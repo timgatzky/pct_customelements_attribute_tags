@@ -34,7 +34,7 @@ $GLOBALS['TL_DCA']['tl_pct_customelement_tags'] = array
 		),
 		'onload_callback' => array
 		(
-			#array('tl_page', 'addBreadcrumb'),
+			array('PCT\CustomElements\Backend\TableCustomElementTags', 'addBreadcrumb'),
 		),
 		'onsubmit_callback' => array
 		(
@@ -48,7 +48,7 @@ $GLOBALS['TL_DCA']['tl_pct_customelement_tags'] = array
 		(
 			'mode'                    => 5,
 			'fields'                  => array('title'),
-			'icon'                    => 'pagemounts.gif',
+			'icon'                    => PCT_CUSTOMELEMENTS_TAGS_PATH.'/assets/img/tags.png',
 			'panelLayout'             => 'filter;search',
 		),
 		'label' => array
