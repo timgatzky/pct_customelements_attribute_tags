@@ -12,13 +12,13 @@
  * @link		http://contao.org
  */
 
+$path = 'system/modules/pct_customelements_attribute_tags';
 
 /**
  * Register the namespaces
  */
 ClassLoader::addNamespaces(array
 (
-	'PCT',
 	'PCT\CustomElements',
 ));
 
@@ -28,23 +28,8 @@ ClassLoader::addNamespaces(array
  */
 ClassLoader::addClasses(array
 (
-	'PCT\CustomElements\Attributes\Tags'						=> 'system/modules/pct_customelements_attribute_tags/PCT/CustomElements/Attributes/Tags/Tags.php',	
-	'PCT\CustomElements\Attributes\Tags\TableHelper'			=> 'system/modules/pct_customelements_attribute_tags/PCT/CustomElements/Attributes/Tags/TableHelper.php',	
-	'PCT\CustomElements\Filters\Tags'							=> 'system/modules/pct_customelements_attribute_tags/PCT/CustomElements/Filters/FilterTags/Tags.php',	
-	'PCT\CustomElements\Backend\TableCustomElementTags'			=> 'system/modules/pct_customelements_attribute_tags/PCT/CustomElements/Backend/TableCustomElementTags.php',	
-																				   
-	'PCT\Widgets\TableTree'										=> 'system/modules/pct_customelements_attribute_tags/PCT/Widgets/TableTree/TableTree.php',	
-	'PCT\Widgets\WidgetTableTree'								=> 'system/modules/pct_customelements_attribute_tags/PCT/Widgets/TableTree/WidgetTableTree.php',	
-	'PCT\Widgets\TableTree\PageTableTree'						=> 'system/modules/pct_customelements_attribute_tags/PCT/Widgets/TableTree/assets/html/PageTableTree.php',	
-	'PCT\Widgets\TableTree\TableTreeHelper'						=> 'system/modules/pct_customelements_attribute_tags/PCT/Widgets/TableTree/TableTreeHelper.php',	
-));
-
-
-/**
- * Register the templates
- */
-TemplateLoader::addFiles(array
-(
-	// widgets
-	'be_pct_tabletree'     => 'system/modules/pct_customelements_attribute_tags/templates/widgets',
+	'PCT\CustomElements\Attributes\Tags'						=> $path.'/PCT/CustomElements/Attributes/Tags/Tags.php',	
+	'PCT\CustomElements\Attributes\Tags\TableHelper'			=> $path.'/PCT/CustomElements/Attributes/Tags/TableHelper.php',	
+	'PCT\CustomElements\Filters\Tags'							=> $path.'/PCT/CustomElements/Filters/FilterTags/Tags.php',	
+	'PCT\CustomElements\Backend\TableCustomElementTags'			=> $path.'/PCT/CustomElements/Backend/TableCustomElementTags.php',	
 ));
