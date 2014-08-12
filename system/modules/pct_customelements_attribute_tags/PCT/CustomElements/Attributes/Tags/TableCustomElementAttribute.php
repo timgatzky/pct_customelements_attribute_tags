@@ -8,14 +8,14 @@
  * @copyright	Tim Gatzky 2014, Premium Contao Webworks, Premium Contao Themes
  * @author		Tim Gatzky <info@tim-gatzky.de>
  * @package		pct_customelements
- * @attribute	AttributeTags
+ * @attribute	Tags
  * @link		http://contao.org
  */
 
 /**
  * Namespace
  */
-namespace PCT\CustomElements\Attribute\Tags;
+namespace PCT\CustomElements\Attributes\Tags;
 
 /**
  * Imports
@@ -42,7 +42,7 @@ class TableCustomElementAttribute extends \Backend
 	 * Set the tabletree source
 	 * @param object
 	 */
-	public function setSourceTable(\DataContainer $objDC)
+	public function setTabletreeOptions(\DataContainer $objDC)
 	{
 		$objActiveRecord = \Database::getInstance()->prepare("SELECT * FROM ".$objDC->table." WHERE id=?")->limit(1)->execute($objDC->id);
 		
@@ -51,7 +51,12 @@ class TableCustomElementAttribute extends \Backend
 			return;
 		}
 		
-		$GLOBALS['TL_DCA'][$objDC->table]['fields']['tag_roots']['eval']['source'] = $objActiveRecord->tag_table;
-			
+		$options = array
+		(
+			'source' 		=> $objActiveRecord->tag_table,
+			'valueField'	=> $objActiveRecord->tag_value,
+			'keyField'		=> $objActiveRecord->tag_key,
+		);
+		$GLOBALS['TL_DCA'][$objDC->table]['fields']['tag_roots']['eval']['tabletree'] = $options;
 	}
 } 

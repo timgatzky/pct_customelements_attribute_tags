@@ -25,7 +25,7 @@ $objDcaHelper = DcaHelper::getInstance()->setTable('tl_pct_customelement_attribu
 /**
  * Config
  */
-$GLOBALS['TL_DCA']['tl_pct_customelement_attribute']['config']['onload_callback'][] = array('PCT\CustomElements\Attributes\Tags\TableCustomElementAttribute','setSourceTable');
+$GLOBALS['TL_DCA']['tl_pct_customelement_attribute']['config']['onload_callback'][] = array('PCT\CustomElements\Attributes\Tags\TableCustomElementAttribute','setTabletreeOptions');
 
 /**
  * Palettes
@@ -48,7 +48,7 @@ $GLOBALS['TL_DCA']['tl_pct_customelement_attribute']['fields']['tag_roots'] = ar
     'label'  		=> &$GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['tag_roots'],
     'exclude'		=> true,
     'inputType'		=> 'pct_TableTree',
-    'eval'			=> array('tl_class'=>'','source'=>'tl_pct_customelement_tags','fieldType'=>'checkbox','multiple'=>true),
+    'eval'			=> array('tl_class'=>'','tabletree'=>array('source'=>'tl_pct_customelement_tags'),'fieldType'=>'checkbox','multiple'=>true),
     'sql'			=> "blob NULL"
 );
 
