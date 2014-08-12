@@ -8,7 +8,7 @@
  * @copyright	Tim Gatzky 2014, Premium Contao Webworks, Premium Contao Themes
  * @author		Tim Gatzky <info@tim-gatzky.de>
  * @package		pct_customelements
- * @attribute	AttributeTags
+ * @attribute	Tags
  * @link		http://contao.org
  */
 
@@ -127,9 +127,11 @@ class TableCustomElementTags extends \Backend
 	 */
 	public function updateChilds(\DataContainer $objDC)
 	{
-		$objActiveRecord = \Database::getInstance()->prepare("SELECT * FROM ".$objDC->table." WHERE id=?")->limit(1)->execute($objDC->id);
+		$objDatabase = \Database::getInstance();
 		
-		$objChilds = \Database::getInstance()->prepare("SELECT * FROM ".$objDC->table." WHERE pid=?")->execute($objDC->id);
+		$objActiveRecord = $objDatabase->prepare("SELECT * FROM ".$objDC->table." WHERE id=?")->limit(1)->execute($objDC->id);
+		
+		$objChilds = $objDatabase->prepare("SELECT * FROM ".$objDC->table." WHERE pid=?")->execute($objDC->id);
 		if($objChilds->numRows < 1)
 		{
 			return;
@@ -143,7 +145,7 @@ class TableCustomElementTags extends \Backend
 				'tstamp'	=> $time,
 				'title' 	=> $objActiveRecord->title.'-'.$objChilds->id
 			);
-			\Database::getInstance()->prepare("UPDATE ".$objDC->table." %s WHERE id=?")->set($arrSet)->execute($objChilds->id);
+			$objDatabase->prepare("UPDATE ".$objDC->table." %s WHERE id=?")->set($arrSet)->execute($objChilds->id);
 		}
 	}
 	
