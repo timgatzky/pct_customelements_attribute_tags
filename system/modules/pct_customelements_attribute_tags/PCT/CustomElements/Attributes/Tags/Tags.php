@@ -64,6 +64,15 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			'sql'			=> "blob NULL",
 		);
 		
+		// use a custom source
+		if($this->get('tag_custom'))
+		{
+			$arrReturn['tabletree']['source'] = $this->get('tag_table');
+			$arrReturn['tabletree']['valueField'] = $this->get('tag_value');
+			$arrReturn['tabletree']['keyField'] = $this->get('tag_key');
+			$arrReturn['tabletree']['sortingField'] = $this->get('tag_sorting');
+		}
+		
 		// make field sortable
 		#$arrReturn['sortable'] = true;
 		
