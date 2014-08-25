@@ -26,6 +26,6 @@ $GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['tag_sorting'][1]	= 'Bitte
 $GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['tag_where'][0]	= 'Bedingung';
 $GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['tag_where'][1]	= 'Hier können Sie eine Bedingung eingeben, um die Ergebnisse zu filtern (z.B. published=1)';	
 $GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['tag_custom'][0]	= 'Eigene Quelle';
-$GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['tag_custom'][1]	= 'Wählen Sie hier, wenn Sie eine eigene Tabelle als Quelle nutzen wollen.';	
+$GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['tag_custom'][1]	= 'Wählen Sie hier, wenn Sie ein andere Tabelle als die Standard-Tags-Tabelle (pct_customelement_tags) als Quelle nutzen wollen.';	
 $GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['tag_roots'][0]	= 'Auswahl einschränken';
 $GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['tag_roots'][1]	= 'Wählen Sie die Tags die mit Ihren Kindelementen angezeigt werden sollen.';

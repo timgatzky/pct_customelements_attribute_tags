@@ -32,7 +32,7 @@ $GLOBALS['TL_DCA']['tl_pct_customelement_attribute']['config']['onload_callback'
  */
 $type = 'tags';
 $arrPalettes = $objDcaHelper->getPalettesAsArray('default');
-$arrPalettes['settings_legend'] = array('tag_custom','tag_roots');
+$arrPalettes['settings_legend'] = array('tag_custom','tag_roots','eval_multiple');
 $GLOBALS['TL_DCA']['tl_pct_customelement_attribute']['palettes'][$type] = $objDcaHelper->generatePalettes($arrPalettes);
 
 /**
@@ -47,7 +47,7 @@ $GLOBALS['TL_DCA']['tl_pct_customelement_attribute']['fields']['tag_roots'] = ar
 (
     'label'  		=> &$GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['tag_roots'],
     'exclude'		=> true,
-    'inputType'		=> 'pct_TableTree',
+    'inputType'		=> 'pct_tabletree',
     'eval'			=> array('tl_class'=>'','tabletree'=>array('source'=>'tl_pct_customelement_tags'),'fieldType'=>'checkbox','multiple'=>true),
     'sql'			=> "blob NULL"
 );
