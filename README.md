@@ -1,4 +1,4 @@
-pct_customelements_attributetags
+pct_customelements_attribute_tags
 ===================================
 
 Tags attribute and filter for customelements
