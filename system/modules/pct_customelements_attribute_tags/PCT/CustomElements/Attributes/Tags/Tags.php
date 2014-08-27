@@ -73,6 +73,9 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$arrReturn['tabletree']['sortingField'] = $this->get('tag_sorting');
 		}
 		
+		// set root nodes
+		$arrReturn['tabletree']['roots'] = deserialize($this->get('tag_roots'));
+		
 		// make field sortable
 		#$arrReturn['sortable'] = true;
 		
