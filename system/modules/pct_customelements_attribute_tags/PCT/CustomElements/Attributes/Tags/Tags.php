@@ -81,6 +81,37 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		
 		return $arrReturn;
 	}
+	
+	
+	/**
+	 * Parse widget callback
+	 * Generate the widgets in the backend 
+	 * @param object	Widget
+	 * @param string	Name of the field
+	 * @param array		Field definition
+	 * @param object	DataContainer
+	 * @return string	HTML output of the widget
+	 */
+	public function parseWidgetCallback($objWidget,$strField,$arrFieldDef,$objDC)
+	{
+		$arrFieldDef['id'] = $arrFieldDef['strField'] = $arrFieldDef['name'] = $strField;
+		$arrFieldDef['strTable'] = $objDC->table;
+		// recreate the widget since contao does not support custom config/eval arrays for widgets yet
+		$objWidget = new $GLOBALS['BE_FFL']['pct_tabletree']($arrFieldDef);
+		$objWidget->label = $this->get('title');
+		$objWidget->description = $this->get('description');
+		
+		// validate the input
+		$objWidget->validate();
+		
+		if($objWidget->hasErrors())
+		{
+			$objWidget->class = 'error';
+		}
+		
+		return $objWidget->parse();
+	}
+
 
 
 	/**
