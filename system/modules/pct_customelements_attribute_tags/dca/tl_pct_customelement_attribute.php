@@ -32,7 +32,7 @@ $GLOBALS['TL_DCA']['tl_pct_customelement_attribute']['config']['onload_callback'
  */
 $type = 'tags';
 $arrPalettes = $objDcaHelper->getPalettesAsArray('default');
-$arrPalettes['settings_legend'] = array('tag_custom','tag_roots','eval_multiple');
+$arrPalettes['settings_legend'] = array('tag_custom','tag_roots','eval_multiple','eval_mandatory');
 $GLOBALS['TL_DCA']['tl_pct_customelement_attribute']['palettes'][$type] = $objDcaHelper->generatePalettes($arrPalettes);
 
 /**
