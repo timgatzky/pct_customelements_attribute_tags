@@ -127,10 +127,16 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 	 */
 	public function renderCallback($strField,$varValue,$arrFieldDef,$strBuffer,$objTemplate,$objAttribute)
 	{
-		$varValue = explode(',', $varValue);
-		if(count($varValue) < 1)
+		$varValue = deserialize($varValue);
+		
+		if(empty($varValue) || count($varValue) < 1)
 		{
 			return '';
+		}
+		
+		if(!is_array($varValue))
+		{
+			$varValue = explode(',', $varValue);
 		}
 		
 		// fetch the readable values
