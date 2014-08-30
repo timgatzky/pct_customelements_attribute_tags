@@ -6,5 +6,5 @@ Tags attribute and filter for customelements
 Requirements
 ---
 
-Requires: pct_customelements >= 1.1.9<br>
-Requires: pct_tabletree_widget (https://github.com/timgatzky/pct_tabletree_widget)
+* Premium Contao Themes CustomElements (pct_customelements >= 1.1.9)
+* pct_tabletree_widget (https://github.com/timgatzky/pct_tabletree_widget)
