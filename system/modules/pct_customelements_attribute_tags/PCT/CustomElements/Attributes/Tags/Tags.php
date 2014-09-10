@@ -125,7 +125,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 	 * @return string
 	 * called renderCallback method
 	 */
-	public function renderCallback($strField,$varValue,$arrFieldDef,$strBuffer,$objTemplate,$objAttribute)
+	public function renderCallback($strField,$varValue,$arrFieldDef,$objTemplate,$objAttribute)
 	{
 		$varValue = deserialize($varValue);
 		
