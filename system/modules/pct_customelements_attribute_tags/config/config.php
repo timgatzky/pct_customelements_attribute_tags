@@ -30,12 +30,6 @@ array_insert($GLOBALS['BE_MOD']['content'], count($GLOBALS['BE_MOD']['content'])
 	)
 ));
 
-
-/**
- * Back end form fields
- */
-$GLOBALS['BE_FFL']['pct_TableTree'] = 'PCT\Widgets\WidgetTableTree';
-
 /**
  * Hooks
  */
@@ -47,7 +41,6 @@ $GLOBALS['TL_HOOKS']['executePreActions'][] = array('PCT\Widgets\TableTree\Table
  */
 $GLOBALS['PCT_CUSTOMELEMENTS']['ATTRIBUTES']['tags'] = array
 (
-	'path' 		=> 'system/modules/pct_customelements_attributetags',
 	'class'		=> 'PCT\CustomElements\Attributes\Tags',
 	'icon'		=> 'fa fa-tags'
 );
@@ -57,7 +50,8 @@ $GLOBALS['PCT_CUSTOMELEMENTS']['ATTRIBUTES']['tags'] = array
  */
 $GLOBALS['PCT_CUSTOMELEMENTS']['FILTERS']['tags'] = array
 (
-	'path' 		=> 'system/modules/pct_customelements_attributetags',
+	'label'		=> &$GLOBALS['TL_LANG']['PCT_CUSTOMELEMENTS']['FILTERS']['tags'],
+	'path' 		=> PCT_CUSTOMELEMENTS_TAGS_PATH,
 	'class'		=> 'PCT\CustomElements\Filters\Tags',
 	'icon'		=> 'fa fa-tags'
 );
