@@ -1,3 +1,6 @@
 ### 1.0.0
 Added: Mandatory option (#2)
+Added: CustomCatalog FE Filter
+Added: Filter template
+Added: Englishe language files
 Update: Handle empty values correctly before parsing
