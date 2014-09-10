@@ -32,4 +32,13 @@ ClassLoader::addClasses(array
 	'PCT\CustomElements\Attributes\Tags\TableHelper'					=> $path.'/PCT/CustomElements/Attributes/Tags/TableHelper.php',	
 	'PCT\CustomElements\Attributes\Tags\TableCustomElementAttribute'	=> $path.'/PCT/CustomElements/Attributes/Tags/TableCustomElementAttribute.php',	
 	'PCT\CustomElements\Backend\TableCustomElementTags'					=> $path.'/PCT/CustomElements/Backend/TableCustomElementTags.php',	
+	'PCT\CustomElements\Filters\Tags'									=> $path.'/PCT/CustomElements/Filters/Tags/Tags.php',	
+));
+
+/**
+ * Register the templates
+ */
+TemplateLoader::addFiles(array
+(
+	'customcatalog_filter_tags'		=> $path.'/templates',
 ));

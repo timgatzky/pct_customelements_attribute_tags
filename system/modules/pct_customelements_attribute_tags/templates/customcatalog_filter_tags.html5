@@ -1,0 +1,13 @@
+<?php
+/**
+ * Tags filter template
+ */
+?>
+<div <?php echo $this->cssID; ?> class="widget <?php echo $this->class; ?> block">
+	<fieldset class="checkbox_container">
+	<legend><?php echo $this->label; ?></legend>
+	<?php foreach($this->options as $option): ?>
+	<input id="<?php echo $option['id']; ?>" type="checkbox" name="<?php echo $option['name']; ?>[]" value="<?php echo $option['value']; ?>" <?php echo $option['selected']; ?>><?php echo $option['label']; ?></input>
+	<?php endforeach; ?>
+	</fieldset>
+</div>
