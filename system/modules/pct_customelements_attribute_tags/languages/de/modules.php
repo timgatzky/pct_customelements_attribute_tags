@@ -14,4 +14,4 @@
  */
 
 $GLOBALS['TL_LANG']['MOD']['pct_customelements_tags'][0] = 'Tags';
-$GLOBALS['TL_LANG']['MOD']['pct_customelements_tags'][1] = 'Tags Attribute für PCT CustomElements';
+$GLOBALS['TL_LANG']['MOD']['pct_customelements_tags'][1] = 'Tags Attribut für PCT CustomElements';
