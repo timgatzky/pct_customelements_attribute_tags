@@ -7,10 +7,11 @@
  * 
  * @copyright	Tim Gatzky 2014, Premium Contao Webworks, Premium Contao Themes
  * @author		Tim Gatzky <info@tim-gatzky.de>
- * @package		pct_customelements
- * @subpackage	Tags
+ * @package		pct_customelements_attribute_tags
  * @link		http://contao.org
+ * @license     LGPL
  */
+
 
 $path = 'system/modules/pct_customelements_attribute_tags';
 
