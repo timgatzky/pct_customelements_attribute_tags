@@ -2,6 +2,6 @@
 Added: Mandatory option (#2)
 Added: CustomCatalog FE Filter
 Added: Filter template
-Added: Englishe language files
+Added: English language files
 Update: Handle empty values correctly before parsing
 Update: License agreement
