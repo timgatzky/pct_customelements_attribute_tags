@@ -1,5 +1,6 @@
 ### 1.1.0
 Fixed: Editing an existing tag ran into error (#3)
+Fixed: Remove obsolete hooks
 
 ### 1.0.0
 Added: Mandatory option (#2)
