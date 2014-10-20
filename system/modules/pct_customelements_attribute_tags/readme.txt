@@ -1,3 +1,4 @@
+(best use with those extensions. Can be used standalone)
 Requirements:
 Requires: pct_customelements >= 1.1.9
 Requires: pct_tabletree_widget (https://github.com/timgatzky/pct_tabletree_widget)
