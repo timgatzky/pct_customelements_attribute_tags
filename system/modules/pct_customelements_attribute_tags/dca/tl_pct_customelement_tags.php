@@ -77,40 +77,32 @@ $GLOBALS['TL_DCA']['tl_pct_customelement_tags'] = array
 		(
 			'edit' => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_pct_customelement']['edit'],
-				'href'                => 'table=tl_pct_customelement_group',
+				'label'               => &$GLOBALS['TL_LANG']['tl_pct_customelement_tags']['edit'],
+				'href'                => 'act=edit',
 				'icon'                => 'edit.gif',
 			),
 			'copy' => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_pct_customelement']['copy'],
+				'label'               => &$GLOBALS['TL_LANG']['tl_pct_customelement_tags']['copy'],
 				'href'                => 'act=copy',
 				'icon'                => 'copy.gif',
 			),
-			#'copyChilds' => array
-			#(
-			#	'label'               => &$GLOBALS['TL_LANG']['tl_page']['copyChilds'],
-			#	'href'                => 'act=paste&amp;mode=copy&amp;childs=1',
-			#	'icon'                => 'copychilds.gif',
-			#	'attributes'          => 'onclick="Backend.getScrollOffset()"',
-			#	'button_callback'     => array('PCT\CustomElements\Backend\TableCustomElementTags', 'copyWithChilds')
-			#),
 			'cut' => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_pct_customelement']['copy'],
+				'label'               => &$GLOBALS['TL_LANG']['tl_pct_customelement_tags']['copy'],
 				'href'                => 'act=paste&amp;mode=cut',
 				'icon'                => 'cut.gif',
 			),
 			'delete' => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_pct_customelement']['delete'],
+				'label'               => &$GLOBALS['TL_LANG']['tl_pct_customelement_tags']['delete'],
 				'href'                => 'act=delete',
 				'icon'                => 'delete.gif',
 				'attributes'          => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\'))return false;Backend.getScrollOffset()"',
 			),
 			'show' => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_pct_customelement']['show'],
+				'label'               => &$GLOBALS['TL_LANG']['tl_pct_customelement_tags']['show'],
 				'href'                => 'act=show',
 				'icon'                => 'show.gif'
 			),
