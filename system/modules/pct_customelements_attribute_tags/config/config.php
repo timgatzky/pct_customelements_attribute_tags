@@ -32,12 +32,6 @@ array_insert($GLOBALS['BE_MOD']['content'], count($GLOBALS['BE_MOD']['content'])
 ));
 
 /**
- * Hooks
- */
-$GLOBALS['TL_HOOKS']['executePostActions'][] = array('PCT\Widgets\TableTree\TableTreeHelper','postActions');
-$GLOBALS['TL_HOOKS']['executePreActions'][] = array('PCT\Widgets\TableTree\TableTreeHelper','preActions');
-
-/**
  * Register attribute
  */
 $GLOBALS['PCT_CUSTOMELEMENTS']['ATTRIBUTES']['tags'] = array
