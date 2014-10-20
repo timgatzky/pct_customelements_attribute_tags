@@ -1,3 +1,6 @@
+### 1.1.0
+Fixed: Editing an existing tag ran into error (#3)
+
 ### 1.0.0
 Added: Mandatory option (#2)
 Added: CustomCatalog FE Filter
