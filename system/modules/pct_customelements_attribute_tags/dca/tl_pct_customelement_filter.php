@@ -29,5 +29,6 @@ $GLOBALS['TL_DCA']['tl_pct_customelement_filter']['palettes'][$strType] = $objDc
 
 if($objDcaHelper->getActiveRecord()->type == $strType)
 {
+	$GLOBALS['TL_DCA']['tl_pct_customelement_filter']['fields']['attr_id']['options_values'] = array('tags');
 	$GLOBALS['TL_DCA']['tl_pct_customelement_filter']['fields']['template']['default'] = 'customcatalog_filter_tags';
 }
