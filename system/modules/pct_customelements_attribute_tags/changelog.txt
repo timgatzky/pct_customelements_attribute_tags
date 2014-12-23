@@ -1,3 +1,8 @@
+### 1.2.0
+Update: Filter the attribute selection down to tags only
+Update: Update the parameter count of the renderAttribute callback to CE 1.2
+Update: General updates
+
 ### 1.1.0
 Fixed: Editing an existing tag ran into error (#3)
 Fixed: Remove obsolete hooks
