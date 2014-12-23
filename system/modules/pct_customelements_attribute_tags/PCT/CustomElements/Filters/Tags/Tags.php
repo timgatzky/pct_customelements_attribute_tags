@@ -165,7 +165,7 @@ class Tags extends \PCT\CustomElements\Filter
 		
 		while($objTags->next())
 		{
-			$return[] = $objTags->$valueField;
+			$return[$objTags->id] = $objTags->$valueField;
 		}
 		
 		return $return;
@@ -179,14 +179,39 @@ class Tags extends \PCT\CustomElements\Filter
 	protected function findMatchingIds()
 	{
 		// get the current filter values
-		$values = $this->getValue();
-		if(empty($values))
+		$filterValues = $this->getValue();
+		if(empty($filterValues))
 		{
 			return array();
 		}
 		
-		$values = array(152);
+		$objDatabase = \Database::getInstance();
+		$field = $this->getFilterTarget();
 		
-		return $values;
+		$objRows = $objDatabase->prepare("SELECT id,".$field." FROM ".$this->getTable()." WHERE ".$field." IS NOT NULL")->execute();
+		if($objRows->numRows < 1)
+		{
+			return array();
+		}
+		
+		$arrTags = array_keys($this->getTagsOptions());
+		
+		$arrReturn = array();
+		while($objRows->next())
+		{
+			if(strlen($objRows->{$field}) < 1)
+			{
+				continue;
+			}
+			
+			$values = deserialize($objRows->{$field});
+			
+			if(count(array_intersect($values, $arrTags)) > 0)
+			{
+				$arrReturn[] = $objRows->id;
+			}
+		}
+		
+		return $arrReturn;
 	}
 }
