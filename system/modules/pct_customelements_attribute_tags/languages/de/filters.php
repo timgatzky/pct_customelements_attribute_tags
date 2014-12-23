@@ -17,4 +17,4 @@
  * Filters
  */
 $GLOBALS['TL_LANG']['PCT_CUSTOMELEMENTS']['FILTERS']['tags'][0]		= 'Tags';
-$GLOBALS['TL_LANG']['PCT_CUSTOMELEMENTS']['FILTERS']['tags'][1]		= 'Filterung nach mehreren Werten';
+$GLOBALS['TL_LANG']['PCT_CUSTOMELEMENTS']['FILTERS']['tags'][1]		= 'Filterung nach mehreren Werten eines Tags-Attributes';
