@@ -140,12 +140,20 @@ class Tags extends \PCT\CustomElements\Filter
 	 * Get the tags options
 	 * @return array 
 	 */
-	protected function getTagsOptions()
+	protected function getTagsOptions($arrValues=array())
 	{
-		// fetch the possible filter values
-		$values = $this->fetchValues($this->getTable(),$this->getFilterTarget());
+		$bolByValueField = false;
+		if(count($arrValues) < 1)
+		{
+			// fetch the possible filter values
+			$arrValues = $this->fetchValues($this->getTable(),$this->getFilterTarget());
+		}
+		else
+		{
+			$bolByValueField = true;
+		}
 		
-		if(empty($values))
+		if(empty($arrValues))
 		{
 			return array();
 		}
@@ -161,7 +169,15 @@ class Tags extends \PCT\CustomElements\Filter
 			$valueField = $this->objAttribute->tag_value;
 		}
 		
-		$objTags = \Database::getInstance()->prepare("SELECT id,".$valueField." FROM ".$table." WHERE id IN(".implode(',', $values).")")->execute();
+		$objDatabase = \Database::getInstance();
+		if($bolByValueField)
+		{
+			$objTags = $objDatabase->prepare("SELECT id,".$valueField." FROM ".$table." WHERE ".$objDatabase->findInSet($valueField,$arrValues))->execute();
+		}
+		else
+		{
+			$objTags = $objDatabase->prepare("SELECT id,".$valueField." FROM ".$table." WHERE id IN(".implode(',', $arrValues).")")->execute();
+		}
 		
 		while($objTags->next())
 		{
@@ -194,7 +210,7 @@ class Tags extends \PCT\CustomElements\Filter
 			return array();
 		}
 		
-		$arrTags = array_keys($this->getTagsOptions());
+		$arrTags = array_keys($this->getTagsOptions($filterValues));
 		
 		$arrReturn = array();
 		while($objRows->next())
@@ -205,7 +221,11 @@ class Tags extends \PCT\CustomElements\Filter
 			}
 			
 			$values = deserialize($objRows->{$field});
-			
+			if(!is_array($values))
+			{
+				$values = array($values);
+			}
+			\FB::log($values);
 			if(count(array_intersect($values, $arrTags)) > 0)
 			{
 				$arrReturn[] = $objRows->id;
