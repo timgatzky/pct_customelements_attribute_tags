@@ -16,4 +16,4 @@
 /**
  * Attributes
  */
-$GLOBALS['TL_LANG']['PCT_ATTRIBUTES']['tags']		= array('Tags','Dieses Attribut fügt eine Mehrfachauswahl auf eine Datenbank-Tabelle hinzu.');
+$GLOBALS['TL_LANG']['PCT_CUSTOMELEMENTS']['ATTRIBUTES']['tags']		= array('Tags','Dieses Attribut fügt eine Mehrfachauswahl auf eine Datenbank-Tabelle hinzu.');

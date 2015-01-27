@@ -36,6 +36,8 @@ array_insert($GLOBALS['BE_MOD']['content'], count($GLOBALS['BE_MOD']['content'])
  */
 $GLOBALS['PCT_CUSTOMELEMENTS']['ATTRIBUTES']['tags'] = array
 (
+	'label'		=> &$GLOBALS['TL_LANG']['PCT_CUSTOMELEMENTS']['ATTRIBUTES']['tags'],
+	'path' 		=> PCT_CUSTOMELEMENTS_TAGS_PATH,
 	'class'		=> 'PCT\CustomElements\Attributes\Tags',
 	'icon'		=> 'fa fa-tags'
 );
