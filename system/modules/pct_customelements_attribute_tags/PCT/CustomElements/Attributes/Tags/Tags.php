@@ -165,6 +165,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 	
 	/**
 	 * Return the options as array
+	 * @return array()
 	 */
 	public function getSelectOptions()
 	{
@@ -219,7 +220,11 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 	
 	
 	/**
-	 * Backend filtering
+	 * Custom backend filtering routing
+	 * @param array
+	 * @param string
+	 * @param object
+	 * @param object
 	 */
 	public function getBackendFilterOptions($arrData,$strField,$objAttribute,$objCC)
 	{
@@ -229,8 +234,8 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			return array();
 		}
 		
-		$strTable = $objCC->get('tableName');
-		
+		$strTable = $objCC->getTable();
+	
 		$objRows = \Database::getInstance()->prepare("SELECT * FROM ".$strTable." WHERE ".$strField. " IS NOT NULL")->execute();
 		if($objRows->numRows < 1)
 		{
@@ -276,19 +281,29 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 	}
 	
 	
-#	public function loadFilterValueInSession(\DataContainer $objDC)
-#	{
-#		$objSession = \Session::getInstance();
-#		$arrSession = $objSession->getData();
-#		
-#		$arrReturn = array();
-#		foreach($GLOBALS['PCT_CUSTOMCATALOG']['filterFields'][$objDC->table] as $strField => $arrData)
-#		{
-#			$arrSession['filter'][$objDC->table]['tags'] = 2;
-#		}
-#		$objSession->setData($arrSession);
-#				
-#		return $GLOBALS['PCT_CUSTOMCATALOG']['filterFields'][$objDC->table]['tags']['fieldDef']['options'];
-#	}
+	/**
+	 * Modify the field DCA settings for customcatalogs
+	 * @param array
+	 * @param string
+	 * @param object
+	 * @param object
+	 * @param object
+	 * @param object
+	 * @return array
+	 */	
+	public function prepareField($arrData,$fieldName,$objAttribute,$objCC,$objCE,$objSystemIntegration)
+	{
+		if($objAttribute->get('type') != 'tags')
+		{
+			return $arrData;
+		}
+		
+		// set the orgin to the customcatalog
+		$objAttribute->setOrigin($objCC);
+		
+		$arrData['fieldDef']['options'] = $objAttribute->getSelectOptions();
+		
+		return $arrData;
+	}
 	
 }

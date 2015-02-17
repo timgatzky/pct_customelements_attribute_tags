@@ -52,3 +52,8 @@ $GLOBALS['PCT_CUSTOMELEMENTS']['FILTERS']['tags'] = array
 	'class'		=> 'PCT\CustomElements\Filters\Tags',
 	'icon'		=> 'fa fa-tags'
 );
+
+/**
+ * Hooks
+ */
+$GLOBALS['CUSTOMCATALOG_HOOKS']['prepareField'][] 		= array('PCT\CustomElements\Attributes\Tags','prepareField');
