@@ -134,9 +134,9 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			return '';
 		}
 		
-		if(!is_array($varValue))
+		if(is_array($varValue))
 		{
-			$varValue = explode(',', $varValue);
+			$varValue = array($varValue);
 		}
 		
 		// fetch the readable values
@@ -152,7 +152,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$strSortingField = $objAttribute->get('tag_sorting');
 		}
 		
-		$objResult = \Database::getInstance()->prepare("SELECT * FROM ".$strSource." WHERE id IN(".implode(',', $varValue).")".($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
+		$objResult = $objDatabase->prepare("SELECT * FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField,$varValue).($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
 		if($objResult->numRows < 1)
 		{
 			return '';
@@ -161,5 +161,134 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		$objTemplate->value = implode(',', $objResult->fetchEach($strValueField) );
 		return $objTemplate->parse();
 	}
+	
+	
+	/**
+	 * Return the options as array
+	 */
+	public function getSelectOptions()
+	{
+		$objOrigin = $this->getOrigin();
+		$objDatabase = \Database::getInstance();
+		$strField = $this->get('alias');
+		
+		$objRows = $objDatabase->prepare("SELECT * FROM ".$objOrigin->getTable()." WHERE ".$strField. " IS NOT NULL")->execute();
+		if($objRows->numRows < 1)
+		{
+			return array();
+		}
+		
+		$arrValues = array();
+		while($objRows->next())
+		{
+			$values = deserialize($objRows->{$strField});
+			if(!is_array($values))
+			{
+				$values = array($values);
+			}
+			$arrValues = array_merge($arrValues,$values);
+		}
+		
+		// fetch the readable values
+		$strSource = 'tl_pct_customelement_tags';
+		$strValueField = 'title';
+		$strKeyField = 'id';
+		$strSorting = 'sorting';
+		if($this->get('tag_custom'))
+		{
+			$strSource = $this->get('tag_table');
+			$strValueField = $this->get('tag_value');
+			if($this->get('tag_key')) {$strKeyField = $this->get('tag_key');}
+			$strSortingField = $this->get('tag_sorting');
+		}
+		
+		$objResult = $objDatabase->prepare("SELECT * FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField, $arrValues).($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
+		if($objResult->numRows < 1)
+		{
+			return array();
+		}
+		
+		$arrReturn = array();
+		while($objResult->next())
+		{
+			$arrReturn[$objResult->{$strKeyField}] = $objResult->{$strValueField};
+		}
+		
+		return $arrReturn;
+	}
+	
+	
+	/**
+	 * Backend filtering
+	 */
+	public function getBackendFilterOptions($arrData,$strField,$objAttribute,$objCC)
+	{
+		$arrOptions = $objAttribute->getSelectOptions();
+		if(count($arrOptions) < 1)
+		{
+			return array();
+		}
+		
+		$strTable = $objCC->get('tableName');
+		
+		$objRows = \Database::getInstance()->prepare("SELECT * FROM ".$strTable." WHERE ".$strField. " IS NOT NULL")->execute();
+		if($objRows->numRows < 1)
+		{
+			return array();
+		}
+		
+		$arrSession = \Session::getInstance()->getData();
+		$strSession = $GLOBALS['PCT_CUSTOMCATALOG']['backendFilterSession'];
+		
+		$varValue = '';
+		if(\Input::post('FORM_SUBMIT') == 'tl_filter')
+		{
+			$varValue = \Input::post($strField);
+		}
+		else
+		{
+			$varValue = $arrSession[$strSession][$strTable][$strField];
+		}
+		
+		$arrIds = array();
+		while($objRows->next())
+		{
+			$values = deserialize($objRows->{$strField});
+			if(!is_array($values))
+			{
+				$values = array($values);
+			}
+			
+			if(!in_array($varValue, $values))
+			{
+				continue;
+			}
+			
+			$arrIds[] = $objRows->id;
+		}
+		
+		if(count($arrIds) < 1)
+		{
+			return array();
+		}
+		
+		return array('id IN(?)',implode(',',$arrIds));
+	}
+	
+	
+#	public function loadFilterValueInSession(\DataContainer $objDC)
+#	{
+#		$objSession = \Session::getInstance();
+#		$arrSession = $objSession->getData();
+#		
+#		$arrReturn = array();
+#		foreach($GLOBALS['PCT_CUSTOMCATALOG']['filterFields'][$objDC->table] as $strField => $arrData)
+#		{
+#			$arrSession['filter'][$objDC->table]['tags'] = 2;
+#		}
+#		$objSession->setData($arrSession);
+#				
+#		return $GLOBALS['PCT_CUSTOMCATALOG']['filterFields'][$objDC->table]['tags']['fieldDef']['options'];
+#	}
 	
 }
