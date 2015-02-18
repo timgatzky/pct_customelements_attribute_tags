@@ -1,3 +1,7 @@
+### 1.4.1
+Fixed: Use FIND_IN_SET in backend filter return because contao converts the placeholder to a full string
+Added: Backend search support
+
 ### 1.4.0
 Added: CustomCatalog backend filtering support
 
