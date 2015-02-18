@@ -245,15 +245,8 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		$arrSession = \Session::getInstance()->getData();
 		$strSession = $GLOBALS['PCT_CUSTOMCATALOG']['backendFilterSession'];
 		
-		$varValue = '';
-		if(\Input::post('FORM_SUBMIT') == 'tl_filter')
-		{
-			$varValue = \Input::post($strField);
-		}
-		else
-		{
-			$varValue = $arrSession[$strSession][$strTable][$strField];
-		}
+		$varFilterValue = $arrSession[$strSession][$strTable][$strField] ?: $arrSession['filter'][$strTable][$strField];
+		$varSearchValue = $arrSession[$strSession.'_search'][$strTable]['value'] ?: $arrSession['search'][$strTable]['value'];
 		
 		$arrIds = array();
 		while($objRows->next())
@@ -264,7 +257,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 				$values = array($values);
 			}
 			
-			if(!in_array($varValue, $values))
+			if(!in_array($varSearchValue, $values) && !in_array($varFilterValue, $values))
 			{
 				continue;
 			}
