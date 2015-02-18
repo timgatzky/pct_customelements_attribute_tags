@@ -197,10 +197,10 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		$strSorting = 'sorting';
 		if($this->get('tag_custom'))
 		{
-			$strSource = $this->get('tag_table');
-			$strValueField = $this->get('tag_value');
-			if($this->get('tag_key')) {$strKeyField = $this->get('tag_key');}
-			$strSortingField = $this->get('tag_sorting');
+			$strSource = $this->get('tag_table') ?: 'tl_pct_customelement_tags';
+			$strValueField = $this->get('tag_value') ?: 'title';
+			$strKeyField = $this->get('tag_key') ?: 'id';
+			$strSorting = $this->get('tag_sorting') ?: 'sorting';
 		}
 		
 		$objResult = $objDatabase->prepare("SELECT * FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField, $arrValues).($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
