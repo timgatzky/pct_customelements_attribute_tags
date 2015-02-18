@@ -270,7 +270,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			return array();
 		}
 		
-		return array('id IN(?)',implode(',',$arrIds));
+		return array('FIND_IN_SET(id,?)',implode(',',array_unique($arrIds)));
 	}
 	
 	
