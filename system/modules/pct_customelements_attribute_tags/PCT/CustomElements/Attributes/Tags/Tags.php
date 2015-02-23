@@ -152,7 +152,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$strSortingField = $objAttribute->get('tag_sorting');
 		}
 		
-		$objResult = $objDatabase->prepare("SELECT * FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField,$varValue).($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
+		$objResult = \Database::getInstance()->prepare("SELECT * FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField,$varValue).($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
 		if($objResult->numRows < 1)
 		{
 			return '';
@@ -172,6 +172,11 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		$objOrigin = $this->getOrigin();
 		$objDatabase = \Database::getInstance();
 		$strField = $this->get('alias');
+		
+		if(strlen($strField) < 1 || !\Database::getInstance()->fieldExists($fieldName,$strTable))
+		{
+			return array();
+		}
 		
 		$objRows = $objDatabase->prepare("SELECT * FROM ".$objOrigin->getTable()." WHERE ".$strField. " IS NOT NULL")->execute();
 		if($objRows->numRows < 1)
@@ -235,7 +240,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		}
 		
 		$strTable = $objCC->getTable();
-	
+		
 		$objRows = \Database::getInstance()->prepare("SELECT * FROM ".$strTable." WHERE ".$strField. " IS NOT NULL")->execute();
 		if($objRows->numRows < 1)
 		{
@@ -286,7 +291,9 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 	 */	
 	public function prepareField($arrData,$fieldName,$objAttribute,$objCC,$objCE,$objSystemIntegration)
 	{
-		if($objAttribute->get('type') != 'tags')
+		$strTable = $objCC->mode == 'new' ? $objCC->tableName : $objCC->existingTable;
+		
+		if($objAttribute->get('type') != 'tags' || !\Database::getInstance()->fieldExists($fieldName,$strTable))
 		{
 			return $arrData;
 		}
