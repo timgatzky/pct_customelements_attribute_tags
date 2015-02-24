@@ -139,6 +139,8 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$varValue = array($varValue);
 		}
 		
+		$objDatabase = \Database::getInstance();
+		
 		// fetch the readable values
 		$strSource = 'tl_pct_customelement_tags';
 		$strValueField = 'title';
@@ -152,7 +154,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$strSortingField = $objAttribute->get('tag_sorting');
 		}
 		
-		$objResult = \Database::getInstance()->prepare("SELECT * FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField,$varValue).($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
+		$objResult = $objDatabase->prepare("SELECT * FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField,$varValue).($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
 		if($objResult->numRows < 1)
 		{
 			return '';
