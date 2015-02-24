@@ -68,7 +68,7 @@ $GLOBALS['TL_DCA']['tl_pct_customelement_attribute']['fields']['tag_table'] = ar
     'exclude'		=> true,
     'inputType'		=> 'select',
     'options_callback'	=> array('PCT\CustomElements\Attributes\Tags\TableHelper','getAllTables'),
-    'eval'			=> array('tl_class'=>'w50','chosen'=>true,'submitOnChange'=>true,'includeBlankOption'=>true,'decodeEntities'=>true),
+    'eval'			=> array('tl_class'=>'w50','chosen'=>true,'mandatory'=>true,'submitOnChange'=>true,'includeBlankOption'=>true,'decodeEntities'=>true),
     'sql'			=> "varchar(255) NOT NULL default ''"
 );
 
