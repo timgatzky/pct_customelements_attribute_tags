@@ -225,7 +225,7 @@ class Tags extends \PCT\CustomElements\Filter
 			{
 				$values = array($values);
 			}
-			\FB::log($values);
+			
 			if(count(array_intersect($values, $arrTags)) > 0)
 			{
 				$arrReturn[] = $objRows->id;
