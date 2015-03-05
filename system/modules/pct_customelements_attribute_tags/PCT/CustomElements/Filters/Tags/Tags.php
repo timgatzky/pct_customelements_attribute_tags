@@ -112,10 +112,7 @@ class Tags extends \PCT\CustomElements\Filter
 					$tmp['selected'] = 'checked';
 					$isSelected = true;
 				}
-				else
-				{
-					$this->setValue(null);
-				}
+				
 				$options[] = $tmp;
 			}
 		}
