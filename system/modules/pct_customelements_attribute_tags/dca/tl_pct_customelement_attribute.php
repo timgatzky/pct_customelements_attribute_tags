@@ -69,7 +69,7 @@ $objDcaHelper->addFields(array
 	    'inputType'		=> 'select',
 	    'options_callback'	=> array('PCT\CustomElements\Attributes\Tags\TableHelper','getAllTables'),
 	    'eval'			=> array('tl_class'=>'w50','chosen'=>true,'mandatory'=>true,'submitOnChange'=>true,'includeBlankOption'=>true,'decodeEntities'=>true),
-	    'sql'			=> "varchar(255) NOT NULL default ''"
+	    'sql'			=> "varchar(128) NOT NULL default ''"
 	),
 	'tag_key' => array
 	(
@@ -79,7 +79,7 @@ $objDcaHelper->addFields(array
 	    'inputType'		=> 'select',
 	    'options_callback'	=> array('PCT\CustomElements\Attributes\Tags\TableHelper','getFields'),
 	    'eval'			=> array('tl_class'=>'w50','chosen'=>true,'decodeEntities'=>true),
-	    'sql'			=> "varchar(255) NOT NULL default ''"
+	    'sql'			=> "varchar(128) NOT NULL default ''"
 	),
 	'tag_value' => array
 	(
@@ -88,7 +88,7 @@ $objDcaHelper->addFields(array
 	    'inputType'		=> 'select',
 	    'options_callback'	=> array('PCT\CustomElements\Attributes\Tags\TableHelper','getFields'),
 	    'eval'			=> array('tl_class'=>'w50','chosen'=>true,'decodeEntities'=>true),
-	    'sql'			=> "varchar(255) NOT NULL default ''"
+	    'sql'			=> "varchar(128) NOT NULL default ''"
 	),
 	'tag_sorting' => array
 	(
@@ -97,7 +97,7 @@ $objDcaHelper->addFields(array
 	    'inputType'		=> 'select',
 	    'options_callback'	=> array('PCT\CustomElements\Attributes\Tags\TableHelper','getFields'),
 	    'eval'			=> array('tl_class'=>'w50','chosen'=>true,'decodeEntities'=>true),
-	    'sql'			=> "varchar(255) NOT NULL default ''"
+	    'sql'			=> "varchar(128) NOT NULL default ''"
 	),
 	'tag_where' => array
 	(
