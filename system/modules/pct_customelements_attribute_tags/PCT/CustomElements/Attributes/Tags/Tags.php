@@ -150,7 +150,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		{
 			$strSource = $objAttribute->get('tag_table');
 			$strValueField = $objAttribute->get('tag_value');
-			if($objAttribute->get('tag_key')) {$strKeyField = $objAttribute->get('tag_key');}
+			$strKeyField = $objAttribute->get('tag_key') ?: 'id';
 			$strSortingField = $objAttribute->get('tag_sorting');
 		}
 		
