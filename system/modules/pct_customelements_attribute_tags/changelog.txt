@@ -1,3 +1,11 @@
+### 1.4.4
+Fixed: Set the default table in eval array
+Fixed: Explode values array in filter class
+Added: Generate the link url in the options array
+Update: Option id now starts with ctrl_
+Update: Updated the template variable to be compatible with the standard CC template vars
+Update: Wrap the template in a div and use the selected key as boolean
+
 ### 1.4.3
 Update: Smaller sql field sizes
 Update: General updates
