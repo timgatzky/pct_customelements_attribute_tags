@@ -220,7 +220,7 @@ class Tags extends \PCT\CustomElements\Filter
 			$values = deserialize($objRows->{$field});
 			if(!is_array($values))
 			{
-				$values = array($values);
+				$values = explode(',', $values);
 			}
 			
 			if(count(array_intersect($values, $arrTags)) > 0)
