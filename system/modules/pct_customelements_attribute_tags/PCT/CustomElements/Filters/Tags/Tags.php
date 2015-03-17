@@ -89,6 +89,9 @@ class Tags extends \PCT\CustomElements\Filter
 			$this->reset();
 		}
 		
+		$objJumpTo = $objFilter->jumpTo;
+		$objModule = $objFilter->getModule();
+		
 		$values = $this->getTagsOptions();
 
 		$options = array();
@@ -99,18 +102,25 @@ class Tags extends \PCT\CustomElements\Filter
 		{
 			foreach($values as $i => $v)
 			{
+				$isSelected = $this->isSelected($v);
+				
 				$tmp = array
 				(
-					'id'  => 'ctrl_'.$strName.'_'.$i,
-					'value'  => $v,
-					'label'  => $v,
-					'name'  => $strName,
+					'id'  		=> 'ctrl_'.$strName.'_'.$i,
+					'value'  	=> $v,
+					'label'  	=> $v,
+					'name'  	=> $strName,
 				);
 				
-				if($this->isSelected($v))
+				if($isSelected)
 				{
-					$tmp['selected'] = 'checked';
+					$tmp['selected'] = true;
+					$tmp['href'] = $objFilter->removeFromUrl($v,$objJumpTo,$objFilter->getModule()->customcatalog_filter_method);
 					$isSelected = true;
+				}
+				else
+				{
+					$tmp['href'] = $objFilter->addToUrl($v,$objJumpTo,$objFilter->getModule()->customcatalog_filter_method);
 				}
 				
 				$options[] = $tmp;
