@@ -140,7 +140,7 @@ $GLOBALS['TL_DCA']['tl_pct_customelement_tags'] = array
 			'exclude'                 => true,
 			'search'                  => true,
 			'inputType'               => 'text',
-			'eval'                    => array('mandatory'=>true, 'maxlength'=>255, 'unique'=>true, 'tl_class'=>'w50'),
+			'eval'                    => array('mandatory'=>true, 'maxlength'=>255, 'tl_class'=>'w50'),
 			'sql'					  =>  "varchar(255) NOT NULL default ''",
 		),	
 	)
