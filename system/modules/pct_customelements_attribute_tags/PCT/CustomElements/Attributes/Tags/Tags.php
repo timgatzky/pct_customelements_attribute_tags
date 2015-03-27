@@ -175,7 +175,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		$objDatabase = \Database::getInstance();
 		$strField = $this->get('alias');
 		
-		if(strlen($strField) < 1 || !\Database::getInstance()->fieldExists($fieldName,$strTable))
+		if(strlen($strField) < 1 || !\Database::getInstance()->fieldExists($strField,$objOrigin->getTable()))
 		{
 			return array();
 		}
@@ -192,7 +192,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$values = deserialize($objRows->{$strField});
 			if(!is_array($values))
 			{
-				$values = array($values);
+				$values = explode(',', $values);
 			}
 			$arrValues = array_merge($arrValues,$values);
 		}
@@ -210,7 +210,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$strSorting = $this->get('tag_sorting') ?: 'sorting';
 		}
 		
-		$objResult = $objDatabase->prepare("SELECT * FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField, $arrValues).($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
+		$objResult = $objDatabase->prepare("SELECT * FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField, array_unique($arrValues)).($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
 		if($objResult->numRows < 1)
 		{
 			return array();
@@ -290,12 +290,12 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 	 * @param object
 	 * @param object
 	 * @return array
+	 * called by prepareField Hook
 	 */	
-	public function prepareField($arrData,$fieldName,$objAttribute,$objCC,$objCE,$objSystemIntegration)
+	public function prepareField($arrData,$strField,$objAttribute,$objCC,$objCE,$objSystemIntegration)
 	{
-		$strTable = $objCC->mode == 'new' ? $objCC->tableName : $objCC->existingTable;
-		
-		if($objAttribute->get('type') != 'tags' || !\Database::getInstance()->fieldExists($fieldName,$strTable))
+		$strTable = $objCC->getTable();
+		if($objAttribute->get('type') != 'tags' || !\Database::getInstance()->fieldExists($strField,$strTable))
 		{
 			return $arrData;
 		}
