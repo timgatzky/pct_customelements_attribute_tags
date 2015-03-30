@@ -5,6 +5,7 @@ Added: Generate the link url in the options array
 Update: Option id now starts with ctrl_
 Update: Updated the template variable to be compatible with the standard CC template vars
 Update: Wrap the template in a div and use the selected key as boolean
+Update: Pass the root field name to the tabletree widget
 
 ### 1.4.3
 Update: Smaller sql field sizes
