@@ -130,14 +130,14 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 	{
 		$varValue = deserialize($varValue);
 		
+		if(!is_array($varValue))
+		{
+			$varValue = explode(',',$varValue);
+		}
+		
 		if(empty($varValue) || count($varValue) < 1)
 		{
 			return '';
-		}
-		
-		if(is_array($varValue))
-		{
-			$varValue = array($varValue);
 		}
 		
 		$objDatabase = \Database::getInstance();
