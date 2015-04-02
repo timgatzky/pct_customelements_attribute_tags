@@ -309,4 +309,17 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		return $arrData;
 	}
 	
+	
+	/**
+	 * Generate wildcard value
+	 * @param mixed
+	 * @param object	DatabaseResult
+	 * @param integer	Id of the Element ( >= CE 1.2.9)
+	 * @param string	Name of the table ( >= CE 1.2.9)
+	 * @return string
+	 */
+	public function processWildcardValue($varValue,$objAttribute)
+	{
+		return $this->renderCallback($objAttribute->get('alias'),$varValue,new \FrontendTemplate('customelement_attr_default'),$objAttribute);;
+	}
 }

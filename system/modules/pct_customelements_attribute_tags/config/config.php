@@ -56,4 +56,5 @@ $GLOBALS['PCT_CUSTOMELEMENTS']['FILTERS']['tags'] = array
 /**
  * Hooks
  */
-$GLOBALS['CUSTOMCATALOG_HOOKS']['prepareField'][] 		= array('PCT\CustomElements\Attributes\Tags','prepareField');
+$GLOBALS['CUSTOMCATALOG_HOOKS']['prepareField'][] 			= array('PCT\CustomElements\Attributes\Tags','prepareField');
+$GLOBALS['CUSTOMELEMENTS_HOOKS']['processWildcardValue'][] 	= array('PCT\CustomElements\Attributes\Tags','processWildcardValue');
