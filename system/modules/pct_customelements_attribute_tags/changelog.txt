@@ -2,6 +2,7 @@
 Fixed: Set the default table in eval array
 Fixed: Explode values array in filter class
 Added: Generate the link url in the options array
+Added: processWildcardValue Callback
 Update: Option id now starts with ctrl_
 Update: Updated the template variable to be compatible with the standard CC template vars
 Update: Wrap the template in a div and use the selected key as boolean
