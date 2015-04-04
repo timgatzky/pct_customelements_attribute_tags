@@ -320,6 +320,9 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 	 */
 	public function processWildcardValue($varValue,$objAttribute)
 	{
-		return $this->renderCallback($objAttribute->get('alias'),$varValue,new \FrontendTemplate('customelement_attr_default'),$objAttribute);;
+		$objTemplate = new \BackendTemplate('be_customelement_attr_default');
+		$objTemplate->setData($objAttribute->getData());
+		
+		return $this->renderCallback($objAttribute->get('alias'),$varValue,$objTemplate,$objAttribute);;
 	}
 }
