@@ -39,7 +39,7 @@ class TableHelper extends \Backend
 	 */
 	public function getFields(\DataContainer $objDC)
 	{
-		if(strlen($objDC->activeRecord->tag_table) < 1)
+		if(strlen($objDC->activeRecord->tag_table) < 1 || !\Database::getInstance()->tableExists($objDC->activeRecord->tag_table))
 		{
 			return array();
 		}

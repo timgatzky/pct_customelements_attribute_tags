@@ -296,6 +296,11 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 	public function prepareField($arrData,$strField,$objAttribute,$objCC,$objCE,$objSystemIntegration)
 	{
 		$strTable = $objCC->getTable();
+		if(!\Database::getInstance()->tableExists($strTable))
+		{
+			return array();
+		}
+		
 		if($objAttribute->get('type') != 'tags' || !\Database::getInstance()->fieldExists($strField,$strTable))
 		{
 			return $arrData;
