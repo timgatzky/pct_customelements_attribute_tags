@@ -1,5 +1,6 @@
 ### 1.4.5
 Fixed: Errors when custom tables not exist
+Update: New filter template structure
 
 ### 1.4.4
 Fixed: Set the default table in eval array
