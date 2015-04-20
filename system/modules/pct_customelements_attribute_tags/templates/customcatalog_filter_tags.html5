@@ -4,13 +4,14 @@
  */
 ?>
 <div <?php echo $this->cssID; ?> class="widget <?php echo $this->class; ?> block">
-	<fieldset class="checkbox_container">
-	<legend><?php echo $this->label; ?></legend>
+<fieldset class="checkbox_container">
+	<?php if($this->label): ?><legend><?php echo $this->label; ?></legend><?php endif; ?>
 	<?php foreach($this->options as $option): ?>
 	<div class="checkbox_container <?php echo standardize($option['value']); ?>">
 		<label class="label"><?php echo $option['label']; ?></label>
 		<input id="<?php echo $option['id']; ?>" type="checkbox" name="<?php echo $option['name']; ?>[]" value="<?php echo $option['value']; ?>" <?php if($option['selected']):?>checked<?php endif;?> > </input>
 	</div>
 	<?php endforeach; ?>
-	</fieldset>
+</fieldset>
+<?php if($this->description): ?><div class="description"><?php echo $this->description; ?></div><?php endif; ?>	
 </div>
