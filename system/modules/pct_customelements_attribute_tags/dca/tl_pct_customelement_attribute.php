@@ -39,7 +39,7 @@ $GLOBALS['TL_DCA']['tl_pct_customelement_attribute']['palettes'][$strType] = $ob
 /**
  * Subpalettes
  */
-$objDcaHelper->addSubpalette('tag_custom',array('tag_table','tag_key','tag_value','tag_sorting','tag_where'));
+$objDcaHelper->addSubpalette('tag_custom',array('tag_table','tag_key','tag_value','tag_sorting','tag_translations','tag_where'));
 
 /**
  * Fields
@@ -106,6 +106,15 @@ $objDcaHelper->addFields(array
 	    'inputType'		=> 'text',
 		'eval'			=> array('tl_class'=>'clr long','decodeEntities'=>true),
 	    'sql'			=> "varchar(255) NOT NULL default ''"
+	),
+	'tag_translations' => array
+	(
+	    'label'  		=> &$GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['tag_translations'],
+	    'exclude'		=> true,
+	    'inputType'		=> 'select',
+	    'options_callback'	=> array('PCT\CustomElements\Attributes\Tags\TableHelper','getFields'),
+	    'eval'			=> array('tl_class'=>'w50','chosen'=>true,'decodeEntities'=>true),
+	    'sql'			=> "varchar(128) NOT NULL default ''"
 	),
 ));
 

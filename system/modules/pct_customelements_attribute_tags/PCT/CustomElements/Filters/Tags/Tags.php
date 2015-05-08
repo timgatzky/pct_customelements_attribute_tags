@@ -96,7 +96,7 @@ class Tags extends \PCT\CustomElements\Filter
 
 		$options = array();
 		$isSelected = false;
-		
+				
 		// build options array
 		if(count($values) > 0)
 		{
@@ -111,6 +111,12 @@ class Tags extends \PCT\CustomElements\Filter
 					'label'  	=> $v,
 					'name'  	=> $strName,
 				);
+				
+				// translate label
+				if($this->hasTranslation($v))
+				{
+					$tmp['label'] = $this->getTranslatedValue($v);
+				}
 				
 				if($isSelected)
 				{
@@ -166,32 +172,47 @@ class Tags extends \PCT\CustomElements\Filter
 		}
 		
 		$return = array();
-		$table = 'tl_pct_customelement_tags';
-		$valueField = 'title';
+		$strSource = 'tl_pct_customelement_tags';
+		$strKeyField = 'id';
+		$strValueField = 'title';
+		$strTranslationField = 'translations';
 		
 		// handle custom tables
 		if($this->objAttribute->tag_custom)
 		{
-			$table = $this->objAttribute->tag_table;
-			$valueField = $this->objAttribute->tag_value;
+			$strSource = $this->objAttribute->tag_table;
+			$strValueField = $this->objAttribute->tag_value;
+			$strTranslationField = $this->objAttribute->tag_translations;
 		}
 		
 		$objDatabase = \Database::getInstance();
 		if($bolByValueField)
 		{
-			$objTags = $objDatabase->prepare("SELECT id,".$valueField." FROM ".$table." WHERE ".$objDatabase->findInSet($valueField,$arrValues))->execute();
+			$objTags = $objDatabase->prepare("SELECT id,".$strValueField.($strKeyField ? ','.$strKeyField:'').($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".$objDatabase->findInSet($strValueField,$arrValues))->execute();
 		}
 		else
 		{
-			$objTags = $objDatabase->prepare("SELECT id,".$valueField." FROM ".$table." WHERE id IN(".implode(',', $arrValues).")")->execute();
+			$objTags = $objDatabase->prepare("SELECT id,".$strValueField.($strKeyField ? ','.$strKeyField:'').($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE id IN(".implode(',', $arrValues).")")->execute();
 		}
 		
+		$strLanguage = \Input::get('language') ?: \Input::get('lang') ?: $GLOBALS['TL_LANGUAGE'];
+		$arrReturn = array();
 		while($objTags->next())
 		{
-			$return[$objTags->id] = $objTags->$valueField;
+			// store the translations
+			if(strlen($objTags->{$strTranslationField}) > 0)
+			{
+				$arrTranslations = deserialize($objTags->{$strTranslationField});
+				foreach($arrTranslations as $lang => $arrTranslation)
+				{
+					$this->addTranslation($objTags->{$strValueField},$arrTranslation['label'],$lang);
+				}
+			}
+			
+			$arrReturn[$objTags->{$strKeyField}] = $objTags->{$strValueField};
 		}
 		
-		return $return;
+		return $arrReturn;
 	}
 	
 	
@@ -240,5 +261,32 @@ class Tags extends \PCT\CustomElements\Filter
 		}
 		
 		return $arrReturn;
+	}
+	
+	
+	
+	/**
+	 * Return the translated labels
+	 * @param array
+	 * @return string
+	 */
+	public function getTranslatedTagsLabel($arrTranslationsData)
+	{
+		if(!is_array($arrTranslations))
+		{
+			$arrTranslationsData = deserialize($arrTranslationsData);
+		}
+		
+		if(count($arrTranslationsData) < 1)
+		{
+			return '';
+		}
+		
+		if(strlen($strLanguage) < 1)
+		{
+			$strLanguage = \Input::get('language') ?: \Input::get('lang') ?: $GLOBALS['TL_LANGUAGE'];
+		}
+		
+		return $arrTranslationsData[$strLanguage]['label'];
 	}
 }

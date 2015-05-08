@@ -22,7 +22,10 @@ $GLOBALS['TL_LANG']['tl_pct_customelement_tags']['config']['label'] 	= 'Tags';
  * Fields
  */
 $GLOBALS['TL_LANG']['tl_pct_customelement_tags']['title'][0]			= 'Bezeichnung';
-$GLOBALS['TL_LANG']['tl_pct_customelement_tags']['title'][1]			= 'Bitte geben Sie einen Text ein. Jede Bezeichnung darf nur einmal vorkommen.';
+$GLOBALS['TL_LANG']['tl_pct_customelement_tags']['title'][1]			= 'Bitte geben Sie einen Text ein.';
+$GLOBALS['TL_LANG']['tl_pct_customelement_tags']['translations'][0]		= 'Übersetzungen';
+$GLOBALS['TL_LANG']['tl_pct_customelement_tags']['translations'][1]		= 'Bitte geben Sie die Übersetzung ein.';
+$GLOBALS['TL_LANG']['tl_pct_customelement_tags']['translations']['label'] = 'Bezeichnung';
 
 /**
  * Legends

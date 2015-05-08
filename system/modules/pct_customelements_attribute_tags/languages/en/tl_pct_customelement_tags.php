@@ -23,6 +23,9 @@ $GLOBALS['TL_LANG']['tl_pct_customelement_tags']['config']['label'] 	= 'Tags';
  */
 $GLOBALS['TL_LANG']['tl_pct_customelement_tags']['title'][0]			= 'Title';
 $GLOBALS['TL_LANG']['tl_pct_customelement_tags']['title'][1]			= 'Please enter a unique title.';
+$GLOBALS['TL_LANG']['tl_pct_customelement_tags']['translations'][0]		= 'Translations';
+$GLOBALS['TL_LANG']['tl_pct_customelement_tags']['translations'][1]		= 'Bitte enter the translation.';
+$GLOBALS['TL_LANG']['tl_pct_customelement_tags']['translations']['label'] = 'Term';
 
 /**
  * Legends

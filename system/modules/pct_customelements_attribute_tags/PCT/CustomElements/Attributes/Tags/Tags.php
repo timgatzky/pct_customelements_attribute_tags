@@ -147,12 +147,14 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		$strValueField = 'title';
 		$strKeyField = 'id';
 		$strSorting = 'sorting';
+		$strTranslationField = 'translations';
 		if($objAttribute->get('tag_custom'))
 		{
 			$strSource = $objAttribute->get('tag_table');
 			$strValueField = $objAttribute->get('tag_value');
 			$strKeyField = $objAttribute->get('tag_key') ?: 'id';
 			$strSortingField = $objAttribute->get('tag_sorting');
+			$strTranslationField = $this->get('tag_translations') ?: 'translations';
 		}
 		
 		$objResult = $objDatabase->prepare("SELECT * FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField,$varValue).($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
@@ -160,8 +162,22 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		{
 			return '';
 		}
+		
+		// translate values
+		$arrValues = array();
+		while($objResult->next())
+		{
+			$strValue = $objResult->{$strValueField};
+			if($this->hasTranslation($strValue))
+			{
+				$strValue = $this->getTranslatedValue($strValue);
+			}
+			
+			$arrValues[] = $strValue;
+		}
+		
 		$objTemplate->result = $objResult;
-		$objTemplate->value = implode(',', $objResult->fetchEach($strValueField) );
+		$objTemplate->value = implode(',', $arrValues);
 		return $objTemplate->parse();
 	}
 	
@@ -203,12 +219,14 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		$strValueField = 'title';
 		$strKeyField = 'id';
 		$strSorting = 'sorting';
+		$strTranslationField = 'translations';
 		if($this->get('tag_custom'))
 		{
 			$strSource = $this->get('tag_table') ?: 'tl_pct_customelement_tags';
 			$strValueField = $this->get('tag_value') ?: 'title';
 			$strKeyField = $this->get('tag_key') ?: 'id';
 			$strSorting = $this->get('tag_sorting') ?: 'sorting';
+			$strTranslationField = $this->get('tag_translations') ?: 'translations';
 		}
 		
 		$objResult = $objDatabase->prepare("SELECT * FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField, array_unique($arrValues)).($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
@@ -220,12 +238,22 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		$arrReturn = array();
 		while($objResult->next())
 		{
+			// store the translations
+			if(strlen($objResult->{$strTranslationField}) > 0)
+			{
+				$arrTranslations = deserialize($objResult->{$strTranslationField});
+				foreach($arrTranslations as $lang => $arrTranslation)
+				{
+					$this->addTranslation($objResult->{$strValueField},$arrTranslation['label'],$lang);
+				}
+			}
+			
 			$arrReturn[$objResult->{$strKeyField}] = $objResult->{$strValueField};
 		}
 		
 		return $arrReturn;
 	}
-	
+
 	
 	/**
 	 * Custom backend filtering routing

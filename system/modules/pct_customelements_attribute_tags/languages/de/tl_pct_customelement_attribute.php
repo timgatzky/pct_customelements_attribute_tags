@@ -29,3 +29,5 @@ $GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['tag_custom'][0]	= 'Eigene
 $GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['tag_custom'][1]	= 'Wählen Sie hier, wenn Sie ein andere Tabelle als die Standard-Tags-Tabelle (pct_customelement_tags) als Quelle nutzen wollen.';	
 $GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['tag_roots'][0]	= 'Auswahl einschränken';
 $GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['tag_roots'][1]	= 'Wählen Sie die Tags die mit Ihren Kindelementen angezeigt werden sollen.';
+$GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['tag_translations'][0]	= 'Übersetzungsfeld';
+$GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['tag_translations'][1]	= 'Wählen das Feld, was als Übersetzungsquelle dient. Siehe metaWizard';
