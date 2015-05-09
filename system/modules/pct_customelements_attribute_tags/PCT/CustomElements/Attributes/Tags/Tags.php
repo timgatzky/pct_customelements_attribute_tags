@@ -59,6 +59,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 				'source'		=> 'tl_pct_customelement_tags',
 				'valueField'	=> 'title',
 				'keyField'		=> 'id',
+				'translationField' => 'translations'
 			),
 			'eval'			=> $arrEval,
 			'sql'			=> "blob NULL",
@@ -71,6 +72,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$arrReturn['tabletree']['valueField'] = $this->get('tag_value');
 			$arrReturn['tabletree']['keyField'] = $this->get('tag_key');
 			$arrReturn['tabletree']['sortingField'] = $this->get('tag_sorting');
+			$arrReturn['tabletree']['translationField'] = $this->get('tag_translations');
 		}
 		
 		// set root nodes
@@ -109,7 +111,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		{
 			$objWidget->class = 'error';
 		}
-		
+
 		return $objWidget->parse();
 	}
 
@@ -226,7 +228,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$strValueField = $this->get('tag_value') ?: 'title';
 			$strKeyField = $this->get('tag_key') ?: 'id';
 			$strSorting = $this->get('tag_sorting') ?: 'sorting';
-			$strTranslationField = $this->get('tag_translations') ?: 'translations';
+			$strTranslationField = $this->get('tag_translations');
 		}
 		
 		$objResult = $objDatabase->prepare("SELECT * FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField, array_unique($arrValues)).($strSorting ? " ORDER BY ".$strSorting:"") )->execute();

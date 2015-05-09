@@ -45,6 +45,13 @@ class TableCustomElementTags extends \Backend
 	 */
 	public function listRecord($arrRow, $strLabel)
 	{
+		if(strlen($arrRow['translations']) > 0)
+		{
+			$arrTranslations = deserialize($arrRow['translations']);
+			$lang = \Input::get('language') ?: \Input::get('lang') ?: $GLOBALS['TL_LANGUAGE'];
+			$strLabel = $arrTranslations[$lang]['label'] ?: $strLabel;
+		}
+		
 		return '<a href="'.$this->addToUrl('node='.$arrRow['id']).'" title="'.$GLOBALS['TL_LANG']['MSC']['selectNode'].'">'.$strLabel.'</a>';
 	}
 	
