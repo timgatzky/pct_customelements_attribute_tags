@@ -328,7 +328,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		$strTable = $objCC->getTable();
 		if(!\Database::getInstance()->tableExists($strTable))
 		{
-			return array();
+			return $arrData;
 		}
 		
 		if($objAttribute->get('type') != 'tags' || !\Database::getInstance()->fieldExists($strField,$strTable))
