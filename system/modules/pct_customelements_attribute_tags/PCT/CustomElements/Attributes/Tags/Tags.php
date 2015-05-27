@@ -355,6 +355,11 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 	 */
 	public function processWildcardValue($varValue,$objAttribute)
 	{
+		if($objAttribute->get('type') != 'tags')
+		{
+			return $varValue;
+		}
+		
 		$objTemplate = new \BackendTemplate('be_customelement_attr_default');
 		$objTemplate->setData($objAttribute->getData());
 		
