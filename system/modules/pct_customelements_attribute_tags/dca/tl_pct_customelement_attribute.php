@@ -113,7 +113,7 @@ $objDcaHelper->addFields(array
 	    'exclude'		=> true,
 	    'inputType'		=> 'select',
 	    'options_callback'	=> array('PCT\CustomElements\Attributes\Tags\TableHelper','getFields'),
-	    'eval'			=> array('tl_class'=>'w50','chosen'=>true,'decodeEntities'=>true),
+	    'eval'			=> array('tl_class'=>'w50','chosen'=>true,'decodeEntities'=>true,'includeBlankOption'=>true),
 	    'sql'			=> "varchar(128) NOT NULL default ''"
 	),
 ));
