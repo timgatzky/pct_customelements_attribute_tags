@@ -1,3 +1,6 @@
+### 1.4.6
+Update: Included blank option for tl_pct_customelement_attribute.tag_translations
+
 ### 1.4.5
 Fixed: Errors when custom tables not exist
 Update: New filter template structure
