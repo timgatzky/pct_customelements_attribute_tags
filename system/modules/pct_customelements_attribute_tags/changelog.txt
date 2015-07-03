@@ -1,4 +1,5 @@
 ### 1.4.6
+Added: Find translation and set translations when rendering
 Update: Included blank option for tl_pct_customelement_attribute.tag_translations
 
 ### 1.4.5
