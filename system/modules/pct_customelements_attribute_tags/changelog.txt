@@ -1,6 +1,7 @@
 ### 1.4.6
 Fixed: Sorting for filter values (#4)
 Added: Find translation and set translations when rendering
+Added: Fallback for metaWizard
 Update: Included blank option for tl_pct_customelement_attribute.tag_translations
 
 ### 1.4.5
