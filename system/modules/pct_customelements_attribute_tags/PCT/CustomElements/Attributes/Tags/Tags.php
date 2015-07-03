@@ -170,6 +170,17 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		while($objResult->next())
 		{
 			$strValue = $objResult->{$strValueField};
+			
+			// store the translations
+			if(strlen($objResult->{$strTranslationField}) > 0)
+			{
+				$arrTranslations = deserialize($objResult->{$strTranslationField});
+				foreach($arrTranslations as $lang => $arrTranslation)
+				{
+					$this->addTranslation($objResult->{$strValueField},$arrTranslation['label'],$lang);
+				}
+			}
+
 			if($this->hasTranslation($strValue))
 			{
 				$strValue = $this->getTranslatedValue($strValue);
