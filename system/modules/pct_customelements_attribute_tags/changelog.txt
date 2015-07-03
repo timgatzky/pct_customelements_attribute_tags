@@ -1,7 +1,7 @@
 ### 1.4.6
 Fixed: Sorting for filter values (#4)
 Added: Find translation and set translations when rendering
-Added: Fallback for metaWizard
+Added: Fallback for metaWizard under Contao 3.2 (#5)
 Update: Included blank option for tl_pct_customelement_attribute.tag_translations
 
 ### 1.4.5
