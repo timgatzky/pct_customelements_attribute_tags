@@ -176,23 +176,24 @@ class Tags extends \PCT\CustomElements\Filter
 		$strKeyField = 'id';
 		$strValueField = 'title';
 		$strTranslationField = 'translations';
-		
+		$strSorting = 'sorting';
 		// handle custom tables
 		if($this->objAttribute->tag_custom)
 		{
 			$strSource = $this->objAttribute->tag_table;
 			$strValueField = $this->objAttribute->tag_value;
 			$strTranslationField = $this->objAttribute->tag_translations;
+			$strSorting = $this->objAttribute->tag_sorting;
 		}
 		
 		$objDatabase = \Database::getInstance();
 		if($bolByValueField)
 		{
-			$objTags = $objDatabase->prepare("SELECT id,".$strValueField.($strKeyField ? ','.$strKeyField:'').($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".$objDatabase->findInSet($strValueField,$arrValues))->execute();
+			$objTags = $objDatabase->prepare("SELECT id,".$strValueField.($strKeyField ? ','.$strKeyField:'').($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".$objDatabase->findInSet($strValueField,$arrValues).' ORDER BY '.$strSortingField)->execute();
 		}
 		else
 		{
-			$objTags = $objDatabase->prepare("SELECT id,".$strValueField.($strKeyField ? ','.$strKeyField:'').($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE id IN(".implode(',', $arrValues).")")->execute();
+			$objTags = $objDatabase->prepare("SELECT id,".$strValueField.($strKeyField ? ','.$strKeyField:'').($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE id IN(".implode(',', $arrValues).")".' ORDER BY '.$strSortingField)->execute();
 		}
 		
 		$strLanguage = \Input::get('language') ?: \Input::get('lang') ?: $GLOBALS['TL_LANGUAGE'];
