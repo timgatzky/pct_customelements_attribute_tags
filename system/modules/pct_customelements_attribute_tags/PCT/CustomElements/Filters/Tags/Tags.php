@@ -176,14 +176,14 @@ class Tags extends \PCT\CustomElements\Filter
 		$strKeyField = 'id';
 		$strValueField = 'title';
 		$strTranslationField = 'translations';
-		$strSorting = 'sorting';
+		$strSortingField = 'sorting';
 		// handle custom tables
 		if($this->objAttribute->tag_custom)
 		{
 			$strSource = $this->objAttribute->tag_table;
 			$strValueField = $this->objAttribute->tag_value;
 			$strTranslationField = $this->objAttribute->tag_translations;
-			$strSorting = $this->objAttribute->tag_sorting;
+			$strSortingField = $this->objAttribute->tag_sorting ?: 'sorting';
 		}
 		
 		$objDatabase = \Database::getInstance();

@@ -148,18 +148,18 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		$strSource = 'tl_pct_customelement_tags';
 		$strValueField = 'title';
 		$strKeyField = 'id';
-		$strSorting = 'sorting';
+		$strSortingField = 'sorting';
 		$strTranslationField = 'translations';
 		if($objAttribute->get('tag_custom'))
 		{
 			$strSource = $objAttribute->get('tag_table');
 			$strValueField = $objAttribute->get('tag_value');
 			$strKeyField = $objAttribute->get('tag_key') ?: 'id';
-			$strSortingField = $objAttribute->get('tag_sorting');
+			$strSortingField = $objAttribute->get('tag_sorting') ?: 'sorting';
 			$strTranslationField = $this->get('tag_translations') ?: 'translations';
 		}
 		
-		$objResult = $objDatabase->prepare("SELECT * FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField,$varValue).($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
+		$objResult = $objDatabase->prepare("SELECT * FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField,$varValue).($strSorting ? " ORDER BY ".$strSortingField:"") )->execute();
 		if($objResult->numRows < 1)
 		{
 			return '';
