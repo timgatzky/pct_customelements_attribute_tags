@@ -204,15 +204,18 @@ class Tags extends \PCT\CustomElements\Filter
 			if(strlen($objTags->{$strTranslationField}) > 0)
 			{
 				$arrTranslations = deserialize($objTags->{$strTranslationField});
-				foreach($arrTranslations as $lang => $arrTranslation)
+				if(count($arrTranslations) > 0 && is_array($arrTranslations))
 				{
-					$k = (version_compare(VERSION,'3.2','<=') ? 'title': 'label');
-					$strLabel = $arrTranslation[$k];
-					if(strlen($strLabel) < 1)
+					foreach($arrTranslations as $lang => $arrTranslation)
 					{
-						$strLabel = $objTags->{$strValueField};
+						$k = (version_compare(VERSION,'3.2','<=') ? 'title': 'label');
+						$strLabel = $arrTranslation[$k];
+						if(strlen($strLabel) < 1)
+						{
+							$strLabel = $objTags->{$strValueField};
+						}
+						$this->addTranslation($objTags->{$strValueField},$strLabel,$lang);
 					}
-					$this->addTranslation($objTags->{$strValueField},$strLabel,$lang);
 				}
 			}
 			
