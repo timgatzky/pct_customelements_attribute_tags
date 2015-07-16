@@ -1,3 +1,6 @@
+### 1.4.7
+Update: Check if translations field has values to avoid foreach php error
+
 ### 1.4.6
 Fixed: Sorting for filter values (#4)
 Added: Find translation and set translations when rendering
