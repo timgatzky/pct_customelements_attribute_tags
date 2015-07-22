@@ -179,4 +179,14 @@ class TableCustomElementTags extends \Backend
 
 		return ($objChilds->numRows && ($this->User->isAdmin || ($this->User->isAllowed(2, $row)))) ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.\Image::getHtml($icon, $label).'</a> ' : \Image::getHtml(preg_replace('/\.gif$/i', '_.gif', $icon)).' ';
 	}
+	
+	
+	/**
+	 * Load assets
+	 */
+	public function loadAssets()
+	{
+		$GLOBALS['TL_CSS'][] = PCT_CUSTOMELEMENTS_TAGS_PATH.'/assets/css/styles.css';
+	}
+	
 }
