@@ -34,6 +34,7 @@ ClassLoader::addClasses(array
 	'PCT\CustomElements\Attributes\Tags\TableCustomElementAttribute'	=> $path.'/PCT/CustomElements/Attributes/Tags/TableCustomElementAttribute.php',	
 	'PCT\CustomElements\Backend\TableCustomElementTags'					=> $path.'/PCT/CustomElements/Backend/TableCustomElementTags.php',	
 	'PCT\CustomElements\Filters\Tags'									=> $path.'/PCT/CustomElements/Filters/Tags/Tags.php',	
+	'PCT\CustomElements\Attributes\Tags\Export'							=> $path.'/PCT/CustomElements/Attributes/Tags/Export.php',	
 ));
 
 /**

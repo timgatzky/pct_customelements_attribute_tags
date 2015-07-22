@@ -248,7 +248,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$strValueField = $this->get('tag_value') ?: 'title';
 			$strKeyField = $this->get('tag_key') ?: 'id';
 			$strSorting = $this->get('tag_sorting') ?: 'sorting';
-			$strTranslationField = $this->get('tag_translations');
+			$strTranslationField = $this->get('tag_translations') ?: 'translations';
 		}
 		
 		$objResult = $objDatabase->prepare("SELECT * FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField, array_unique($arrValues)).($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
@@ -312,8 +312,13 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		$arrSession = \Session::getInstance()->getData();
 		$strSession = $GLOBALS['PCT_CUSTOMCATALOG']['backendFilterSession'];
 		
-		$varFilterValue = $arrSession[$strSession][$strTable][$strField] ?: $arrSession['filter'][$strTable][$strField];
+		$varFilterValue = deserialize($arrSession[$strSession][$strTable][$strField] ?: $arrSession['filter'][$strTable][$strField]);
 		$varSearchValue = $arrSession[$strSession.'_search'][$strTable]['value'] ?: $arrSession['search'][$strTable]['value'];
+		
+		if(is_array($varFilterValue))
+		{
+			$varFilterValue = $varFilterValue[0];
+		}
 		
 		$arrIds = array();
 		while($objRows->next())
@@ -394,4 +399,76 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		
 		return $this->renderCallback($objAttribute->get('alias'),$varValue,$objTemplate,$objAttribute);;
 	}
+	
+	
+	/**
+	 * Get the readable values from tags and return as array
+	 * @param array		List of tags
+	 * @return array
+	 */
+	public function getLabels($arrValues)
+	{
+		if(count($arrValues) < 1 || !is_array($arrValues))
+		{
+			return array();
+		}
+		
+		$objDatabase = \Database::getInstance();
+		
+		// fetch the readable values
+		$strSource = 'tl_pct_customelement_tags';
+		$strValueField = 'title';
+		$strKeyField = 'id';
+		$strSorting = 'sorting';
+		$strTranslationField = 'translations';
+		if($objAttribute->get('tag_custom'))
+		{
+			$strSource = $this->get('tag_table') ?: 'tl_pct_customelement_tags';
+			$strValueField = $this->get('tag_value') ?: 'title';
+			$strKeyField = $this->get('tag_key') ?: 'id';
+			$strSorting = $this->get('tag_sorting') ?: 'sorting';
+			$strTranslationField = $this->get('tag_translations') ?: 'translations';
+		}
+		
+		$objResult = $objDatabase->prepare("SELECT * FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField, array_unique($arrValues)).($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
+		if($objResult->numRows < 1)
+		{
+			return array();
+		}
+		
+		$metaWizardKey = (version_compare(VERSION,'3.2','<=') ? 'title': 'label');		
+		
+		$arrReturn = array();
+		while($objResult->next())
+		{
+			$key = $objResult->{$strKeyField};
+			
+			$arrReturn[$key] = array($objResult->{$strValueField});
+		
+			// run through translations
+			if(strlen($objResult->{$strTranslationField}) > 0)
+			{
+				$arrTranslations = deserialize($objResult->{$strTranslationField});
+				if(count($arrTranslations) > 0 && is_array($arrTranslations))
+				{
+					foreach($arrTranslations as $lang => $arrTranslation)
+					{
+						$strLabel = $arrTranslation[$metaWizardKey];
+						if(strlen($strLabel) < 1)
+						{
+							$strLabel = $objResult->{$strValueField};
+						}
+						
+						if(!in_array($strLabel, $arrReturn[$key]))
+						{
+							$arrReturn[$key][$lang] = $strLabel;
+						}
+					}
+				}
+			}
+		}
+		
+		return $arrReturn;
+	}
+
 }
