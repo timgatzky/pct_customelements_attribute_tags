@@ -1,3 +1,6 @@
+### 1.4.9
+Update: Support conditional filtering and count values in template
+
 ### 1.4.8
 Fixed: Module logo not showing when internal cache is active (#6)
 Update: Support for new CE Export (CE >= 1.4.0)
