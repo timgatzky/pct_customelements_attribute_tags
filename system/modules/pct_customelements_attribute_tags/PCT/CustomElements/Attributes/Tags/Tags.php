@@ -421,7 +421,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		$strKeyField = 'id';
 		$strSorting = 'sorting';
 		$strTranslationField = 'translations';
-		if($objAttribute->get('tag_custom'))
+		if($this->get('tag_custom'))
 		{
 			$strSource = $this->get('tag_table') ?: 'tl_pct_customelement_tags';
 			$strValueField = $this->get('tag_value') ?: 'title';
