@@ -1,6 +1,7 @@
 ### 1.4.11
 Fixed: Do not update child elements when renaming parent node (#9)
 Added: Copy with childs feature (#10)
+Update: Set the backend module icon via css
 
 ### 1.4.10
 Update: Added more engl. translations
