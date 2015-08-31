@@ -36,10 +36,6 @@ $GLOBALS['TL_DCA']['tl_pct_customelement_tags'] = array
 		(
 			array('PCT\CustomElements\Backend\TableCustomElementTags', 'addBreadcrumb'),
 		),
-		'onsubmit_callback' => array
-		(
-			array('PCT\CustomElements\Backend\TableCustomElementTags', 'updateChilds'),
-		),
 	),
 	// List
 	'list' => array
