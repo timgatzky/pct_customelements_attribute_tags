@@ -36,10 +36,6 @@ $GLOBALS['TL_DCA']['tl_pct_customelement_tags'] = array
 		(
 			array('PCT\CustomElements\Backend\TableCustomElementTags', 'addBreadcrumb'),
 		),
-		'onsubmit_callback' => array
-		(
-			array('PCT\CustomElements\Backend\TableCustomElementTags', 'updateChilds'),
-		),
 	),
 	// List
 	'list' => array
@@ -86,6 +82,14 @@ $GLOBALS['TL_DCA']['tl_pct_customelement_tags'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_pct_customelement_tags']['copy'],
 				'href'                => 'act=copy',
 				'icon'                => 'copy.gif',
+			),
+			'copyChilds' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_pct_customelement_tags']['copyChilds'],
+				'href'                => 'act=paste&amp;mode=copy&amp;childs=1',
+				'icon'                => 'copychilds.gif',
+				'attributes'          => 'onclick="Backend.getScrollOffset()"',
+				'button_callback'     => array('PCT\CustomElements\Backend\TableCustomElementTags', 'copyWithChilds')
 			),
 			'cut' => array
 			(

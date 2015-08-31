@@ -129,35 +129,6 @@ class TableCustomElementTags extends \Backend
 
 	
 	/**
-	 * Copy childs
-	 * @param object
-	 */
-	public function updateChilds(\DataContainer $objDC)
-	{
-		$objDatabase = \Database::getInstance();
-		
-		$objActiveRecord = $objDatabase->prepare("SELECT * FROM ".$objDC->table." WHERE id=?")->limit(1)->execute($objDC->id);
-		
-		$objChilds = $objDatabase->prepare("SELECT * FROM ".$objDC->table." WHERE pid=?")->execute($objDC->id);
-		if($objChilds->numRows < 1)
-		{
-			return;
-		}
-		
-		$time = time();
-		while($objChilds->next())
-		{
-			$arrSet = array
-			(
-				'tstamp'	=> $time,
-				'title' 	=> $objActiveRecord->title.'-'.$objChilds->id
-			);
-			$objDatabase->prepare("UPDATE ".$objDC->table." %s WHERE id=?")->set($arrSet)->execute($objChilds->id);
-		}
-	}
-	
-	
-	/**
 	 * Return the copy with childs button
 	 * @param array
 	 * @param string
