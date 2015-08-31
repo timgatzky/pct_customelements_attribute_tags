@@ -83,6 +83,14 @@ $GLOBALS['TL_DCA']['tl_pct_customelement_tags'] = array
 				'href'                => 'act=copy',
 				'icon'                => 'copy.gif',
 			),
+			'copyChilds' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_pct_customelement_tags']['copyChilds'],
+				'href'                => 'act=paste&amp;mode=copy&amp;childs=1',
+				'icon'                => 'copychilds.gif',
+				'attributes'          => 'onclick="Backend.getScrollOffset()"',
+				'button_callback'     => array('PCT\CustomElements\Backend\TableCustomElementTags', 'copyWithChilds')
+			),
 			'cut' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_pct_customelement_tags']['copy'],
