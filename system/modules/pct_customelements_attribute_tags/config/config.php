@@ -27,7 +27,7 @@ array_insert($GLOBALS['BE_MOD']['content'], count($GLOBALS['BE_MOD']['content'])
 	'pct_customelements_tags' => array
 	(
 		'tables' 		=> array('tl_pct_customelement_tags'),
-		'icon'   		=> PCT_CUSTOMELEMENTS_TAGS_PATH.'/assets/img/tags_mod.png',
+	#	'icon'   		=> PCT_CUSTOMELEMENTS_TAGS_PATH.'/assets/img/tags_mod.png',
 	)
 ));
 
