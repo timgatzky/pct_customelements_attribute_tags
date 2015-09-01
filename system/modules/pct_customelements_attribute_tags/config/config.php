@@ -30,7 +30,7 @@ array_insert($GLOBALS['BE_MOD']['content'], count($GLOBALS['BE_MOD']['content'])
 	)
 ));
 
-if(version_compare(VERSION, '3.5','<='))
+if(version_compare(VERSION, '3.5','<'))
 {
 	$GLOBALS['BE_MOD']['content']['pct_customelements_tags']['icon'] = PCT_CUSTOMELEMENTS_TAGS_PATH.'/assets/img/tags_mod.png';
 }
