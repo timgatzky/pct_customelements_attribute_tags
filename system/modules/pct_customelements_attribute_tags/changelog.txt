@@ -1,4 +1,7 @@
 ### 1.4.12
+Update: Remove the switchToEdit DCA option
+Update: Set the backend icon on any possible way
+
 ### 1.4.11
 Fixed: Do not update child elements when renaming parent node (#9)
 Added: Copy with childs feature (#10)

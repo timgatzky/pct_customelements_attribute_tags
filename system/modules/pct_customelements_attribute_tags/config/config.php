@@ -31,11 +31,6 @@ array_insert($GLOBALS['BE_MOD']['content'], count($GLOBALS['BE_MOD']['content'])
 	)
 ));
 
-if(version_compare(VERSION, '3.5','<'))
-{
-	$GLOBALS['BE_MOD']['content']['pct_customelements_tags']['icon'] = PCT_CUSTOMELEMENTS_TAGS_PATH.'/assets/img/tags_mod.png';
-}
-
 /**
  * Register attribute
  */
@@ -59,13 +54,14 @@ $GLOBALS['PCT_CUSTOMELEMENTS']['FILTERS']['tags'] = array
 );
 
 /**
+ * Register the model classes
+ */
+$GLOBALS['TL_MODELS']['tl_pct_customelement_tags'] = 'PCT\CustomElements\Models\Attribute';
+
+/**
  * Hooks
  */
-if(!$GLOBALS['TL_CONFIG']['bypassCache'])
-{
-	// workaround a contao bug with the internal cache and set the module icon via css
-	$GLOBALS['TL_HOOKS']['loadDataContainer'][] 				= array('PCT\CustomElements\Backend\TableCustomElementTags','loadAssets');
-}
+$GLOBALS['TL_HOOKS']['loadDataContainer'][] 				= array('PCT\CustomElements\Backend\TableCustomElementTags','loadAssets');
 $GLOBALS['CUSTOMCATALOG_HOOKS']['prepareField'][] 			= array('PCT\CustomElements\Attributes\Tags','prepareField');
 $GLOBALS['CUSTOMELEMENTS_HOOKS']['processWildcardValue'][] 	= array('PCT\CustomElements\Attributes\Tags','processWildcardValue');
 $GLOBALS['CUSTOMELEMENTS_HOOKS']['getExportChain'][] 		= array('PCT\CustomElements\Attributes\Tags\Export','addToExport');

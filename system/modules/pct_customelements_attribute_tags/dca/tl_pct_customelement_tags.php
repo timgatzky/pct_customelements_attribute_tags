@@ -22,7 +22,6 @@ $GLOBALS['TL_DCA']['tl_pct_customelement_tags'] = array
 	(
 		'label'                       => $GLOBALS['TL_LANG']['tl_pct_customelement_tags']['config']['label'] ? $GLOBALS['TL_LANG']['tl_pct_customelement_tags']['config']['label'] : 'Tags',
 		'dataContainer'				  => 'Table',
-		'switchToEdit'                => true,
 		'enableVersioning'            => true,
 		'sql' => array
 		(
