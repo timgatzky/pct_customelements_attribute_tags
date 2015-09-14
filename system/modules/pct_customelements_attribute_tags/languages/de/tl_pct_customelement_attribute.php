@@ -31,3 +31,5 @@ $GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['tag_roots'][0]	= 'Auswahl
 $GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['tag_roots'][1]	= 'Wählen Sie die Tags die mit Ihren Kindelementen angezeigt werden sollen.';
 $GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['tag_translations'][0]	= 'Übersetzungsfeld';
 $GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['tag_translations'][1]	= 'Wählen das Feld, was als Übersetzungsquelle dient. Siehe metaWizard';
+$GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['options']['tags'] = array('Attribut-Optionen','Wählen Sie welche zusätzlichen Optionen dargestellt werden sollen.');
+$GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['options']['tags']['sortable']	= 'Individuelle Reihenfolge';

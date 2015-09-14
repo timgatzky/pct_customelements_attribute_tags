@@ -31,3 +31,5 @@ $GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['tag_roots'][0]	= 'Limitat
 $GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['tag_roots'][1]	= 'Limit the selection to the selected elements and their childs.';
 $GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['tag_translations'][0]	= 'Translations-widget';
 $GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['tag_translations'][1]	= 'Select the field that stores the translations e.g. created by the translations-widget attribute. Or by a metaWizard field';
+$GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['options']['tags'] = array('Attribute options','Choose more options');
+$GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['options']['tags']['sortable']	= 'Custom order';

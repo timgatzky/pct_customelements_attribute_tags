@@ -80,7 +80,11 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		$arrReturn['tabletree']['rootsField'] = 'tag_roots';
 		
 		// make field sortable
-		#$arrReturn['sortable'] = true;
+		$arrOptions = deserialize($this->get('options')) ?: array();
+		if(in_array('sortable', $arrOptions))
+		{
+			$arrReturn['sortable'] = true;
+		}
 		
 		return $arrReturn;
 	}
@@ -261,6 +265,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		while($objResult->next())
 		{
 			// store the translations
+			$strLabel = $objResult->{$strValueField};
 			if(strlen($objResult->{$strTranslationField}) > 0)
 			{
 				$arrTranslations = deserialize($objResult->{$strTranslationField});
@@ -279,7 +284,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 				}
 			}
 			
-			$arrReturn[$objResult->{$strKeyField}] = $objResult->{$strValueField};
+			$arrReturn[$objResult->{$strKeyField}] = $strLabel;
 		}
 		
 		return $arrReturn;
@@ -326,8 +331,10 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$values = deserialize($objRows->{$strField});
 			if(!is_array($values))
 			{
-				$values = array($values);
+				$values = explode(',', $values);
 			}
+			
+			$values = array_filter($values,'strlen');
 			
 			if(!in_array($varSearchValue, $values) && !in_array($varFilterValue, $values))
 			{
