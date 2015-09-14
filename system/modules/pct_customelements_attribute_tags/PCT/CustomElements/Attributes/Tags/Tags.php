@@ -261,6 +261,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		while($objResult->next())
 		{
 			// store the translations
+			$strLabel = $objResult->{$strValueField};
 			if(strlen($objResult->{$strTranslationField}) > 0)
 			{
 				$arrTranslations = deserialize($objResult->{$strTranslationField});
@@ -279,7 +280,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 				}
 			}
 			
-			$arrReturn[$objResult->{$strKeyField}] = $objResult->{$strValueField};
+			$arrReturn[$objResult->{$strKeyField}] = $strLabel;
 		}
 		
 		return $arrReturn;
