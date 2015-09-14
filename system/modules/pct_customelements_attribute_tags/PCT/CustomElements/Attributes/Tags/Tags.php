@@ -327,8 +327,10 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$values = deserialize($objRows->{$strField});
 			if(!is_array($values))
 			{
-				$values = array($values);
+				$values = explode(',', $values);
 			}
+			
+			$values = array_filter($values,'strlen');
 			
 			if(!in_array($varSearchValue, $values) && !in_array($varFilterValue, $values))
 			{
