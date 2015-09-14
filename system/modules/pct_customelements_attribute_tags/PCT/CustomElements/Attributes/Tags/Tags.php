@@ -80,7 +80,11 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		$arrReturn['tabletree']['rootsField'] = 'tag_roots';
 		
 		// make field sortable
-		#$arrReturn['sortable'] = true;
+		$arrOptions = deserialize($this->get('options')) ?: array();
+		if(in_array('sortable', $arrOptions))
+		{
+			$arrReturn['sortable'] = true;
+		}
 		
 		return $arrReturn;
 	}

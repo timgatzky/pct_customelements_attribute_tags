@@ -33,7 +33,7 @@ $GLOBALS['TL_DCA']['tl_pct_customelement_attribute']['config']['onload_callback'
  */
 $strType = 'tags';
 $arrPalettes = $objDcaHelper->getPalettesAsArray('default');
-$arrPalettes['settings_legend'] = array('tag_custom','tag_roots','eval_multiple','eval_mandatory');
+$arrPalettes['settings_legend'] = array('tag_custom','tag_roots','eval_multiple','eval_mandatory','options');
 $GLOBALS['TL_DCA']['tl_pct_customelement_attribute']['palettes'][$strType] = $objDcaHelper->generatePalettes($arrPalettes);
 
 /**
@@ -44,6 +44,18 @@ $objDcaHelper->addSubpalette('tag_custom',array('tag_table','tag_key','tag_value
 /**
  * Fields
  */
+if($objDcaHelper->getActiveRecord()->type == $strType)
+{
+	$GLOBALS['TL_DCA']['tl_pct_customelement_attribute']['fields']['options'][$strType]['options'] = array
+	(
+		'sortable',
+	);
+	$GLOBALS['TL_DCA']['tl_pct_customelement_attribute']['fields']['options'][$strType]['reference'] = &$GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['options'][$strType];
+
+}
+
+
+
 $objDcaHelper->addFields(array
 (
 	'tag_roots' => array
@@ -117,5 +129,4 @@ $objDcaHelper->addFields(array
 	    'sql'			=> "varchar(128) NOT NULL default ''"
 	),
 ));
-
 
