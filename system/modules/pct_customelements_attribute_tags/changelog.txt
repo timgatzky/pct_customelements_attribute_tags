@@ -1,4 +1,5 @@
 ### 1.4.13
+Added: Custom sorting in widget
 Update: Show translated labels in filter selection in backend
 
 ### 1.4.12
