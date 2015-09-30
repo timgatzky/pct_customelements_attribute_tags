@@ -1,5 +1,5 @@
 ### 1.4.14
-Added: Support the tag_where conditions field
+Added: Support the tag_where conditions field (#22)
 
 ### 1.4.13
 Added: Custom sorting in widget (#18)
