@@ -59,7 +59,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 				'source'		=> 'tl_pct_customelement_tags',
 				'valueField'	=> 'title',
 				'keyField'		=> 'id',
-				'translationField' => 'translations'
+				'translationField' => 'translations',
 			),
 			'eval'			=> $arrEval,
 			'sql'			=> "blob NULL",
@@ -73,6 +73,8 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$arrReturn['tabletree']['keyField'] = $this->get('tag_key');
 			$arrReturn['tabletree']['sortingField'] = $this->get('tag_sorting');
 			$arrReturn['tabletree']['translationField'] = $this->get('tag_translations');
+			$arrReturn['tabletree']['conditionsField'] = 'tag_where';
+			$arrReturn['tabletree']['conditions'] = $this->get('tag_where');
 		}
 		
 		// set root nodes
@@ -163,7 +165,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$strTranslationField = $this->get('tag_translations') ?: 'translations';
 		}
 		
-		$objResult = $objDatabase->prepare("SELECT * FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField,$varValue).($strSorting ? " ORDER BY ".$strSortingField:"") )->execute();
+		$objResult = $objDatabase->prepare("SELECT * FROM ".$strSource." WHERE ".($this->get('tag_where') ? $this->get('tag_where') : "")." ".$objDatabase->findInSet($strKeyField,$varValue).($strSorting ? " ORDER BY ".$strSortingField:"") )->execute();
 		if($objResult->numRows < 1)
 		{
 			return '';
@@ -255,7 +257,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$strTranslationField = $this->get('tag_translations') ?: 'translations';
 		}
 		
-		$objResult = $objDatabase->prepare("SELECT * FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField, array_unique($arrValues)).($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
+		$objResult = $objDatabase->prepare("SELECT * FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField, array_unique($arrValues)).($this->get('tag_where') ? " AND ".$this->get('tag_where') : " ").($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
 		if($objResult->numRows < 1)
 		{
 			return array();
@@ -437,7 +439,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$strTranslationField = $this->get('tag_translations') ?: 'translations';
 		}
 		
-		$objResult = $objDatabase->prepare("SELECT * FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField, array_unique($arrValues)).($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
+		$objResult = $objDatabase->prepare("SELECT * FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField, array_unique($arrValues)).($this->get('tag_where') ? " AND ".$this->get('tag_where') : " ").($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
 		if($objResult->numRows < 1)
 		{
 			return array();
