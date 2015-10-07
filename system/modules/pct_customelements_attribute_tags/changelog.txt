@@ -1,3 +1,6 @@
+### 1.4.15
+Added: Support language switching in TableTree widget (#25)
+
 ### 1.4.14
 Added: Support the tag_where conditions field (#22)
 
