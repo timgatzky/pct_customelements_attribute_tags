@@ -122,7 +122,6 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 	}
 
 
-
 	/**
 	 * Generate the attribute in the frontend
 	 * @param string
@@ -383,6 +382,42 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		$objAttribute->setOrigin($objCC);
 		
 		$arrData['fieldDef']['options'] = $objAttribute->getSelectOptions();
+		
+		// show language records in a multilanguage custom catalog source
+		if($objAttribute->get('tag_custom'))
+		{
+			$objSession = \Session::getInstance();
+			$strSource = $objAttribute->get('tag_table');
+			if(\PCT\CustomElements\Plugins\CustomCatalog\Core\CustomCatalogFactory::validateByTableName($strSource))
+			{
+				$objSourceCC = \PCT\CustomElements\Plugins\CustomCatalog\Core\Cache::getCustomCatalog($strSource);
+				if(!$objSourceCC)
+				{
+					$objSourceCC = \PCT\CustomElements\Plugins\CustomCatalog\Core\CustomCatalogFactory::findByTableName($strSource);
+				}
+				
+				if($objSourceCC->hasLanguageRecords())
+				{
+					$strLanguage = \PCT\CustomElements\Plugins\CustomCatalog\Core\Multilanguage::getLanguage($objCC->getTable());
+					if(strlen($strLanguage) > 0)
+					{
+						$arrRoots = \PCT\CustomElements\Plugins\CustomCatalog\Core\Multilanguage::getInstance()->findLanguageRecords($strSource,$strLanguage);
+						$arrData['fieldDef']['tabletree']['roots'] = $arrRoots;
+					}
+					else
+					{
+						$arrRoots = \PCT\CustomElements\Plugins\CustomCatalog\Core\Multilanguage::getInstance()->findBaseRecords($strSource,$strLanguage);
+						$arrData['fieldDef']['tabletree']['roots'] = $arrRoots;
+					}
+					
+					// set table tree roots session
+					$arrSession = $objSession->get('pct_tabletree_roots');
+					$arrSession[$strField] = $arrRoots;
+					$_SESSION['pct_tabletree_roots'][$strField] = $arrRoots;
+					$objSession->set('pct_tabletree_roots',$arrSession);
+				}
+			}
+		}
 		
 		return $arrData;
 	}
