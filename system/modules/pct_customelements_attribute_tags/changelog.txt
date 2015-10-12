@@ -1,3 +1,6 @@
+### 1.4.16
+Fixed: Wrong language in labels in backend filter selects (#27)
+
 ### 1.4.15
 Added: Support language switching in TableTree widget (requires CustomCatalog >= 1.3.4, pct_tabletree_wdiget >= 1.3.1) (#25)
 
