@@ -275,19 +275,23 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 					foreach($arrTranslations as $lang => $arrTranslation)
 					{
 						$k = (version_compare(VERSION,'3.2','<=') ? 'title': 'label');
-						$strLabel = $arrTranslation[$k];
-						if(strlen($strLabel) < 1)
+						$label = $arrTranslation[$k];
+						if(strlen($label) < 1)
 						{
-							$strLabel = $objResult->{$strValueField};
+							$label = $objResult->{$strValueField};
 						}
-						$this->addTranslation($objResult->{$strValueField},$strLabel,$lang);
+						$this->addTranslation($objResult->{$strValueField},$label,$lang);
 					}
 				}
 			}
 			
+			// show translated value in the backend
+			if($this->hasTranslation($objResult->{$strValueField}))
+			{
+				$strLabel = $this->getTranslatedValue($objResult->{$strValueField});
+			}
 			$arrReturn[$objResult->{$strKeyField}] = $strLabel;
 		}
-		
 		return $arrReturn;
 	}
 
