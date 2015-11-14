@@ -135,6 +135,8 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 	 */
 	public function renderCallback($strField,$varValue,$objTemplate,$objAttribute)
 	{
+		$this->setData($objAttribute->getData());
+		
 		$varValue = deserialize($varValue);
 		
 		if(!is_array($varValue))
@@ -267,31 +269,23 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		{
 			// store the translations
 			$strLabel = $objResult->{$strValueField};
-			if(strlen($objResult->{$strTranslationField}) > 0)
+			$arrTranslations = deserialize($objResult->{$strTranslationField});
+			if(count($arrTranslations) > 0 && is_array($arrTranslations))
 			{
-				$arrTranslations = deserialize($objResult->{$strTranslationField});
-				if(count($arrTranslations) > 0 && is_array($arrTranslations))
+				foreach($arrTranslations as $lang => $arrTranslation)
 				{
-					foreach($arrTranslations as $lang => $arrTranslation)
+					$k = (version_compare(VERSION,'3.2','<=') ? 'title': 'label');
+					if(strlen($arrTranslation[$k]) > 0)
 					{
-						$k = (version_compare(VERSION,'3.2','<=') ? 'title': 'label');
-						$label = $arrTranslation[$k];
-						if(strlen($label) < 1)
-						{
-							$label = $objResult->{$strValueField};
-						}
-						$this->addTranslation($objResult->{$strValueField},$label,$lang);
+						$strLabel = $arrTranslation[$k];
 					}
+					$this->addTranslation($objResult->{$strValueField},$strLabel,$lang);
 				}
 			}
 			
-			// show translated value in the backend
-			if($this->hasTranslation($objResult->{$strValueField}))
-			{
-				$strLabel = $this->getTranslatedValue($objResult->{$strValueField});
-			}
 			$arrReturn[$objResult->{$strKeyField}] = $strLabel;
 		}
+		
 		return $arrReturn;
 	}
 
