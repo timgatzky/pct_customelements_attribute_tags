@@ -1,3 +1,6 @@
+### 1.4.17
+Fixed: An issue when displaying in backend wildcard
+
 ### 1.4.16
 Fixed: Wrong language in labels in backend filter selects (#27)
 
