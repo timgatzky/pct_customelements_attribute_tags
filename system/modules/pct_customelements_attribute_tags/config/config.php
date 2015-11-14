@@ -17,7 +17,7 @@
  * Constants
  */
 define(PCT_CUSTOMELEMENTS_TAGS_PATH, 'system/modules/pct_customelements_attribute_tags');
-define(PCT_CUSTOMELEMENTS_TAGS_VERSION, '1.4.17');
+define(PCT_CUSTOMELEMENTS_TAGS_VERSION, '1.4.16');
 
 /**
  * Back end modules
