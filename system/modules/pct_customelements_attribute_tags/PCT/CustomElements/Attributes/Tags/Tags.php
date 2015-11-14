@@ -135,6 +135,8 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 	 */
 	public function renderCallback($strField,$varValue,$objTemplate,$objAttribute)
 	{
+		$this->setData($objAttribute->getData());
+		
 		$varValue = deserialize($varValue);
 		
 		if(!is_array($varValue))
@@ -267,21 +269,17 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		{
 			// store the translations
 			$strLabel = $objResult->{$strValueField};
-			if(strlen($objResult->{$strTranslationField}) > 0)
+			$arrTranslations = deserialize($objResult->{$strTranslationField});
+			if(count($arrTranslations) > 0 && is_array($arrTranslations))
 			{
-				$arrTranslations = deserialize($objResult->{$strTranslationField});
-				if(count($arrTranslations) > 0 && is_array($arrTranslations))
+				foreach($arrTranslations as $lang => $arrTranslation)
 				{
-					foreach($arrTranslations as $lang => $arrTranslation)
+					$k = (version_compare(VERSION,'3.2','<=') ? 'title': 'label');
+					if(strlen($arrTranslation[$k]) > 0)
 					{
-						$k = (version_compare(VERSION,'3.2','<=') ? 'title': 'label');
 						$strLabel = $arrTranslation[$k];
-						if(strlen($strLabel) < 1)
-						{
-							$strLabel = $objResult->{$strValueField};
-						}
-						$this->addTranslation($objResult->{$strValueField},$strLabel,$lang);
 					}
+					$this->addTranslation($objResult->{$strValueField},$strLabel,$lang);
 				}
 			}
 			
@@ -413,7 +411,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 					// set table tree roots session
 					$arrSession = $objSession->get('pct_tabletree_roots');
 					$arrSession[$strField] = $arrRoots;
-					$_SESSION['pct_tabletree_roots'][$strField] = $arrRoots;
+					#$_SESSION['pct_tabletree_roots'][$strField] = $arrRoots;
 					$objSession->set('pct_tabletree_roots',$arrSession);
 				}
 			}
