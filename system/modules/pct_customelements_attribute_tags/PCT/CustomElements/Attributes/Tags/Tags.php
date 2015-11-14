@@ -417,7 +417,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 					// set table tree roots session
 					$arrSession = $objSession->get('pct_tabletree_roots');
 					$arrSession[$strField] = $arrRoots;
-					$_SESSION['pct_tabletree_roots'][$strField] = $arrRoots;
+					#$_SESSION['pct_tabletree_roots'][$strField] = $arrRoots;
 					$objSession->set('pct_tabletree_roots',$arrSession);
 				}
 			}
