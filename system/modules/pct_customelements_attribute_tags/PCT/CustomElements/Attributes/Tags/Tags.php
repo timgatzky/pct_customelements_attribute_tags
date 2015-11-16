@@ -408,11 +408,13 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 						$arrData['fieldDef']['tabletree']['roots'] = $arrRoots;
 					}
 					
-					// set table tree roots session
-					$arrSession = $objSession->get('pct_tabletree_roots');
-					$arrSession[$strField] = $arrRoots;
-					#$_SESSION['pct_tabletree_roots'][$strField] = $arrRoots;
-					$objSession->set('pct_tabletree_roots',$arrSession);
+					if(\Input::get('act') == 'show')
+					{
+						// set table tree roots session
+						$arrSession = $objSession->get('pct_tabletree_roots');
+						$arrSession[$strField] = $arrRoots;
+						$objSession->set('pct_tabletree_roots',$arrSession);
+					}
 				}
 			}
 		}
