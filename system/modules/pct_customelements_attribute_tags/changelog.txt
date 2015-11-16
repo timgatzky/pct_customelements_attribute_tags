@@ -1,3 +1,6 @@
+### 1.4.17
+Update: Store the roots Session only in popup windows
+
 ### 1.4.16
 Fixed: Wrong language in labels in backend filter selects (#27)
 Fixed: An issue when displaying in backend wildcard
