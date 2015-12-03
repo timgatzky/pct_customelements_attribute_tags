@@ -1,3 +1,6 @@
+### 1.4.18
+Update: Respect the published field
+
 ### 1.4.17
 Update: Store the roots Session only in popup windows
 
