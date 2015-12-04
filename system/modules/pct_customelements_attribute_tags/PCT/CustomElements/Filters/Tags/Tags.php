@@ -256,8 +256,7 @@ class Tags extends \PCT\CustomElements\Filter
 		
 		$objDatabase = \Database::getInstance();
 		$field = $this->getFilterTarget();
-		
-		$strPublished = $this->getCustomCatalog()->getPublishedField();
+		$strPublished = ($GLOBALS['PCT_CUSTOMCATALOG']['FRONTEND']['FILTER']['publishedOnly'] ? $this->getCustomCatalog()->getPublishedField() : '');
 		
 		$objRows = $objDatabase->prepare("SELECT id,".$field." FROM ".$this->getTable()." WHERE ".$field." IS NOT NULL ".(strlen($strPublished) > 0 ? " AND ".$strPublished."=1" : ""))->execute();
 		if($objRows->numRows < 1)
