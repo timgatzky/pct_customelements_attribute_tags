@@ -1,4 +1,5 @@
 ### 1.4.18
+Fixed: Show correct translated label in backend filter
 Update: Respect the published field
 
 ### 1.4.17
