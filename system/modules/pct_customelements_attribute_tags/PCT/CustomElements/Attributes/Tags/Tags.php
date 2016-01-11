@@ -283,6 +283,12 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 				}
 			}
 			
+			// look up translation
+			if($this->hasTranslation($objResult->{$strValueField}))
+			{
+				$strLabel = $this->getTranslatedValue($objResult->{$strValueField});
+			}
+			
 			$arrReturn[$objResult->{$strKeyField}] = $strLabel;
 		}
 		
