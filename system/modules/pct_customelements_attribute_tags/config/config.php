@@ -17,7 +17,13 @@
  * Constants
  */
 define(PCT_CUSTOMELEMENTS_TAGS_PATH, 'system/modules/pct_customelements_attribute_tags');
-define(PCT_CUSTOMELEMENTS_TAGS_VERSION, '1.4.18');
+define(PCT_CUSTOMELEMENTS_TAGS_VERSION, '1.4.19');
+
+$blnInstallTool = false;
+if(strlen(strpos(\Environment::getInstance()->scriptName, '/contao/install.php')) > 0 )
+{
+	$blnInstallTool = true;
+}
 
 /**
  * Back end modules
@@ -62,6 +68,9 @@ $GLOBALS['TL_MODELS']['tl_pct_customelement_tags'] = 'PCT\CustomElements\Models\
  * Hooks
  */
 $GLOBALS['TL_HOOKS']['loadDataContainer'][] 				= array('PCT\CustomElements\Backend\TableCustomElementTags','loadAssets');
-$GLOBALS['CUSTOMCATALOG_HOOKS']['prepareField'][] 			= array('PCT\CustomElements\Attributes\Tags','prepareField');
+if($blnInstallTool === false)
+{
+	$GLOBALS['CUSTOMCATALOG_HOOKS']['prepareField'][] 			= array('PCT\CustomElements\Attributes\Tags','prepareField');
+}
 $GLOBALS['CUSTOMELEMENTS_HOOKS']['processWildcardValue'][] 	= array('PCT\CustomElements\Attributes\Tags','processWildcardValue');
 $GLOBALS['CUSTOMELEMENTS_HOOKS']['getExportChain'][] 		= array('PCT\CustomElements\Attributes\Tags\Export','addToExport');

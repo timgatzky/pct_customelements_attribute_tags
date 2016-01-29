@@ -220,7 +220,7 @@ class Tags extends \PCT\CustomElements\Filter
 			if(strlen($objTags->{$strTranslationField}) > 0)
 			{
 				$arrTranslations = deserialize($objTags->{$strTranslationField});
-				if(count($arrTranslations) > 0 && is_array($arrTranslations))
+				if(count($arrTranslations) > 0 && is_array($arrTranslations) && array_key_exists($metaWizardKey, $arrTranslations))
 				{
 					foreach($arrTranslations as $lang => $arrTranslation)
 					{
