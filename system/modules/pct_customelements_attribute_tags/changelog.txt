@@ -1,4 +1,5 @@
 ### 1.4.19
+Fixed: Trigger the prepareField Hook only outside the install tool
 Added: Check if array key "title" or "label" exists in translation array
 
 ### 1.4.18
