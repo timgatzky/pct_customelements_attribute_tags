@@ -44,3 +44,5 @@ $GLOBALS['TL_LANG']['tl_pct_customelement_tags']['delete'][0]			= 'Tag entfernen
 $GLOBALS['TL_LANG']['tl_pct_customelement_tags']['delete'][1]			= 'Soll das Tag ID %s entfernt werden?';
 $GLOBALS['TL_LANG']['tl_pct_customelement_tags']['copyChilds'][0]		= 'Tag ID %s inklusive Kindelementen duplizieren';
 $GLOBALS['TL_LANG']['tl_pct_customelement_tags']['copyChilds'][1]		= 'Tag ID %s inklusive Kindelementen duplizieren';
+$GLOBALS['TL_LANG']['tl_pct_customelement_tags']['show'][0]				= 'Informationen zu Tag ID %s';
+$GLOBALS['TL_LANG']['tl_pct_customelement_tags']['show'][1]				= 'Informationen zu Tag ID %s anzeigen';
