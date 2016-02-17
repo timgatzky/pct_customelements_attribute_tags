@@ -1,3 +1,6 @@
+### 1.4.20
+Added: Backend "show" operations button label
+
 ### 1.4.19
 Fixed: Trigger the prepareField Hook only outside the install tool
 Added: Check if array key "title" or "label" exists in translation array
