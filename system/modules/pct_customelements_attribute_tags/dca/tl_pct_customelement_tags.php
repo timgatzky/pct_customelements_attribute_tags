@@ -92,7 +92,7 @@ $GLOBALS['TL_DCA']['tl_pct_customelement_tags'] = array
 			),
 			'cut' => array
 			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_pct_customelement_tags']['copy'],
+				'label'               => &$GLOBALS['TL_LANG']['tl_pct_customelement_tags']['cut'],
 				'href'                => 'act=paste&amp;mode=cut',
 				'icon'                => 'cut.gif',
 			),
