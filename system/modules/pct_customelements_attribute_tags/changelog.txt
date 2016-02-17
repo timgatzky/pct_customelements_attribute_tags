@@ -1,5 +1,6 @@
 ### 1.4.20
 Added: Backend "show" operations button label
+Update: Correct label for "cut" operations button
 
 ### 1.4.19
 Fixed: Trigger the prepareField Hook only outside the install tool
