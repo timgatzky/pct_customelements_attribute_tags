@@ -17,7 +17,7 @@
  * Constants
  */
 define(PCT_CUSTOMELEMENTS_TAGS_PATH, 'system/modules/pct_customelements_attribute_tags');
-define(PCT_CUSTOMELEMENTS_TAGS_VERSION, '1.4.20');
+define(PCT_CUSTOMELEMENTS_TAGS_VERSION, '1.5.0');
 
 $blnInstallTool = false;
 if(strlen(strpos(\Environment::getInstance()->scriptName, '/contao/install.php')) > 0 )
@@ -62,7 +62,7 @@ $GLOBALS['PCT_CUSTOMELEMENTS']['FILTERS']['tags'] = array
 /**
  * Register the model classes
  */
-$GLOBALS['TL_MODELS']['tl_pct_customelement_tags'] = 'PCT\CustomElements\Models\Attribute';
+$GLOBALS['TL_MODELS']['tl_pct_customelement_tags'] = 'Contao\PCT_TagsModel';
 
 /**
  * Hooks
