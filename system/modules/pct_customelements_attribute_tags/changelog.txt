@@ -1,3 +1,6 @@
+### 1.5.0
+New: PCT_TagsModel class (#35)
+
 ### 1.4.20
 Added: Backend "show" operations button label
 Update: Correct label for "cut" operations button
