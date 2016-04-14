@@ -19,6 +19,10 @@ namespace Contao;
 /**
  * Class
  * PCT_TagsModel
+ *
+ * @method static \PCT_TagsModel|null findById($val, $opt=array())
+ * @method static \PCT_TagsModel|null findByPid($val, $opt=array())
+ * @method static \PCT_TagsModel|null findMultipleByIds($val, $opt=array())
  */
 class PCT_TagsModel extends \Model
 {
