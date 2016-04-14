@@ -62,7 +62,7 @@ $GLOBALS['PCT_CUSTOMELEMENTS']['FILTERS']['tags'] = array
 /**
  * Register the model classes
  */
-$GLOBALS['TL_MODELS']['tl_pct_customelement_tags'] = 'PCT\CustomElements\Models\Attribute';
+$GLOBALS['TL_MODELS']['tl_pct_customelement_tags'] = 'Contao\PCT_TagsModel';
 
 /**
  * Hooks
