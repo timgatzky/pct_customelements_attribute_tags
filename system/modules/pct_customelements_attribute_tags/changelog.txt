@@ -1,3 +1,6 @@
+### 1.5.1
+Added: PCT_TagsModel::findTranslationById($intId, $strLanguage='')
+
 ### 1.5.0
 New: PCT_TagsModel class (#35)
 
