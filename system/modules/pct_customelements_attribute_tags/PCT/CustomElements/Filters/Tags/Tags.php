@@ -209,18 +209,16 @@ class Tags extends \PCT\CustomElements\Filter
 		
 		$metaWizardKey = (version_compare(VERSION,'3.2','<=') ? 'title': 'label');
 					
-		$strLanguage = \Input::get($GLOBALS['PCT_CUSTOMCATALOG']['urlLanguageParameter']) ?: $GLOBALS['TL_LANGUAGE'];
-		
 		$arrReturn = array();
 		while($objTags->next())
 		{
 			$varValue = $objTags->{$strValueField};
-				
+			
 			// store the translations
 			if(strlen($objTags->{$strTranslationField}) > 0)
 			{
 				$arrTranslations = deserialize($objTags->{$strTranslationField});
-				if(count($arrTranslations) > 0 && is_array($arrTranslations) && array_key_exists($metaWizardKey, $arrTranslations))
+				if(count($arrTranslations) > 0 && is_array($arrTranslations))
 				{
 					foreach($arrTranslations as $lang => $arrTranslation)
 					{
@@ -287,31 +285,5 @@ class Tags extends \PCT\CustomElements\Filter
 		}
 		
 		return $arrReturn;
-	}
-	
-	
-	/**
-	 * Return the translated labels
-	 * @param array
-	 * @return string
-	 */
-	public function getTranslatedTagsLabel($arrTranslationsData)
-	{
-		if(!is_array($arrTranslations))
-		{
-			$arrTranslationsData = deserialize($arrTranslationsData);
-		}
-		
-		if(count($arrTranslationsData) < 1)
-		{
-			return '';
-		}
-		
-		if(strlen($strLanguage) < 1)
-		{
-			$strLanguage = \Input::get($GLOBALS['PCT_CUSTOMCATALOG']['urlLanguageParameter']) ?: $GLOBALS['TL_LANGUAGE'];
-		}
-		
-		return $arrTranslationsData[$strLanguage]['label'];
 	}
 }
