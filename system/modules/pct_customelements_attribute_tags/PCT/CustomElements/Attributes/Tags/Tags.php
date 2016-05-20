@@ -163,10 +163,10 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$strValueField = $objAttribute->get('tag_value');
 			$strKeyField = $objAttribute->get('tag_key') ?: 'id';
 			$strSortingField = $objAttribute->get('tag_sorting') ?: 'sorting';
-			$strTranslationField = $this->get('tag_translations') ?: 'translations';
+			$strTranslationField = $objAttribute->get('tag_translations') ?: 'translations';
 		}
 		
-		$objResult = $objDatabase->prepare("SELECT * FROM ".$strSource." WHERE ".($this->get('tag_where') ? $this->get('tag_where') : "")." ".$objDatabase->findInSet($strKeyField,$varValue).($strSorting ? " ORDER BY ".$strSortingField:"") )->execute();
+		$objResult = $objDatabase->prepare("SELECT * FROM ".$strSource." WHERE ".($objAttribute->get('tag_where') ? $objAttribute->get('tag_where') : "")." ".$objDatabase->findInSet($strKeyField,$varValue).($strSorting ? " ORDER BY ".$strSortingField:"") )->execute();
 		if($objResult->numRows < 1)
 		{
 			return '';
@@ -193,16 +193,15 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 						{
 							$strLabel = $objResult->{$strValueField};
 						}
-						$this->addTranslation($objResult->{$strValueField},$strLabel,$lang);
+						$objAttribute->addTranslation($objResult->{$strValueField},$strLabel,$lang);
 					}
 				}
 			}
 
-			if($this->hasTranslation($strValue))
+			if($objAttribute->hasTranslation($strValue))
 			{
-				$strValue = $this->getTranslatedValue($strValue);
+				$strValue = $objAttribute->getTranslatedValue($strValue);
 			}
-			
 			$arrValues[] = $strValue;
 		}
 		
@@ -454,7 +453,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		$objTemplate = new \BackendTemplate('be_customelement_attr_default');
 		$objTemplate->setData($objAttribute->getData());
 		
-		return $this->renderCallback($objAttribute->get('alias'),$varValue,$objTemplate,$objAttribute);;
+		return $this->renderCallback($objAttribute->get('alias'),$varValue,$objTemplate,$objAttribute);
 	}
 	
 	
