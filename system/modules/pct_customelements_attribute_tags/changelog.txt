@@ -1,3 +1,6 @@
+### 1.5.3
+Update: Work strictly object orientated to the $objAttribute parameter in the renderCallback method
+
 ### 1.5.2
 Fixed: Not storing the language data correctly
 
