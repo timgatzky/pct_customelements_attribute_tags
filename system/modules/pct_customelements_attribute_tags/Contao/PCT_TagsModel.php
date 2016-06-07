@@ -24,41 +24,7 @@ namespace Contao;
  * @method static \PCT_TagsModel|null findByPid($val, $opt=array())
  * @method static \PCT_TagsModel|null findMultipleByIds($val, $opt=array())
  */
-class PCT_TagsModel extends \Model
+class PCT_TagsModel extends \PCT\CustomElements\Models\TagsModel
 {
-	/**
-	 * Table name
-	 * @var string
-	 */
-	protected static $strTable = 'tl_pct_customelement_tags';
-	
-	
-	/**
-	 * Find the translated value by an ID and optional by the language code
-	 * @param integer
-	 * @param string
-	 * @return string
-	 */
-	public static function findTranslationById($intId, $strLanguage='')
-	{
-		if($intId < 1)
-		{
-			return '';
-		}
-		
-		$objModel = self::findByPk($intId);
-		if($objModel === null)
-		{
-			return '';
-		}
-		
-		$arrTranslations = deserialize($objModel->translations);
-		
-		if(strlen($strLanguage) < 1)
-		{
-			$strLanguage = str_replace('-', '_', $GLOBALS['TL_LANGUAGE']);
-		}
-		
-		return $arrTranslations[$strLanguage]['label'] ?: '';
-	}
+
 }
