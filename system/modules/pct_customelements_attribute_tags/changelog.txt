@@ -1,3 +1,8 @@
+### 1.6.0
+Added: \PCT\CustomElements\Models\TagsModel
+Change: \Contao\PCT_TagsModel now extends \PCT\CustomElements\Models\TagsModel
+Update: Use Caching for repeating database requests to minimize fetching
+
 ### 1.5.3
 Update: Work strictly object orientated to the $objAttribute parameter in the renderCallback method
 
