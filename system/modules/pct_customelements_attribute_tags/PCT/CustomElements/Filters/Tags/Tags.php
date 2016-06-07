@@ -256,7 +256,17 @@ class Tags extends \PCT\CustomElements\Filter
 		$field = $this->getFilterTarget();
 		$strPublished = ($GLOBALS['PCT_CUSTOMCATALOG']['FRONTEND']['FILTER']['publishedOnly'] ? $this->getCustomCatalog()->getPublishedField() : '');
 		
-		$objRows = $objDatabase->prepare("SELECT id,".$field." FROM ".$this->getTable()." WHERE ".$field." IS NOT NULL ".(strlen($strPublished) > 0 ? " AND ".$strPublished."=1" : ""))->execute();
+		$objCache = new \PCT\CustomElements\Plugins\CustomCatalog\Core\Cache();
+		
+		// look up from cache
+		$objRows = $objCache::getDatabaseResult('Tags::findAll'.(strlen($strPublished) > 0 ? 'Published' : ''),$field);
+		if($objRows === null)
+		{
+			$objRows = $objDatabase->prepare("SELECT id,".$field." FROM ".$this->getTable()." WHERE ".$field." IS NOT NULL ".(strlen($strPublished) > 0 ? " AND ".$strPublished."=1" : ""))->execute();
+			// add to cache
+			$objCache::addDatabaseResult('Tags::findAll'.(strlen($strPublished) > 0 ? 'Published' : ''),$field,$objRows);
+		}
+		
 		if($objRows->numRows < 1)
 		{
 			return array();
