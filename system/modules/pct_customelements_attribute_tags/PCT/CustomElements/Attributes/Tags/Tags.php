@@ -71,7 +71,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$arrReturn['tabletree']['source'] = $this->get('tag_table');
 			$arrReturn['tabletree']['valueField'] = $this->get('tag_value');
 			$arrReturn['tabletree']['keyField'] = $this->get('tag_key');
-			$arrReturn['tabletree']['sortingField'] = $this->get('tag_sorting');
+			$arrReturn['tabletree']['orderField'] = $this->get('tag_sorting');
 			$arrReturn['tabletree']['translationField'] = $this->get('tag_translations');
 			$arrReturn['tabletree']['conditionsField'] = 'tag_where';
 			$arrReturn['tabletree']['conditions'] = $this->get('tag_where');
