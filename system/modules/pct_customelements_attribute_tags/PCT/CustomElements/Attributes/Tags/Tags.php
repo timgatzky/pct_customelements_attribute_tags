@@ -333,7 +333,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		$objRows = $objCache::getDatabaseResult('Tags::findAll',$strField);
 		if($objRows === null)
 		{
-			$objRows = $objDatabase->prepare("SELECT * FROM ".$objOrigin->getTable()." WHERE ".$strField. " IS NOT NULL")->execute();
+			$objRows = \Database::getInstance()->prepare("SELECT * FROM ".$objCC->getTable()." WHERE ".$strField. " IS NOT NULL")->execute();
 			// add to cache
 			$objCache::addDatabaseResult('Tags::findAll',$strField,$objRows);
 		}
