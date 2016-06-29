@@ -71,7 +71,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$arrReturn['tabletree']['source'] = $this->get('tag_table');
 			$arrReturn['tabletree']['valueField'] = $this->get('tag_value');
 			$arrReturn['tabletree']['keyField'] = $this->get('tag_key');
-			$arrReturn['tabletree']['sortingField'] = $this->get('tag_sorting');
+			$arrReturn['tabletree']['orderField'] = $this->get('tag_sorting');
 			$arrReturn['tabletree']['translationField'] = $this->get('tag_translations');
 			$arrReturn['tabletree']['conditionsField'] = 'tag_where';
 			$arrReturn['tabletree']['conditions'] = $this->get('tag_where');
@@ -226,7 +226,16 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			return array();
 		}
 		
-		$objRows = $objDatabase->prepare("SELECT * FROM ".$objOrigin->getTable()." WHERE ".$strField. " IS NOT NULL")->execute();
+		// look up from cache
+		$objCache = new \PCT\CustomElements\Plugins\CustomCatalog\Core\Cache();
+		$objRows = $objCache::getDatabaseResult('Tags::findAll',$strField);
+		if($objRows === null)
+		{
+			$objRows = $objDatabase->prepare("SELECT * FROM ".$objOrigin->getTable()." WHERE ".$strField. " IS NOT NULL")->execute();
+			// add to cache
+			$objCache::addDatabaseResult('Tags::findAll',$strField,$objRows);
+		}
+		
 		if($objRows->numRows < 1)
 		{
 			return array();
@@ -319,10 +328,14 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		
 		$strTable = $objCC->getTable();
 		
-		$objRows = \Database::getInstance()->prepare("SELECT * FROM ".$strTable." WHERE ".$strField. " IS NOT NULL")->execute();
-		if($objRows->numRows < 1)
+		// look up from cache
+		$objCache = new \PCT\CustomElements\Plugins\CustomCatalog\Core\Cache();
+		$objRows = $objCache::getDatabaseResult('Tags::findAll',$strField);
+		if($objRows === null)
 		{
-			return array();
+			$objRows = \Database::getInstance()->prepare("SELECT * FROM ".$objCC->getTable()." WHERE ".$strField. " IS NOT NULL")->execute();
+			// add to cache
+			$objCache::addDatabaseResult('Tags::findAll',$strField,$objRows);
 		}
 		
 		$arrSession = \Session::getInstance()->getData();
