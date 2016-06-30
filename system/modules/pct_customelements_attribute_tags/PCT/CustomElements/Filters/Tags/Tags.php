@@ -194,17 +194,25 @@ class Tags extends \PCT\CustomElements\Filter
 			$strSource = $this->objAttribute->tag_table;
 			$strValueField = $this->objAttribute->tag_value;
 			$strTranslationField = $this->objAttribute->tag_translations;
-			$strSortingField = $this->objAttribute->tag_sorting ?: 'sorting';
+			$strSortingField = $this->objAttribute->tag_sorting;
 		}
 		
 		$objDatabase = \Database::getInstance();
 		if($bolByValueField)
 		{
-			$objTags = $objDatabase->prepare("SELECT id,".$strValueField.($strKeyField ? ','.$strKeyField:'').($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".$objDatabase->findInSet($strValueField,$arrValues).' ORDER BY '.$strSortingField)->execute();
+			foreach($arrValues as $i => $v)
+			{
+				// capsule strings
+				if(strlen(strpos($v, ',')) > 0 || (is_string($v) && !is_numeric($v)) )
+				{
+					$arrValues[$i] = "'".$v."'";
+				}
+			}
+			$objTags = $objDatabase->prepare("SELECT id,".$strValueField.($strKeyField ? ','.$strKeyField:'').($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".$strValueField." IN(".implode(',', $arrValues).")" . ($strSortingField ? " ORDER BY ".$strSortingField : "") )->execute();
 		}
 		else
 		{
-			$objTags = $objDatabase->prepare("SELECT id,".$strValueField.($strKeyField ? ','.$strKeyField:'').($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE id IN(".implode(',', $arrValues).")".' ORDER BY '.$strSortingField)->execute();
+			$objTags = $objDatabase->prepare("SELECT id,".$strValueField.($strKeyField ? ','.$strKeyField:'').($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE id IN(".implode(',', $arrValues).")" . ($strSortingField ? " ORDER BY ".$strSortingField : "") )->execute();
 		}
 		
 		$metaWizardKey = (version_compare(VERSION,'3.2','<=') ? 'title': 'label');
@@ -231,7 +239,6 @@ class Tags extends \PCT\CustomElements\Filter
 					}
 				}
 			}
-			
 			$arrReturn[$objTags->{$strKeyField}] = $varValue;
 		}
 		
@@ -247,6 +254,7 @@ class Tags extends \PCT\CustomElements\Filter
 	{
 		// get the current filter values
 		$filterValues = $this->getValue();
+		
 		if(empty($filterValues))
 		{
 			return array();
