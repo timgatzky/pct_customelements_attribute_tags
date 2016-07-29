@@ -378,6 +378,131 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 	
 	
 	/**
+	 * Custom sorting routine
+	 * @param array		The attribute field defintion
+	 * @param string	The attribute alias/name
+	 * @param object	The attribute object
+	 * @param object	The DataContainer Object
+	 * @return string	The ORDER BY part for the Contao query
+	 */
+	public function getBackendSortingOptions($arrData,$strField,$objAttribute,$objDC)
+	{
+		$arrOptions = $objAttribute->getSelectOptions();
+		if(count($arrOptions) < 1)
+		{
+			return array();
+		}
+		
+		$objCC = $objAttribute->get('objCustomCatalog') ?: $objAttribute->getOrigin();
+		if($objCC === null)
+		{
+			return '';
+		}
+		
+		$strKeyTrick = 'myKey_';
+		
+		// trick php to use asort and arsort later on
+		$tmp = array();
+		foreach($arrOptions as $k => $v)
+		{
+			$tmp[$strKeyTrick.$k] = $v;
+		}
+		$arrOptions = $tmp;
+		unset($tmp);
+		
+		$strReturn = '';
+
+		$flag = $objCC->get('list_flag');
+		
+		// ascending
+		if( in_array($flag, array(1,3,11)) || !$flag )
+		{
+			asort($arrOptions,SORT_NATURAL);
+		}
+		// descending
+		else if( in_array($flag, array(2,4,12)) )
+		{
+			arsort($arrOptions,SORT_NATURAL);
+		}
+		
+		// rebuild the array
+		$tmp = array();
+		foreach($arrOptions as $k => $v)
+		{
+			$k = str_replace($strKeyTrick,'', $k);
+			$tmp[$k] = $v;
+		}
+		$arrOptions = $tmp;
+		unset($tmp);
+		
+		// look up from cache
+		$objCache = new \PCT\CustomElements\Plugins\CustomCatalog\Core\Cache();
+		$objRows = $objCache::getDatabaseResult('Tags::findAll',$strField);
+		if($objRows === null)
+		{
+			$objRows = $objDatabase->prepare("SELECT * FROM ".$objOrigin->getTable()." WHERE ".$strField. " IS NOT NULL")->execute();
+			// add to cache
+			$objCache::addDatabaseResult('Tags::findAll',$strField,$objRows);
+		}
+		
+		$arrIds = array();
+		$arrKeys = array_keys($arrOptions);
+		$strKeyField = 'id';
+		$strSorting = 'sorting';
+		$strTranslationField = 'translations';
+		if($objAttribute->get('tag_custom'))
+		{
+			$strSource = $objAttribute->get('tag_table') ?: 'tl_pct_customelement_tags';
+			$strValueField = $objAttribute->get('tag_value') ?: 'title';
+			$strKeyField = $objAttribute->get('tag_key') ?: 'id';
+			$strSorting = $objAttribute->get('tag_sorting') ?: 'sorting';
+			$strTranslationField = $this->get('tag_translations') ?: 'translations';
+		}
+		
+		#\PC::debug($arrKeys);
+		$ORDER_BY_FIELD = array();
+		
+		$pos = 0;
+		while($objRows->next())
+		{
+			$values = deserialize($objRows->{$strField});
+			if(!is_array($values))
+			{
+				$values = explode(',', $values);
+			}
+			
+			if(array_intersect($values, $arrKeys))
+			{
+				// order by the keys array
+				foreach($values as $val)
+				{
+					$pos = array_search($val, $arrKeys);
+					
+					// add the entry to the ordered list
+					if(isset($ORDER_BY_FIELD[$pos]))
+					{
+						$pos++;
+					}
+					
+					$ORDER_BY_FIELD[$pos] = $objRows->id;
+				}
+			}
+		}
+		
+		ksort( $ORDER_BY_FIELD );
+		
+		$ORDER_BY_FIELD = array_unique($ORDER_BY_FIELD);
+		
+		if(count($ORDER_BY_FIELD) < 1)
+		{
+			return '';
+		}
+		
+		return "FIELD(id,".implode(',', $ORDER_BY_FIELD).")";
+	}
+	
+	
+	/**
 	 * Modify the field DCA settings for customcatalogs
 	 * @param array
 	 * @param string
