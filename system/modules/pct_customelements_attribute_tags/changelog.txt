@@ -1,3 +1,6 @@
+### 1.7.0
+Added: Custom backend sorting routine. ::getBackendSortingOptions(). Requires min. CustomCatalog 1.6.7
+
 ### 1.6.0
 Fixed: Wrong array key for sorting field (#41)
 Added: \PCT\CustomElements\Models\TagsModel
