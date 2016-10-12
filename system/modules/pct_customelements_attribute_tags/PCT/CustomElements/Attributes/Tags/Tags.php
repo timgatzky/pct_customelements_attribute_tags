@@ -161,9 +161,9 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		{
 			$strSource = $objAttribute->get('tag_table');
 			$strValueField = $objAttribute->get('tag_value');
-			$strKeyField = $objAttribute->get('tag_key') ?: 'id';
-			$strSortingField = $objAttribute->get('tag_sorting') ?: 'sorting';
-			$strTranslationField = $objAttribute->get('tag_translations') ?: 'translations';
+			$strKeyField = $objAttribute->get('tag_key');
+			$strSortingField = $objAttribute->get('tag_sorting');
+			$strTranslationField = $objAttribute->get('tag_translations');
 		}
 		
 		$objResult = $objDatabase->prepare("SELECT * FROM ".$strSource." WHERE ".($objAttribute->get('tag_where') ? $objAttribute->get('tag_where') : "")." ".$objDatabase->findInSet($strKeyField,$varValue).($strSorting ? " ORDER BY ".$strSortingField:"") )->execute();
@@ -260,11 +260,11 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		$strTranslationField = 'translations';
 		if($this->get('tag_custom'))
 		{
-			$strSource = $this->get('tag_table') ?: 'tl_pct_customelement_tags';
-			$strValueField = $this->get('tag_value') ?: 'title';
-			$strKeyField = $this->get('tag_key') ?: 'id';
-			$strSorting = $this->get('tag_sorting') ?: 'sorting';
-			$strTranslationField = $this->get('tag_translations') ?: 'translations';
+			$strSource = $this->get('tag_table');
+			$strValueField = $this->get('tag_value');
+			$strKeyField = $this->get('tag_key');
+			$strSorting = $this->get('tag_sorting');
+			$strTranslationField = $this->get('tag_translations');
 		}
 		
 		$objResult = $objDatabase->prepare("SELECT * FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField, array_unique($arrValues)).($this->get('tag_where') ? " AND ".$this->get('tag_where') : " ").($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
@@ -452,11 +452,11 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		$strTranslationField = 'translations';
 		if($objAttribute->get('tag_custom'))
 		{
-			$strSource = $objAttribute->get('tag_table') ?: 'tl_pct_customelement_tags';
-			$strValueField = $objAttribute->get('tag_value') ?: 'title';
-			$strKeyField = $objAttribute->get('tag_key') ?: 'id';
-			$strSorting = $objAttribute->get('tag_sorting') ?: 'sorting';
-			$strTranslationField = $this->get('tag_translations') ?: 'translations';
+			$strSource = $objAttribute->get('tag_table');
+			$strValueField = $objAttribute->get('tag_value');
+			$strKeyField = $objAttribute->get('tag_key');
+			$strSorting = $objAttribute->get('tag_sorting');
+			$strTranslationField = $this->get('tag_translations');
 		}
 		
 		#\PC::debug($arrKeys);
@@ -617,11 +617,11 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		$strTranslationField = 'translations';
 		if($this->get('tag_custom'))
 		{
-			$strSource = $this->get('tag_table') ?: 'tl_pct_customelement_tags';
-			$strValueField = $this->get('tag_value') ?: 'title';
-			$strKeyField = $this->get('tag_key') ?: 'id';
-			$strSorting = $this->get('tag_sorting') ?: 'sorting';
-			$strTranslationField = $this->get('tag_translations') ?: 'translations';
+			$strSource = $this->get('tag_table');
+			$strValueField = $this->get('tag_value');
+			$strKeyField = $this->get('tag_key');
+			$strSorting = $this->get('tag_sorting');
+			$strTranslationField = $this->get('tag_translations');
 		}
 		
 		$objResult = $objDatabase->prepare("SELECT * FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField, array_unique($arrValues)).($this->get('tag_where') ? " AND ".$this->get('tag_where') : " ").($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
