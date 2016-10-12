@@ -1,3 +1,6 @@
+### 1.7.1
+Update: Remove the fallback field names for custom table settings
+
 ### 1.7.0
 Added: Custom backend sorting routine. ::getBackendSortingOptions(). Requires min. CustomCatalog 1.6.7
 
