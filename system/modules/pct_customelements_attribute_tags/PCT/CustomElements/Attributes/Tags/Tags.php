@@ -371,15 +371,15 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		
 		$varFilterValue = deserialize($arrSession[$strSession][$strTable][$strField] ?: $arrSession['filter'][$strTable][$strField]);
 		$varSearchValue = $arrSession[$strSession.'_search'][$strTable]['value'] ?: $arrSession['search'][$strTable]['value'];
+		$varSearchField = $arrSession[$strSession.'_search'][$strTable]['field'];
 		
 		if(is_array($varFilterValue))
 		{
 			$varFilterValue = $varFilterValue[0];
 		}
 		
-		
-		$arrTags = array();
-		if(strlen($varSearchValue) > 0)
+		$arrSearch = array();
+		if(strlen($varSearchValue) > 0 && $varSearchField == $strField)
 		{
 			$strSource = 'tl_pct_customelement_tags';
 			$strKeyField = 'id';
@@ -395,7 +395,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			
 			if($objTags->numRows > 0)
 			{
-				$arrTags = $objTags->fetchEach($strKeyField);
+				$arrSearch = $objTags->fetchEach($strKeyField);
 			}
 		}
 		
@@ -411,7 +411,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$values = array_filter($values,'strlen');
 			
 			// match
-			if(count(array_intersect($values, $arrTags)) > 0)
+			if(count(array_intersect($values, $arrSearch)) > 0)
 			{
 				$arrIds[] = $objRows->id;
 				continue;
