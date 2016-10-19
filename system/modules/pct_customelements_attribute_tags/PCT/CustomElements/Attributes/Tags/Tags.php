@@ -536,13 +536,15 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 	 */	
 	public function prepareField($arrData,$strField,$objAttribute,$objCC,$objCE,$objSystemIntegration)
 	{
+		$objDatabase = \Database::getInstance();
+		
 		$strTable = $objCC->getTable();
-		if(!\Database::getInstance()->tableExists($strTable))
+		if(!$objDatabase->tableExists($strTable))
 		{
 			return $arrData;
 		}
 		
-		if($objAttribute->get('type') != 'tags' || !\Database::getInstance()->fieldExists($strField,$strTable))
+		if($objAttribute->get('type') != 'tags' || !$objDatabase->fieldExists($strField,$strTable))
 		{
 			return $arrData;
 		}
@@ -552,12 +554,25 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		
 		if($objAttribute->get('be_visible') || $objAttribute->get('be_filter') || $objAttribute->get('be_search') || $objAttribute->get('be_sorting'))
 		{
-			$arrData['fieldDef']['foreignKey'] = 'tl_pct_customelement_tags.title';
-			$arrData['fieldDef']['relation'] = array('type'=>'hasMany', 'load'=>'lazy');
-			
+			$strSource = 'tl_pct_customelement_tags';
 			if($objAttribute->get('tag_custom'))
 			{
-				$arrData['fieldDef']['foreignKey'] = $objAttribute->get('tag_table').'.'.$objAttribute->get('tag_value');
+				$strSource = $objAttribute->get('tag_table');
+			}
+			
+			if($objDatabase->fieldExists('id',$strSource))
+			{
+				$arrData['fieldDef']['foreignKey'] = $strSource.'.title';
+				$arrData['fieldDef']['relation'] = array('type'=>'hasMany', 'load'=>'lazy');
+			
+				if($objAttribute->get('tag_custom'))
+				{
+					$arrData['fieldDef']['foreignKey'] =  $strSource.'.'.$objAttribute->get('tag_value');
+				}
+			}
+			else
+			{
+				$arrData['fieldDef']['options'] = $objAttribute->getSelectOptions();
 			}
 		}
 		
