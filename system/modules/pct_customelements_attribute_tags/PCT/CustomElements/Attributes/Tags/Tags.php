@@ -427,7 +427,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		
 		if(count($arrIds) < 1)
 		{
-			return array();
+			$arrIds = array(-1);
 		}
 		
 		return array('FIND_IN_SET(id,?)',implode(',',array_unique($arrIds)));
