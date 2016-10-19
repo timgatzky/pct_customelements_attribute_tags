@@ -550,7 +550,16 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		// set the orgin to the customcatalog
 		$objAttribute->setOrigin($objCC);
 		
-		$arrData['fieldDef']['options'] = $objAttribute->getSelectOptions();
+		if($objAttribute->get('be_visible') || $objAttribute->get('be_filter') || $objAttribute->get('be_search') || $objAttribute->get('be_sorting'))
+		{
+			$arrData['fieldDef']['foreignKey'] = 'tl_pct_customelement_tags.title';
+			$arrData['fieldDef']['relation'] = array('type'=>'hasMany', 'load'=>'lazy');
+			
+			if($objAttribute->get('tag_custom'))
+			{
+				$arrData['fieldDef']['foreignKey'] = $objAttribute->get('tag_table').'.'.$objAttribute->get('tag_value');
+			}
+		}
 		
 		// show language records in a multilanguage custom catalog source
 		if($objAttribute->get('tag_custom'))
@@ -559,11 +568,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$strSource = $objAttribute->get('tag_table');
 			if(\PCT\CustomElements\Plugins\CustomCatalog\Core\CustomCatalogFactory::validateByTableName($strSource))
 			{
-				$objSourceCC = \PCT\CustomElements\Plugins\CustomCatalog\Core\Cache::getCustomCatalog($strSource);
-				if(!$objSourceCC)
-				{
-					$objSourceCC = \PCT\CustomElements\Plugins\CustomCatalog\Core\CustomCatalogFactory::findByTableName($strSource);
-				}
+				$objSourceCC = \PCT\CustomElements\Plugins\CustomCatalog\Core\CustomCatalogFactory::findByTableName($strSource);
 				
 				if($objSourceCC->hasLanguageRecords())
 				{
