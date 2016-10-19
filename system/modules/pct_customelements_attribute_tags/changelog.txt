@@ -1,4 +1,5 @@
 ### 1.7.1
+Change: Backend filtering now displays empty result when there is no matching data
 Added: Support backend search
 Update: Use foreignKey DCA method to load data, not the options_callback when target table contains an ID field
 Update: Search for translations only when a translations field is given
