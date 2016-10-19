@@ -1,4 +1,5 @@
 ### 1.7.1
+Added: Support backend search
 Update: Use foreignKey DCA method to load data, not the options_callback when target table contains an ID field
 Update: Search for translations only when a translations field is given
 Update: Remove the fallback field names for custom table settings
