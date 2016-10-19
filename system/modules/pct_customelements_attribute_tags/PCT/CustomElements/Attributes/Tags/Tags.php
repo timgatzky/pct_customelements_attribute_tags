@@ -166,7 +166,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$strTranslationField = $objAttribute->get('tag_translations');
 		}
 		
-		$objResult = $objDatabase->prepare("SELECT * FROM ".$strSource." WHERE ".($objAttribute->get('tag_where') ? $objAttribute->get('tag_where') : "")." ".$objDatabase->findInSet($strKeyField,$varValue).($strSorting ? " ORDER BY ".$strSortingField:"") )->execute();
+		$objResult = $objDatabase->prepare("SELECT ".$strKeyField.','.$strValueField.($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".($objAttribute->get('tag_where') ? $objAttribute->get('tag_where') : "")." ".$objDatabase->findInSet($strKeyField,$varValue).($strSorting ? " ORDER BY ".$strSortingField:"") )->execute();
 		if($objResult->numRows < 1)
 		{
 			return '';
@@ -176,33 +176,43 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		
 		// translate values
 		$arrValues = array();
-		while($objResult->next())
+		
+		if(strlen($strTranslationField) > 0)
 		{
-			$strValue = $objResult->{$strValueField};
-			
-			// store the translations
-			if(strlen($objResult->{$strTranslationField}) > 0)
+			while($objResult->next())
 			{
-				$arrTranslations = deserialize($objResult->{$strTranslationField});
-				if(count($arrTranslations) > 0 && is_array($arrTranslations) && array_key_exists($metaWizardKey, $arrTranslations))
+				$strValue = $objResult->{$strValueField};
+				
+				// store the translations
+				if(strlen($objResult->{$strTranslationField}) > 0)
 				{
-					foreach($arrTranslations as $lang => $arrTranslation)
+					$arrTranslations = deserialize($objResult->{$strTranslationField});
+					if(count($arrTranslations) > 0 && is_array($arrTranslations) && array_key_exists($metaWizardKey, $arrTranslations))
 					{
-						$strLabel = $arrTranslation[$metaWizardKey];
-						if(strlen($strLabel) < 1)
+						foreach($arrTranslations as $lang => $arrTranslation)
 						{
-							$strLabel = $objResult->{$strValueField};
+							$strLabel = $arrTranslation[$metaWizardKey];
+							if(strlen($strLabel) < 1)
+							{
+								$strLabel = $objResult->{$strValueField};
+							}
+							$objAttribute->addTranslation($objResult->{$strValueField},$strLabel,$lang);
 						}
-						$objAttribute->addTranslation($objResult->{$strValueField},$strLabel,$lang);
 					}
 				}
+	
+				if($objAttribute->hasTranslation($strValue))
+				{
+					$strValue = $objAttribute->getTranslatedValue($strValue);
+				}
+				$arrValues[] = $strValue;
 			}
-
-			if($objAttribute->hasTranslation($strValue))
-			{
-				$strValue = $objAttribute->getTranslatedValue($strValue);
-			}
-			$arrValues[] = $strValue;
+		}
+		
+		// no translations
+		else
+		{
+			$arrValues = $objResult->fetchEach($strValueField);
 		}
 		
 		$objTemplate->result = $objResult;
@@ -267,7 +277,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$strTranslationField = $this->get('tag_translations');
 		}
 		
-		$objResult = $objDatabase->prepare("SELECT * FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField, array_unique($arrValues)).($this->get('tag_where') ? " AND ".$this->get('tag_where') : " ").($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
+		$objResult = $objDatabase->prepare("SELECT ".$strKeyField.','.$strValueField.($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField, array_unique($arrValues)).($this->get('tag_where') ? " AND ".$this->get('tag_where') : " ").($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
 		if($objResult->numRows < 1)
 		{
 			return array();
@@ -275,36 +285,47 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		
 		$metaWizardKey = (version_compare(VERSION,'3.2','<=') ? 'title': 'label');
 		
+		
+		
 		$arrReturn = array();
-		while($objResult->next())
+		
+		if(strlen($strTranslationField) > 0)
 		{
-			$strLabel = $objResult->{$strValueField};
-			
-			// store the translations
-			if(strlen($objResult->{$strTranslationField}) > 0)
+			while($objResult->next())
 			{
-				$arrTranslations = deserialize($objResult->{$strTranslationField});
-				if(count($arrTranslations) > 0 && is_array($arrTranslations))
+				$strLabel = $objResult->{$strValueField};
+				
+				// store the translations
+				if(strlen($objResult->{$strTranslationField}) > 0)
 				{
-					foreach($arrTranslations as $lang => $arrTranslation)
+					$arrTranslations = deserialize($objResult->{$strTranslationField});
+					if(count($arrTranslations) > 0 && is_array($arrTranslations))
 					{
-						$strLabel = $arrTranslation[$metaWizardKey];
-						if(strlen($strLabel) < 1)
+						foreach($arrTranslations as $lang => $arrTranslation)
 						{
-							$strLabel = $objResult->{$strValueField};
+							$strLabel = $arrTranslation[$metaWizardKey];
+							if(strlen($strLabel) < 1)
+							{
+								$strLabel = $objResult->{$strValueField};
+							}
+							$this->addTranslation($objResult->{$strValueField},$strLabel,$lang);
 						}
-						$this->addTranslation($objResult->{$strValueField},$strLabel,$lang);
 					}
 				}
+				
+				// look up translation
+				if($this->hasTranslation($objResult->{$strValueField}))
+				{
+					$strLabel = $this->getTranslatedValue($objResult->{$strValueField});
+				}
+				
+				$arrReturn[$objResult->{$strKeyField}] = $strLabel;
 			}
-			
-			// look up translation
-			if($this->hasTranslation($objResult->{$strValueField}))
-			{
-				$strLabel = $this->getTranslatedValue($objResult->{$strValueField});
-			}
-			
-			$arrReturn[$objResult->{$strKeyField}] = $strLabel;
+		}
+		// no translation
+		else
+		{
+			$arrReturn = $objResult->fetchEach($strValueField);
 		}
 		
 		return $arrReturn;
@@ -624,7 +645,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$strTranslationField = $this->get('tag_translations');
 		}
 		
-		$objResult = $objDatabase->prepare("SELECT * FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField, array_unique($arrValues)).($this->get('tag_where') ? " AND ".$this->get('tag_where') : " ").($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
+		$objResult = $objDatabase->prepare("SELECT ".$strKeyField.','.$strValueField.($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField, array_unique($arrValues)).($this->get('tag_where') ? " AND ".$this->get('tag_where') : " ").($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
 		if($objResult->numRows < 1)
 		{
 			return array();
