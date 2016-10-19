@@ -347,14 +347,21 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			return array();
 		}
 		
+		$objDatabase = \Database::getInstance();
+			
 		$strTable = $objCC->getTable();
+		
+		if(!$objDatabase->tableExists($strTable))
+		{
+			return array();
+		}
 		
 		// look up from cache
 		$objCache = new \PCT\CustomElements\Plugins\CustomCatalog\Core\Cache();
 		$objRows = $objCache::getDatabaseResult('Tags::findAll',$strField);
 		if($objRows === null)
 		{
-			$objRows = \Database::getInstance()->prepare("SELECT * FROM ".$objCC->getTable()." WHERE ".$strField. " IS NOT NULL")->execute();
+			$objRows = $objDatabase->prepare("SELECT * FROM ".$objCC->getTable()." WHERE ".$strField. " IS NOT NULL")->execute();
 			// add to cache
 			$objCache::addDatabaseResult('Tags::findAll',$strField,$objRows);
 		}
@@ -370,6 +377,28 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$varFilterValue = $varFilterValue[0];
 		}
 		
+		
+		$arrTags = array();
+		if(strlen($varSearchValue) > 0)
+		{
+			$strSource = 'tl_pct_customelement_tags';
+			$strKeyField = 'id';
+			$strValueField = 'title';
+			if($this->get('tag_custom'))
+			{
+				$strSource = $this->get('tag_table');
+				$strValueField = $this->get('tag_value');
+				$strKeyField = $this->get('tag_key');
+			}
+			
+			$objTags = $objDatabase->prepare("SELECT * FROM ".$strSource." WHERE ".$strValueField." LIKE '%$varSearchValue%'")->execute();
+			
+			if($objTags->numRows > 0)
+			{
+				$arrTags = $objTags->fetchEach($strKeyField);
+			}
+		}
+		
 		$arrIds = array();
 		while($objRows->next())
 		{
@@ -380,6 +409,13 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			}
 			
 			$values = array_filter($values,'strlen');
+			
+			// match
+			if(count(array_intersect($values, $arrTags)) > 0)
+			{
+				$arrIds[] = $objRows->id;
+				continue;
+			}
 			
 			if(!in_array($varSearchValue, $values) && !in_array($varFilterValue, $values))
 			{
