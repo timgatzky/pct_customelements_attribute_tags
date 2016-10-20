@@ -425,11 +425,16 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$arrIds[] = $objRows->id;
 		}
 		
-		if(count($arrIds) < 1)
+		if(count($arrIds) < 1 && (!empty($varFilterValue) || !empty($varSearchValue)) )
 		{
 			$arrIds = array(-1);
 		}
 		
+		if(empty($arrIds))
+		{
+			return array();
+		}
+				
 		return array('FIND_IN_SET(id,?)',implode(',',array_unique($arrIds)));
 	}
 	
