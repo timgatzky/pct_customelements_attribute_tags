@@ -5,6 +5,7 @@ Update: Use foreignKey DCA method to load data, not the options_callback when ta
 Update: Search for translations only when a translations field is given
 Update: Remove the fallback field names for custom table settings
 Update: Updated the translations field backend info text
+Update: tl_pct_customelement_tags.title decodeEntities true
 
 ### 1.7.0
 Added: Custom backend sorting routine. ::getBackendSortingOptions(). Requires min. CustomCatalog 1.6.7
