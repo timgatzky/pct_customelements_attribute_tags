@@ -1,6 +1,7 @@
 ### 1.7.2
 Fixed: Backend-filter/search were too strict (#48)
 Fixed: Check meta key for each translations array
+Fixed: Check if custom table exists in prepareField callback
 
 ### 1.7.1
 Change: Backend filtering now displays empty result when there is no matching data
