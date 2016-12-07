@@ -611,6 +611,12 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 				$strSource = $objAttribute->get('tag_table');
 			}
 			
+			// source table does not exist
+			if(!$objDatabase->tableExists($strSource))
+			{
+				return $arrData;
+			}
+			
 			if($objDatabase->fieldExists('id',$strSource))
 			{
 				$arrData['fieldDef']['foreignKey'] = $strSource.'.title';
