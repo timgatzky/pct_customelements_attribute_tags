@@ -230,6 +230,11 @@ class Tags extends \PCT\CustomElements\Filter
 				{
 					foreach($arrTranslations as $lang => $arrTranslation)
 					{
+						if(!array_key_exists($metaWizardKey, $arrTranslation))
+						{
+							continue;
+						}
+						
 						$strLabel = $arrTranslation[$metaWizardKey];
 						if(strlen($strLabel) < 1)
 						{

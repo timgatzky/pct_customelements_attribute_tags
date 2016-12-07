@@ -187,10 +187,15 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 				if(strlen($objResult->{$strTranslationField}) > 0)
 				{
 					$arrTranslations = deserialize($objResult->{$strTranslationField});
-					if(count($arrTranslations) > 0 && is_array($arrTranslations) && array_key_exists($metaWizardKey, $arrTranslations))
+					if(count($arrTranslations) > 0 && is_array($arrTranslations))
 					{
 						foreach($arrTranslations as $lang => $arrTranslation)
 						{
+							if(!array_key_exists($metaWizardKey, $arrTranslation))
+							{
+								continue;
+							}
+							
 							$strLabel = $arrTranslation[$metaWizardKey];
 							if(strlen($strLabel) < 1)
 							{
@@ -200,7 +205,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 						}
 					}
 				}
-	
+				
 				if($objAttribute->hasTranslation($strValue))
 				{
 					$strValue = $objAttribute->getTranslatedValue($strValue);
@@ -303,6 +308,11 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 					{
 						foreach($arrTranslations as $lang => $arrTranslation)
 						{
+							if(!array_key_exists($metaWizardKey, $arrTranslation))
+							{
+								continue;
+							}
+							
 							$strLabel = $arrTranslation[$metaWizardKey];
 							if(strlen($strLabel) < 1)
 							{
