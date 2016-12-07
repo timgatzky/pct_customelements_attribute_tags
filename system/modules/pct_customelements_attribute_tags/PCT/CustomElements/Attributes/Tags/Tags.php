@@ -435,12 +435,20 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$arrIds[] = $objRows->id;
 		}
 		
-		if(count($arrIds) < 1 && (!empty($varFilterValue) || !empty($varSearchValue)) )
+		// null result on filters
+		if(count($arrIds) < 1 && !empty($varFilterValue))
 		{
 			$arrIds = array(-1);
 		}
 		
-		if(empty($arrIds))
+		// null result on empty search
+		else if(count($arrIds) < 1 && $varSearchField == $strField && !empty($varSearchValue))
+		{
+			$arrIds = array(-1);
+		}
+		
+		// return if there is no result and not even a null result
+		if(count($arrIds) < 1)
 		{
 			return array();
 		}
