@@ -1,4 +1,5 @@
 ### 1.7.2
+Fixed: Backend-filter/search were too strict (#48)
 Fixed: Check meta key for each translations array
 
 ### 1.7.1
