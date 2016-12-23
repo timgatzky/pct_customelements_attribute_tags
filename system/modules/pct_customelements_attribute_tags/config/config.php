@@ -17,7 +17,7 @@
  * Constants
  */
 define(PCT_CUSTOMELEMENTS_TAGS_PATH, 'system/modules/pct_customelements_attribute_tags');
-define(PCT_CUSTOMELEMENTS_TAGS_VERSION, '1.7.2');
+define(PCT_CUSTOMELEMENTS_TAGS_VERSION, '1.7.3');
 
 $blnInstallTool = false;
 if(strlen(strpos(\Environment::getInstance()->scriptName, '/contao/install.php')) > 0 )
@@ -67,7 +67,11 @@ $GLOBALS['TL_MODELS']['tl_pct_customelement_tags'] = 'Contao\PCT_TagsModel';
 /**
  * Hooks
  */
-$GLOBALS['TL_HOOKS']['loadDataContainer'][] 				= array('PCT\CustomElements\Backend\TableCustomElementTags','loadAssets');
+if(TL_MODE == 'BE')
+{
+	$GLOBALS['TL_HOOKS']['loadDataContainer'][] 				= array('PCT\CustomElements\Backend\TableCustomElementTags','loadAssets');
+}
+
 if($blnInstallTool === false)
 {
 	$GLOBALS['CUSTOMCATALOG_HOOKS']['prepareField'][] 			= array('PCT\CustomElements\Attributes\Tags','prepareField');

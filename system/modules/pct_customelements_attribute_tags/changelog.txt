@@ -1,3 +1,6 @@
+### 1.7.3
+Fixed: Prevent Contao from overriding back end related constants in front end
+
 ### 1.7.2
 Fixed: Backend-filter/search were too strict (#48)
 Fixed: Check meta key for each translations array
