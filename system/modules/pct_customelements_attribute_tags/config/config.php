@@ -67,7 +67,11 @@ $GLOBALS['TL_MODELS']['tl_pct_customelement_tags'] = 'Contao\PCT_TagsModel';
 /**
  * Hooks
  */
-$GLOBALS['TL_HOOKS']['loadDataContainer'][] 				= array('PCT\CustomElements\Backend\TableCustomElementTags','loadAssets');
+if(TL_MODE == 'BE')
+{
+	$GLOBALS['TL_HOOKS']['loadDataContainer'][] 				= array('PCT\CustomElements\Backend\TableCustomElementTags','loadAssets');
+}
+
 if($blnInstallTool === false)
 {
 	$GLOBALS['CUSTOMCATALOG_HOOKS']['prepareField'][] 			= array('PCT\CustomElements\Attributes\Tags','prepareField');
