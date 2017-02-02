@@ -1,5 +1,5 @@
 ### 1.7.4
-Fixed: Append missing AND when a custom condition is set before the FIND_IN_SET statement (#10)
+Fixed: Append missing AND when a custom condition is set before the FIND_IN_SET statement (#52)
 
 ### 1.7.3
 Fixed: Prevent Contao from overriding back end related constants in front end
