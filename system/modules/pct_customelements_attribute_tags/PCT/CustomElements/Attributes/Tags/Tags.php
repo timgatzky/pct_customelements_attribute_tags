@@ -114,17 +114,28 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 	 * @param object	DataContainer
 	 * @return string	HTML output of the widget
 	 */
-	public function parseWidgetCallback($objWidget,$strField,$arrFieldDef,$objDC)
+	public function parseWidgetCallback($objWidget,$strField,$arrFieldDef,$objDC,$varValue)
 	{
 		$arrFieldDef['id'] = $arrFieldDef['strField'] = $arrFieldDef['name'] = $strField;
 		$arrFieldDef['strTable'] = $objDC->table;
-		// recreate the widget since contao does not support custom config/eval arrays for widgets yet
-		$objWidget = new $GLOBALS['BE_FFL']['pct_tabletree']($arrFieldDef);
-		$objWidget->label = $this->get('title');
-		$objWidget->description = $this->get('description');
 		
-		// validate the input
-		$objWidget->validate();
+		if(!is_array($varValue) && !\Environment::get('isAjaxRequest') && !$objDC->submitted)
+		{
+			$varValue = explode(',', $varValue);
+			$objWidget->__set('value',$varValue);
+		}
+		
+		// no orderSRC field reference needed for CEs
+		if($arrFieldDef['sortable'] == true)
+		{
+			$objWidget->strOrderSRC = '';
+		}
+		
+		if(isset($_POST[$strField]))
+		{
+			// validate
+			$objWidget->validate();
+		}
 		
 		if($objWidget->hasErrors())
 		{
