@@ -49,9 +49,9 @@ if($objDcaHelper->getActiveRecord()->type == $strType)
 	$GLOBALS['TL_DCA']['tl_pct_customelement_attribute']['fields']['options'][$strType]['options'] = array
 	(
 		'sortable',
+		'checkboxmenu'
 	);
 	$GLOBALS['TL_DCA']['tl_pct_customelement_attribute']['fields']['options'][$strType]['reference'] = &$GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['options'][$strType];
-
 }
 
 

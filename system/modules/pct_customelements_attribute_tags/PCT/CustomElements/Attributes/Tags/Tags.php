@@ -62,6 +62,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 				'translationField' => 'translations',
 			),
 			'eval'			=> $arrEval,
+			'relation'		=> array('type'=>'hasMany', 'load'=>'lazy'),
 			'sql'			=> "blob NULL",
 		);
 		
@@ -86,6 +87,18 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		if(in_array('sortable', $arrOptions))
 		{
 			$arrReturn['sortable'] = true;
+		}
+		
+		// sortable checkbox menu
+		if(in_array('checkboxmenu', $arrOptions))
+		{
+			$arrReturn['eval']['multiple'] = true;
+			$arrReturn['inputType'] = $arrReturn['sortable'] ? 'checkboxWizard' : 'checkbox';
+			// custom options requested
+			if($this->get('tag_roots') || $this->get('tag_custom'))
+			{
+				$arrReturn['options_callback'] = array('PCT\CustomElements\Attributes\Tags\TableHelper','getTagsByDca');
+			}
 		}
 		
 		return $arrReturn;
