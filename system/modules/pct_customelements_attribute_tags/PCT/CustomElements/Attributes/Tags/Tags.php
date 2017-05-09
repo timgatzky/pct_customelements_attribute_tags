@@ -62,7 +62,6 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 				'translationField' => 'translations',
 			),
 			'eval'			=> $arrEval,
-			'relation'		=> array('type'=>'hasMany', 'load'=>'lazy'),
 			'sql'			=> "blob NULL",
 		);
 		
@@ -123,12 +122,6 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		{
 			$varValue = explode(',', $varValue);
 			$objWidget->__set('value',$varValue);
-		}
-		
-		// no orderSRC field reference needed for CEs
-		if($arrFieldDef['sortable'] == true)
-		{
-			$objWidget->strOrderSRC = '';
 		}
 		
 		if(isset($_POST[$strField]))
