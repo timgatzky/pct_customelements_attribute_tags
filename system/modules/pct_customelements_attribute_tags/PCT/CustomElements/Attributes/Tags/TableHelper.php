@@ -21,13 +21,13 @@ namespace PCT\CustomElements\Attributes\Tags;
  * Class file
  * TableHelper
  */
-class TableHelper extends \Backend
+class TableHelper extends \Controller
 {
 	/**
 	 * Return all contao tables as array
 	 * @param object
 	 */
-	public function getAllTables(\DataContainer $objDC)
+	public function getAllTables($objDC)
 	{
 		return \Database::getInstance()->listTables();
 	}
@@ -37,7 +37,7 @@ class TableHelper extends \Backend
 	 * Return all fields as array from the selected table
 	 * @object
 	 */
-	public function getFields(\DataContainer $objDC)
+	public function getFields($objDC)
 	{
 		if(strlen($objDC->activeRecord->tag_table) < 1 || !\Database::getInstance()->tableExists($objDC->activeRecord->tag_table))
 		{
@@ -51,4 +51,40 @@ class TableHelper extends \Backend
 		
 		return $fields;
 	}
+	
+	
+	/**
+	 * Return all tags as array by a data container object
+	 * @param object
+	 *
+	 * called from options_callback
+	 */
+	public function getTagsByDca($objDC)
+	{
+		$objAttribute = null;
+		// is customcatalog
+		if(\PCT\CustomElements\Plugins\CustomCatalog\Core\CustomCatalogFactory::validateByTableName($objDC->table))
+		{
+			$objAttribute = \PCT\CustomElements\Plugins\CustomCatalog\Core\AttributeFactory::findByCustomCatalog($objDC->field,$objDC->table);
+		}
+		// is customelement
+		else
+		{
+			$objAttribute = \PCT\CustomElements\Core\AttributeFactory::findByUuid($objDC->field);
+		}
+		
+		if($objAttribute === null)
+		{
+			return array();
+		}
+		
+		$objOrigin = new \PCT\CustomElements\Core\Origin;
+		$objOrigin->set('pid',$objDC->id);
+		$objOrigin->set('table',$objDC->table);
+		#$objOrigin->set('objActiveRecord'.$objDC->activeRecord);
+		$objAttribute->setOrigin($objOrigin);
+		
+		return $objAttribute->getSelectOptions();
+	}
+	
 }

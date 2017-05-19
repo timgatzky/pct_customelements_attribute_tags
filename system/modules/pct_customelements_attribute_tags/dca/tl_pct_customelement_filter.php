@@ -25,7 +25,7 @@ $arrPalettes = $objDcaHelper->getPalettesAsArray('default');
 $arrPalettes['settings_legend'][] = 'attr_id'; 
 $arrPalettes['settings_legend'][] = 'label';
 $arrPalettes['settings_legend'][] = 'includeReset';
-array_insert($arrPalettes['expert_legend'],1,array('conditional'));
+array_insert( $arrPalettes, 3, array('conditions_legend' => array('conditional')) );
 $GLOBALS['TL_DCA']['tl_pct_customelement_filter']['palettes'][$strType] = $objDcaHelper->generatePalettes($arrPalettes);
 
 if($objDcaHelper->getActiveRecord()->type == $strType)

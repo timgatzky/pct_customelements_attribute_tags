@@ -32,4 +32,5 @@ $GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['tag_roots'][1]	= 'Wählen
 $GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['tag_translations'][0]	= 'Übersetzungsfeld';
 $GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['tag_translations'][1]	= 'Wählen das Feld, was als Übersetzungsquelle dient. Das Feld sollte durch ein Übersetzungswidget-Attribut erstellt sein oder ein metaWizard Feld';
 $GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['options']['tags'] = array('Attribut-Optionen','Wählen Sie welche zusätzlichen Optionen dargestellt werden sollen.');
-$GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['options']['tags']['sortable']	= 'Individuelle Reihenfolge';
+$GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['options']['tags']['sortable']		= 'Individuelle Reihenfolge';
+$GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['options']['tags']['checkboxmenu']	= 'Als Checkbox-Menü anzeigen (immer Mehrfachauswahl)';

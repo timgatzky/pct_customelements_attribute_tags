@@ -88,6 +88,18 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$arrReturn['sortable'] = true;
 		}
 		
+		// sortable checkbox menu
+		if(in_array('checkboxmenu', $arrOptions))
+		{
+			$arrReturn['eval']['multiple'] = true;
+			$arrReturn['inputType'] = $arrReturn['sortable'] ? 'checkboxWizard' : 'checkbox';
+			// custom options requested
+			if($this->get('tag_roots') || $this->get('tag_custom'))
+			{
+				$arrReturn['options_callback'] = array('PCT\CustomElements\Attributes\Tags\TableHelper','getTagsByDca');
+			}
+		}
+		
 		return $arrReturn;
 	}
 	
@@ -101,17 +113,22 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 	 * @param object	DataContainer
 	 * @return string	HTML output of the widget
 	 */
-	public function parseWidgetCallback($objWidget,$strField,$arrFieldDef,$objDC)
+	public function parseWidgetCallback($objWidget,$strField,$arrFieldDef,$objDC,$varValue)
 	{
 		$arrFieldDef['id'] = $arrFieldDef['strField'] = $arrFieldDef['name'] = $strField;
 		$arrFieldDef['strTable'] = $objDC->table;
-		// recreate the widget since contao does not support custom config/eval arrays for widgets yet
-		$objWidget = new $GLOBALS['BE_FFL']['pct_tabletree']($arrFieldDef);
-		$objWidget->label = $this->get('title');
-		$objWidget->description = $this->get('description');
 		
-		// validate the input
-		$objWidget->validate();
+		if(!is_array($varValue) && !\Environment::get('isAjaxRequest') && !$objDC->submitted)
+		{
+			$varValue = explode(',', $varValue);
+			$objWidget->__set('value',$varValue);
+		}
+		
+		if(isset($_POST[$strField]))
+		{
+			// validate
+			$objWidget->validate();
+		}
 		
 		if($objWidget->hasErrors())
 		{
@@ -539,7 +556,6 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$strTranslationField = $this->get('tag_translations');
 		}
 		
-		#\PC::debug($arrKeys);
 		$ORDER_BY_FIELD = array();
 		
 		$pos = 0;
