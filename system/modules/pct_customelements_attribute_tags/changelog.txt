@@ -1,4 +1,5 @@
 ### 1.8.0
+Fixed: Invalid html5 in customcatalog_filter_tags.html5 template (#55)
 Added: Tags can now be a Checkbox menu or Checkbox Wizard (when sortable) (#54)
 Update: Updates made when handling POST request due to changes made in CustomElements >= 2.3
 Update: Filter conditions field now has its own palette
