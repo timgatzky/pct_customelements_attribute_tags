@@ -556,7 +556,6 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$strTranslationField = $this->get('tag_translations');
 		}
 		
-		#\PC::debug($arrKeys);
 		$ORDER_BY_FIELD = array();
 		
 		$pos = 0;
