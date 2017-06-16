@@ -1,3 +1,6 @@
+### 1.8.1
+Fixed: Respect custom order in default output (#57)
+
 ### 1.8.0
 Fixed: Invalid html5 in customcatalog_filter_tags.html5 template (#55)
 Added: Tags can now be a Checkbox menu or Checkbox Wizard (when sortable) (#54)
