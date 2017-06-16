@@ -191,10 +191,13 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$arrOptions = explode(',', $arrOptions);
 		}
 		
-		if(in_array('sortable', $arrOptions))
+		if(in_array('sortable', $arrOptions) && isset($objAttribute->getActiveRecord()->{'orderSRC_'.$strField}))
 		{
 			$arrOrderSRC = deserialize( $objAttribute->getActiveRecord()->{'orderSRC_'.$strField} );
-			$strSortingField = 'FIELD ('.$strKeyField.','.implode(',', $arrOrderSRC).')';
+			if(!empty($arrOrderSRC))
+			{
+				$strSortingField = 'FIELD ('.$strKeyField.','.implode(',', $arrOrderSRC).')';
+			}
 		}
 				
 		$objResult = $objDatabase->prepare("SELECT ".$strKeyField.','.$strValueField.($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".($objAttribute->get('tag_where') ? $objAttribute->get('tag_where') . " AND " : "")." ".$objDatabase->findInSet($strKeyField,$varValue).($strSortingField ? " ORDER BY ".$strSortingField:"") )->execute();
