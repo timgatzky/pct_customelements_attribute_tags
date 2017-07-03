@@ -194,6 +194,10 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		if(in_array('sortable', $arrOptions) && isset($objAttribute->getActiveRecord()->{'orderSRC_'.$strField}))
 		{
 			$arrOrderSRC = deserialize( $objAttribute->getActiveRecord()->{'orderSRC_'.$strField} );
+			if(!is_array($arrOrderSRC) && !empty($arrOrderSRC))
+			{
+				$arrOrderSRC = explode(',', $arrOrderSRC);
+			}
 			if(!empty($arrOrderSRC))
 			{
 				$strSortingField = 'FIELD ('.$strKeyField.','.implode(',', $arrOrderSRC).')';
