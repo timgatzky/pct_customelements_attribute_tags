@@ -198,6 +198,9 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			{
 				$arrOrderSRC = explode(',', $arrOrderSRC);
 			}
+			
+			$arrOrderSRC = array_filter($arrOrderSRC);
+			
 			if(!empty($arrOrderSRC))
 			{
 				$strSortingField = 'FIELD ('.$strKeyField.','.implode(',', $arrOrderSRC).')';
