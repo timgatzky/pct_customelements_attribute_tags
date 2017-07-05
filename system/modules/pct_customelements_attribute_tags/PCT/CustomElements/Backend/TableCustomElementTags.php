@@ -157,7 +157,14 @@ class TableCustomElementTags extends \Backend
 	 */
 	public function loadAssets()
 	{
-		$GLOBALS['TL_CSS'][] = PCT_CUSTOMELEMENTS_TAGS_PATH.'/assets/css/styles.css';
+		if(version_compare(VERSION, '4','>='))
+		{
+			$GLOBALS['TL_CSS'][] = PCT_CUSTOMELEMENTS_TAGS_PATH.'/assets/css/styles.css';
+		}
+		else
+		{
+			$GLOBALS['TL_CSS'][] = PCT_CUSTOMELEMENTS_TAGS_PATH.'/assets/css/styles_c3.css';
+		}
 	}
 	
 }
