@@ -1,5 +1,6 @@
-### 1.8.1
+### 1.9.0
 Fixed: Respect custom order in default output (#57)
+Update: Contao 4.4 ready (#58)
 
 ### 1.8.0
 Fixed: Invalid html5 in customcatalog_filter_tags.html5 template (#55)
