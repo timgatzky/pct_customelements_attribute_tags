@@ -63,7 +63,7 @@ $objDcaHelper->addFields(array
 	    'label'  		=> &$GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['tag_roots'],
 	    'exclude'		=> true,
 	    'inputType'		=> 'pct_tabletree',
-	    'eval'			=> array('tl_class'=>'','tabletree'=>array('source'=>'tl_pct_customelement_tags','keyField'=>'id','valueField'=>'title'),'fieldType'=>'checkbox','multiple'=>true),
+	    'eval'			=> array('tl_class'=>'clr','tabletree'=>array('source'=>'tl_pct_customelement_tags','keyField'=>'id','valueField'=>'title'),'fieldType'=>'checkbox','multiple'=>true),
 	    'sql'			=> "blob NULL"
 	),
 	'tag_custom' => array

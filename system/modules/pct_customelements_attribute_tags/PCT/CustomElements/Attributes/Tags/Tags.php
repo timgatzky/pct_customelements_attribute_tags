@@ -183,7 +183,31 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$strTranslationField = $objAttribute->get('tag_translations');
 		}
 		
-		$objResult = $objDatabase->prepare("SELECT ".$strKeyField.','.$strValueField.($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".($objAttribute->get('tag_where') ? $objAttribute->get('tag_where') . " AND " : "")." ".$objDatabase->findInSet($strKeyField,$varValue).($strSorting ? " ORDER BY ".$strSortingField:"") )->execute();
+			
+		// custom orderSRC
+		$arrOptions = deserialize( $objAttribute->get('options') );
+		if(!is_array($arrOptions))
+		{
+			$arrOptions = explode(',', $arrOptions);
+		}
+		
+		if(in_array('sortable', $arrOptions) && isset($objAttribute->getActiveRecord()->{'orderSRC_'.$strField}))
+		{
+			$arrOrderSRC = deserialize( $objAttribute->getActiveRecord()->{'orderSRC_'.$strField} );
+			if(!is_array($arrOrderSRC) && !empty($arrOrderSRC))
+			{
+				$arrOrderSRC = explode(',', $arrOrderSRC);
+			}
+			
+			$arrOrderSRC = array_filter($arrOrderSRC);
+			
+			if(!empty($arrOrderSRC))
+			{
+				$strSortingField = 'FIELD ('.$strKeyField.','.implode(',', $arrOrderSRC).')';
+			}
+		}
+				
+		$objResult = $objDatabase->prepare("SELECT ".$strKeyField.','.$strValueField.($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".($objAttribute->get('tag_where') ? $objAttribute->get('tag_where') . " AND " : "")." ".$objDatabase->findInSet($strKeyField,$varValue).($strSortingField ? " ORDER BY ".$strSortingField:"") )->execute();
 		if($objResult->numRows < 1)
 		{
 			return '';
