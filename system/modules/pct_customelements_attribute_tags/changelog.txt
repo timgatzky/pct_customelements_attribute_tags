@@ -1,3 +1,6 @@
+### 1.9.1
+Update: Support CCs && (boolean)$GLOBALS['PCT_CUSTOMCATALOG']['FRONTEND']['FILTER']['showEmptyResults'] setting (CC >= 2.8.0)
+
 ### 1.9.0
 Fixed: Respect custom order in default output (#57)
 Update: Contao 4.4 ready (#58)

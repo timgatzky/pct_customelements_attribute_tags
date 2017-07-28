@@ -60,6 +60,13 @@ class Tags extends \PCT\CustomElements\Filter
 		
 		// set the filter to be multiple
 		$this->set('multiple',true);
+		
+		// show empty results
+		$this->set('showEmptyResults',false);
+		if(isset($GLOBALS['PCT_CUSTOMCATALOG']['FRONTEND']['FILTER']['showEmptyResults']))
+		{
+			$this->set('showEmptyResults',(boolean)$GLOBALS['PCT_CUSTOMCATALOG']['FRONTEND']['FILTER']['showEmptyResults']);
+		}
 	}
 
 
@@ -104,7 +111,7 @@ class Tags extends \PCT\CustomElements\Filter
 			{
 				// check the condition of the value in relation to other filters
 				// skip the value if it would produce an empty result
-				if(!$this->hasResults($v))
+				if(!$this->hasResults($v) && $this->get('showEmptyResults') === false)
 				{
 					continue;
 				}
