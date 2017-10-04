@@ -308,6 +308,17 @@ class Tags extends \PCT\CustomElements\Filter
 				$values = explode(',', $values);
 			}
 			
+			// exact mode
+			if($this->get('mode') == 'exact')
+			{
+				if( empty(array_diff($arrTags,$values)) )
+				{
+					$arrReturn[] = $objRows->id;
+				}
+				continue;
+			}
+			
+			// normal mode
 			if(count(array_intersect($values, $arrTags)) > 0)
 			{
 				$arrReturn[] = $objRows->id;

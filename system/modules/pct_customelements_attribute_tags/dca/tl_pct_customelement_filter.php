@@ -24,6 +24,7 @@ $strType = 'tags';
 $arrPalettes = $objDcaHelper->getPalettesAsArray('default');
 $arrPalettes['settings_legend'][] = 'attr_id'; 
 $arrPalettes['settings_legend'][] = 'label';
+$arrPalettes['settings_legend'][] = 'mode';
 $arrPalettes['settings_legend'][] = 'includeReset';
 array_insert( $arrPalettes, 3, array('conditions_legend' => array('conditional')) );
 $GLOBALS['TL_DCA']['tl_pct_customelement_filter']['palettes'][$strType] = $objDcaHelper->generatePalettes($arrPalettes);
@@ -38,4 +39,9 @@ if($objDcaHelper->getActiveRecord()->type == $strType)
 	
 	$GLOBALS['TL_DCA']['tl_pct_customelement_filter']['fields']['attr_id']['options_values'] = array('tags');
 	$GLOBALS['TL_DCA']['tl_pct_customelement_filter']['fields']['template']['default'] = 'customcatalog_filter_tags';
+	
+	$GLOBALS['TL_DCA']['tl_pct_customelement_filter']['fields']['mode']['inputType'] = 'select';
+	$GLOBALS['TL_DCA']['tl_pct_customelement_filter']['fields']['mode']['options'] = array('exact');
+	$GLOBALS['TL_DCA']['tl_pct_customelement_filter']['fields']['mode']['eval'] = array('tl_class'=>'clr','includeBlankOption' => true);
+	$GLOBALS['TL_DCA']['tl_pct_customelement_filter']['fields']['mode']['reference'] = $GLOBALS['TL_LANG']['tl_pct_customelement_filter']['mode']['tags'];
 }
