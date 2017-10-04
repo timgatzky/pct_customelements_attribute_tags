@@ -1,3 +1,6 @@
+### 1.10.0
+New: Filter mode "exact". The filter will count only entries that have the exact values selected (#61)
+
 ### 1.9.1
 Update: Support CCs && (boolean)$GLOBALS['PCT_CUSTOMCATALOG']['FRONTEND']['FILTER']['showEmptyResults'] setting (CC >= 2.8.0)
 
