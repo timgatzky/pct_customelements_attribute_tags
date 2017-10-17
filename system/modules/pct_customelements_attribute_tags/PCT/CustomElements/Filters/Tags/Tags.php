@@ -109,38 +109,47 @@ class Tags extends \PCT\CustomElements\Filter
 		{
 			foreach($values as $i => $v)
 			{
+				$label = $v;
+				$value = $v;
+				
+				// standardize regular tag values to avoid commen mistakes like commata
+				if(!$this->objAttribute->tag_custom)
+				{
+					$value = standardize($v); 
+				}
+				
 				// check the condition of the value in relation to other filters
 				// skip the value if it would produce an empty result
-				if(!$this->hasResults($v) && $this->get('showEmptyResults') === false)
+				if(!$this->hasResults($value) && $this->get('showEmptyResults') === false)
 				{
 					continue;
 				}
 				
-				$isSelected = $this->isSelected($v);
+				$isSelected = $this->isSelected($value);
 				
 				$tmp = array
 				(
 					'id'  		=> 'ctrl_'.$strName.'_'.$i,
-					'value'  	=> $v,
-					'label'  	=> $v,
+					'value'  	=> $value,
+					'label'  	=> $label,
 					'name'  	=> $strName,
 				);
 				
 				// translate label
-				if($this->hasTranslation($v))
+				if($this->hasTranslation($value))
 				{
-					$tmp['label'] = $this->getTranslatedValue($v);
+					$tmp['label'] = $this->getTranslatedValue($value);
 				}
 				
 				if($isSelected)
 				{
 					$tmp['selected'] = true;
-					$tmp['href'] = $objFilter->removeFromUrl($v,$objJumpTo,$objFilter->getModule()->customcatalog_filter_method);
+					$tmp['href'] = $objFilter->removeFromUrl($value,$objJumpTo,$objFilter->getModule()->customcatalog_filter_method);
 					$isSelected = true;
 				}
 				else
 				{
-					$tmp['href'] = $objFilter->addToUrl($v,$objJumpTo,$objFilter->getModule()->customcatalog_filter_method);
+					$tmp['href'] = $objFilter->addToUrl($value,$objJumpTo,$objFilter->getModule()->customcatalog_filter_method);
 				}
 				
 				$options[] = $tmp;
