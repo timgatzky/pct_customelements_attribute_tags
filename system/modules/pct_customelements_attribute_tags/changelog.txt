@@ -1,3 +1,6 @@
+### 1.10.1
+Update: Standardize regular tag values to avoid commen mistakes like commata (#63)
+
 ### 1.10.0
 New: Filter mode "exact". The filter will count only entries that have the exact values selected (#61)
 
