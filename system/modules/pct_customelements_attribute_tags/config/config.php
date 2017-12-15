@@ -78,3 +78,4 @@ if($blnInstallTool === false)
 }
 $GLOBALS['CUSTOMELEMENTS_HOOKS']['processWildcardValue'][] 	= array('PCT\CustomElements\Attributes\Tags','processWildcardValue');
 $GLOBALS['CUSTOMELEMENTS_HOOKS']['getExportChain'][] 		= array('PCT\CustomElements\Attributes\Tags\Export','addToExport');
+$GLOBALS['TL_CRON']['daily'][] 								= array('PCT\CustomElements\Backend\TableCustomElementTags','purgeRevisedRecords');

@@ -167,4 +167,47 @@ class TableCustomElementTags extends \Backend
 		}
 	}
 	
+	
+	/**
+	 * Purge revised records like records without existing parent entries that reach back to root level (pid=0) 
+	 */
+	public function purgeRevisedRecords()
+	{
+		$strTable = 'tl_pct_customelement_tags';
+		
+		$objDatabase = \Database::getInstance();
+		$objResult = $objDatabase->prepare("SELECT * FROM ".$strTable." WHERE pid > 0 AND tstamp > 0")->execute();
+		if($objResult->numRows < 1)
+		{
+			return;
+		}
+		
+		$arrPurge = array();
+		while($objResult->next())
+		{
+			$arrParents = $objDatabase->getParentRecords($objResult->id,$strTable);
+			if(empty($arrParents))
+			{
+				continue;
+			}
+			
+			$objRootedParents = $objDatabase->prepare("SELECT * FROM ".$strTable." WHERE id IN (".implode(',', $arrParents).") AND pid=0")->execute();
+			
+			// all good, the parent trail reaches back to root level
+			if($objRootedParents->numRows > 0)
+			{
+				continue;
+			}
+			
+			$arrPurge[] = $objResult->id;
+		}
+		
+		if(count($arrPurge) > 0)
+		{
+			$objDatabase->prepare("DELETE FROM ".$strTable." WHERE id IN (".implode(',', $arrPurge).")")->execute();
+			// Log
+			\System::log('Purged tags. Child records id: '.implode(',', $arrPurge).'',__METHOD__,TL_CRON);
+		}
+	} 
+	
 }
