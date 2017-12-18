@@ -56,7 +56,8 @@ $GLOBALS['PCT_CUSTOMELEMENTS']['FILTERS']['tags'] = array
 	'label'		=> &$GLOBALS['TL_LANG']['PCT_CUSTOMELEMENTS']['FILTERS']['tags'],
 	'path' 		=> PCT_CUSTOMELEMENTS_TAGS_PATH,
 	'class'		=> 'PCT\CustomElements\Filters\Tags',
-	'icon'		=> 'fa fa-tags'
+	'icon'		=> 'fa fa-tags',
+	'settings'	=> array('useIdsAsFilterValue'=>true)
 );
 
 /**

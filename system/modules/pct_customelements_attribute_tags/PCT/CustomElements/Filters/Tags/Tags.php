@@ -96,6 +96,7 @@ class Tags extends \PCT\CustomElements\Filter
 			$this->reset();
 		}
 		
+		$arrSettings = $GLOBALS['PCT_CUSTOMELEMENTS']['FILTERS']['tags']['settings'];
 		$objJumpTo = $objFilter->jumpTo;
 		$objModule = $objFilter->getModule();
 		
@@ -113,7 +114,7 @@ class Tags extends \PCT\CustomElements\Filter
 				$value = $v;
 				
 				// standardize regular tag values to avoid commen mistakes like commata
-				if(!$this->objAttribute->tag_custom)
+				if(!$this->objAttribute->tag_custom && !$arrSettings['useIdsAsFilterValue'])
 				{
 					$value = standardize($v); 
 				}
@@ -193,11 +194,14 @@ class Tags extends \PCT\CustomElements\Filter
 			$bolByValueField = true;
 		}
 		
-		if(empty($arrValues))
+		if(empty(array_filter($arrValues)))
 		{
 			return array();
 		}
 		
+		$objDatabase = \Database::getInstance();
+		
+		$arrSettings = $GLOBALS['PCT_CUSTOMELEMENTS']['FILTERS']['tags']['settings'];
 		$return = array();
 		$strSource = 'tl_pct_customelement_tags';
 		$strKeyField = 'id';
@@ -213,7 +217,8 @@ class Tags extends \PCT\CustomElements\Filter
 			$strSortingField = $this->objAttribute->tag_sorting;
 		}
 		
-		$objDatabase = \Database::getInstance();
+		$blnHasIdField = $objDatabase->fieldExists('id',$strSource);
+		
 		if($bolByValueField)
 		{
 			foreach($arrValues as $i => $v)
@@ -224,11 +229,11 @@ class Tags extends \PCT\CustomElements\Filter
 					$arrValues[$i] = "'".$v."'";
 				}
 			}
-			$objTags = $objDatabase->prepare("SELECT id,".$strValueField.($strKeyField ? ','.$strKeyField:'').($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".$strValueField." IN(".implode(',', $arrValues).")" . ($strSortingField ? " ORDER BY ".$strSortingField : "") )->execute();
+			$objTags = $objDatabase->prepare("SELECT ".($blnHasIdField ? "id,":'').$strValueField.($strKeyField ? ','.$strKeyField:'').($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".$strValueField." IN(".implode(',', $arrValues).")" . ($strSortingField ? " ORDER BY ".$strSortingField : "") )->execute();
 		}
 		else
 		{
-			$objTags = $objDatabase->prepare("SELECT id,".$strValueField.($strKeyField ? ','.$strKeyField:'').($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE id IN(".implode(',', $arrValues).")" . ($strSortingField ? " ORDER BY ".$strSortingField : "") )->execute();
+			$objTags = $objDatabase->prepare("SELECT ".($blnHasIdField ? "id,":'').$strValueField.($strKeyField ? ','.$strKeyField:'').($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE id IN(".implode(',', $arrValues).")" . ($strSortingField ? " ORDER BY ".$strSortingField : "") )->execute();
 		}
 		
 		$metaWizardKey = (version_compare(VERSION,'3.2','<=') ? 'title': 'label');
@@ -237,6 +242,12 @@ class Tags extends \PCT\CustomElements\Filter
 		while($objTags->next())
 		{
 			$varValue = $objTags->{$strValueField};
+			
+			// use ID field
+			if($blnHasIdField && (boolean)$arrSettings['useIdsAsFilterValue'] === true)
+			{
+				$varValue = $objTags->id;
+			}
 			
 			// store the translations
 			if(strlen($objTags->{$strTranslationField}) > 0)
@@ -254,8 +265,9 @@ class Tags extends \PCT\CustomElements\Filter
 						$strLabel = $arrTranslation[$metaWizardKey];
 						if(strlen($strLabel) < 1)
 						{
-							$strLabel = $varValue;
+							$strLabel = $objTags->{$strValueField};
 						}
+						
 						$this->addTranslation($varValue,$strLabel,$lang);
 					}
 				}
@@ -282,18 +294,19 @@ class Tags extends \PCT\CustomElements\Filter
 		}
 		
 		$objDatabase = \Database::getInstance();
-		$field = $this->getFilterTarget();
+		$strField = $this->getFilterTarget();
 		$strPublished = ($GLOBALS['PCT_CUSTOMCATALOG']['FRONTEND']['FILTER']['publishedOnly'] ? $this->getCustomCatalog()->getPublishedField() : '');
+		$arrSettings = $GLOBALS['PCT_CUSTOMELEMENTS']['FILTERS']['tags']['settings'];
 		
 		$objCache = new \PCT\CustomElements\Plugins\CustomCatalog\Core\Cache();
 		
 		// look up from cache
-		$objRows = $objCache::getDatabaseResult('Tags::findAll'.(strlen($strPublished) > 0 ? 'Published' : ''),$field);
+		$objRows = $objCache::getDatabaseResult('Tags::findAll'.(strlen($strPublished) > 0 ? 'Published' : ''),$strField);
 		if($objRows === null)
 		{
-			$objRows = $objDatabase->prepare("SELECT id,".$field." FROM ".$this->getTable()." WHERE ".$field." IS NOT NULL ".(strlen($strPublished) > 0 ? " AND ".$strPublished."=1" : ""))->execute();
+			$objRows = $objDatabase->prepare("SELECT id,".$strField." FROM ".$this->getTable()." WHERE ".$strField." IS NOT NULL ".(strlen($strPublished) > 0 ? " AND ".$strPublished."=1" : ""))->execute();
 			// add to cache
-			$objCache::addDatabaseResult('Tags::findAll'.(strlen($strPublished) > 0 ? 'Published' : ''),$field,$objRows);
+			$objCache::addDatabaseResult('Tags::findAll'.(strlen($strPublished) > 0 ? 'Published' : ''),$strField,$objRows);
 		}
 		
 		if($objRows->numRows < 1)
@@ -301,17 +314,25 @@ class Tags extends \PCT\CustomElements\Filter
 			return array();
 		}
 		
-		$arrTags = array_keys($this->getTagsOptions($filterValues));
-		
+		if((boolean)$arrSettings['useIdsAsFilterValue'] === true)
+		{
+			$arrTags = $filterValues;
+		}
+		else
+		{
+			$arrTags = array_keys($this->getTagsOptions($filterValues));
+		}
+	
 		$arrReturn = array();
 		while($objRows->next())
 		{
-			if(strlen($objRows->{$field}) < 1)
+			if(strlen($objRows->{$strField}) < 1)
 			{
 				continue;
 			}
 			
-			$values = deserialize($objRows->{$field});
+			$values = deserialize($objRows->{$strField});
+			
 			if(!is_array($values))
 			{
 				$values = explode(',', $values);
