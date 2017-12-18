@@ -91,7 +91,7 @@ class Tags extends \PCT\CustomElements\Filter
 	public function renderCallback($strName,$varActiveFilterValue,$objTemplate,$objFilter)
 	{
 		// reset the filter (will reload the page)
-		if(isset($_POST[$strName.'_reset']) || isset($_GET[$strName.'_reset']))
+		if(\Input::post($strName.'_reset') != '' || \Input::get($strName.'_reset') != '')
 		{
 			$this->reset();
 		}
