@@ -213,6 +213,7 @@ class Tags extends \PCT\CustomElements\Filter
 		{
 			$strSource = $this->objAttribute->tag_table;
 			$strValueField = $this->objAttribute->tag_value;
+			$strKeyField = $this->objAttribute->tag_key;
 			$strTranslationField = $this->objAttribute->tag_translations;
 			$strSortingField = $this->objAttribute->tag_sorting;
 		}
@@ -247,6 +248,11 @@ class Tags extends \PCT\CustomElements\Filter
 			if($blnHasIdField && (boolean)$arrSettings['useIdsAsFilterValue'] === true)
 			{
 				$varValue = $objTags->id;
+			}
+			// use key field value
+			else if(!$blnHasIdField && (boolean)$arrSettings['useIdsAsFilterValue'] === true)
+			{
+				$varValue = $objTags->{$strKeyField};
 			}
 			
 			// store the translations
