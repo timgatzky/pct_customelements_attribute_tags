@@ -67,6 +67,13 @@ class Tags extends \PCT\CustomElements\Filter
 		{
 			$this->set('showEmptyResults',(boolean)$GLOBALS['PCT_CUSTOMCATALOG']['FRONTEND']['FILTER']['showEmptyResults']);
 		}
+		
+		// use ids as values
+		$this->set('useIdsAsFilterValue',false);
+		if(isset($GLOBALS['PCT_CUSTOMELEMENTS']['FILTERS']['tags']['settings']['useIdsAsFilterValue']))
+		{
+			$this->set('useIdsAsFilterValue',(boolean)$GLOBALS['PCT_CUSTOMELEMENTS']['FILTERS']['tags']['settings']['useIdsAsFilterValue']);
+		}
 	}
 
 
@@ -96,28 +103,21 @@ class Tags extends \PCT\CustomElements\Filter
 			$this->reset();
 		}
 		
-		$arrSettings = $GLOBALS['PCT_CUSTOMELEMENTS']['FILTERS']['tags']['settings'];
 		$objJumpTo = $objFilter->jumpTo;
 		$objModule = $objFilter->getModule();
 		
-		$values = $this->getTagsOptions();
+		$arrValues = $this->getTagsOptions();
 
-		$options = array();
+		$arrOptions = array();
 		$isSelected = false;
 				
 		// build options array
-		if(count($values) > 0)
+		if(count($arrValues) > 0)
 		{
-			foreach($values as $i => $v)
+			foreach($arrValues as $i => $v)
 			{
 				$label = $v;
 				$value = $v;
-				
-				// standardize regular tag values to avoid commen mistakes like commata
-				if(!$this->objAttribute->tag_custom && !$arrSettings['useIdsAsFilterValue'])
-				{
-					$value = standardize($v); 
-				}
 				
 				// check the condition of the value in relation to other filters
 				// skip the value if it would produce an empty result
@@ -125,8 +125,6 @@ class Tags extends \PCT\CustomElements\Filter
 				{
 					continue;
 				}
-				
-				$isSelected = $this->isSelected($value);
 				
 				$tmp = array
 				(
@@ -142,7 +140,7 @@ class Tags extends \PCT\CustomElements\Filter
 					$tmp['label'] = $this->getTranslatedValue($value);
 				}
 				
-				if($isSelected)
+				if($this->isSelected($value))
 				{
 					$tmp['selected'] = true;
 					$tmp['href'] = $objFilter->removeFromUrl($value,$objJumpTo,$objFilter->getModule()->customcatalog_filter_method);
@@ -153,7 +151,8 @@ class Tags extends \PCT\CustomElements\Filter
 					$tmp['href'] = $objFilter->addToUrl($value,$objJumpTo,$objFilter->getModule()->customcatalog_filter_method);
 				}
 				
-				$options[] = $tmp;
+				$arrOptions[] = $tmp;
+				unset($tmp);
 			}
 		}
 		
@@ -162,10 +161,10 @@ class Tags extends \PCT\CustomElements\Filter
 		{
 			$label = !$isSelected ? sprintf($GLOBALS['TL_LANG']['PCT_CUSTOMCATALOG']['MSC']['filter_firstOption'],$this->objAttribute->title) : $GLOBALS['TL_LANG']['PCT_CUSTOMCATALOG']['MSC']['filter_reset'];
 			$blank = array('value'=>'','label'=>$label,'id'=>'ctrl_'.$strName.'_reset','name'=> $strName.'_reset');
-			array_insert($options,0,array($blank));
+			array_insert($arrOptions,0,array($blank));
 		}
 
-		$objTemplate->options = $options;
+		$objTemplate->options = $arrOptions;
 		$objTemplate->name = $strName;
 		$objTemplate->label = $this->get('label');
 
@@ -201,7 +200,6 @@ class Tags extends \PCT\CustomElements\Filter
 		
 		$objDatabase = \Database::getInstance();
 		
-		$arrSettings = $GLOBALS['PCT_CUSTOMELEMENTS']['FILTERS']['tags']['settings'];
 		$return = array();
 		$strSource = 'tl_pct_customelement_tags';
 		$strKeyField = 'id';
@@ -245,12 +243,12 @@ class Tags extends \PCT\CustomElements\Filter
 			$varValue = $objTags->{$strValueField};
 			
 			// use ID field
-			if($blnHasIdField && (boolean)$arrSettings['useIdsAsFilterValue'] === true)
+			if($blnHasIdField && $this->get('useIdsAsFilterValue') === true)
 			{
 				$varValue = $objTags->id;
 			}
 			// use key field value
-			else if(!$blnHasIdField && (boolean)$arrSettings['useIdsAsFilterValue'] === true)
+			else if(!$blnHasIdField && $this->get('useIdsAsFilterValue') === true)
 			{
 				$varValue = $objTags->{$strKeyField};
 			}
@@ -302,7 +300,6 @@ class Tags extends \PCT\CustomElements\Filter
 		$objDatabase = \Database::getInstance();
 		$strField = $this->getFilterTarget();
 		$strPublished = ($GLOBALS['PCT_CUSTOMCATALOG']['FRONTEND']['FILTER']['publishedOnly'] ? $this->getCustomCatalog()->getPublishedField() : '');
-		$arrSettings = $GLOBALS['PCT_CUSTOMELEMENTS']['FILTERS']['tags']['settings'];
 		
 		$objCache = new \PCT\CustomElements\Plugins\CustomCatalog\Core\Cache();
 		
@@ -320,7 +317,7 @@ class Tags extends \PCT\CustomElements\Filter
 			return array();
 		}
 		
-		if((boolean)$arrSettings['useIdsAsFilterValue'] === true)
+		if($this->get('useIdsAsFilterValue') === true)
 		{
 			$arrTags = $filterValues;
 		}
