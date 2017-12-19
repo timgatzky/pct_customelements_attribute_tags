@@ -243,7 +243,7 @@ class Tags extends \PCT\CustomElements\Filter
 			$varValue = $objTags->{$strValueField};
 			
 			// use ID field
-			if($blnHasIdField && $this->get('useIdsAsFilterValue') === true)
+			if($blnHasIdField && $this->get('useIdsAsFilterValue') === true && $strKeyField == 'id')
 			{
 				$varValue = $objTags->id;
 			}
