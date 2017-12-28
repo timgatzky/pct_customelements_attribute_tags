@@ -1,3 +1,10 @@
+### 1.11.0
+Added: Tags::getAllTags method. Returns all tags respecting all settings of the attribute (#69)
+Added: Cronjob [daily] to purge revised tags (tags without a valid parent rooted back to pid=0) (#67)
+Fixed: Checkbox menu feature did not render all tags correctly (#69)
+Update: Filter: Filter values are now the ids by default, defined in $GLOBALS['PCT_CUSTOMELEMENTS']['FILTERS']['tags']['settings']['useIdsAsFilterValue'] = true; (#68)
+
+
 ### 1.10.1
 Update: Standardize regular tag values to avoid common mistakes like commata (#63)
 

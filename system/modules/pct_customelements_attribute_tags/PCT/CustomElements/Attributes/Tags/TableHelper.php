@@ -77,14 +77,11 @@ class TableHelper extends \Controller
 		{
 			return array();
 		}
+		$objAttribute->getAllTags();
+		$objAttribute->getAllTags();
+		$objAttribute->getAllTags();
 		
-		$objOrigin = new \PCT\CustomElements\Core\Origin;
-		$objOrigin->set('pid',$objDC->id);
-		$objOrigin->set('table',$objDC->table);
-		#$objOrigin->set('objActiveRecord'.$objDC->activeRecord);
-		$objAttribute->setOrigin($objOrigin);
-		
-		return $objAttribute->getSelectOptions();
+		return $objAttribute->getAllTags();
 	}
 	
 }

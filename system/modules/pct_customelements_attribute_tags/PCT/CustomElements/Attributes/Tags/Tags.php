@@ -323,6 +323,11 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$strTranslationField = $this->get('tag_translations');
 		}
 		
+		if(empty($strKeyField) || empty($strValueField))
+		{
+			return array();
+		}
+		
 		$objResult = $objDatabase->prepare("SELECT ".$strKeyField.','.$strValueField.($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField, array_unique($arrValues)).($this->get('tag_where') ? " AND ".$this->get('tag_where') : " ").($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
 		if($objResult->numRows < 1)
 		{
@@ -379,6 +384,97 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$arrReturn = $objResult->fetchEach($strValueField);
 		}
 		
+		return $arrReturn;
+	}
+	
+	
+	/**
+	 * Return all tags
+	 * @param boolean	Cache result
+	 * @return array()
+	 */
+	public function getAllTags($blnCached=true)
+	{
+		if($this->isModified('getAllTags'))
+		{
+			return $this->get('getAllTags');
+		}
+		
+		$strSource = 'tl_pct_customelement_tags';
+		$arrRoots = deserialize($this->get('tag_roots'));
+		
+		$strSource = 'tl_pct_customelement_tags';
+		$strValueField = 'title';
+		$strKeyField = 'id';
+		$strSorting = 'sorting';
+		$strTranslationField = 'translations';
+		if($this->get('tag_custom'))
+		{
+			$strSource = $this->get('tag_table');
+			$strValueField = $this->get('tag_value');
+			$strKeyField = $this->get('tag_key');
+			$strSorting = $this->get('tag_sorting');
+			$strTranslationField = $this->get('tag_translations');
+		}
+		
+		
+		$objResult = \Database::getInstance()->prepare("SELECT ".$strKeyField.','.$strValueField.($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".(count($arrRoots) > 0 ? "pid IN(".implode(',', $arrRoots).")" : "").($this->get('tag_where') ? " AND ".$this->get('tag_where') : " ").($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
+		if($objResult->numRows < 1)
+		{
+			return array();
+		}
+		
+		$arrReturn = array();
+		if(strlen($strTranslationField) > 0)
+		{
+			$metaWizardKey = (version_compare(VERSION,'3.2','<=') ? 'title': 'label');
+
+			while($objResult->next())
+			{
+				$strValue = $objResult->{$strValueField};
+				
+				// store the translations
+				if(strlen($objResult->{$strTranslationField}) > 0)
+				{
+					$arrTranslations = deserialize($objResult->{$strTranslationField});
+					if(count($arrTranslations) > 0 && is_array($arrTranslations))
+					{
+						foreach($arrTranslations as $lang => $arrTranslation)
+						{
+							if(!array_key_exists($metaWizardKey, $arrTranslation))
+							{
+								continue;
+							}
+							
+							$strLabel = $arrTranslation[$metaWizardKey];
+							if(strlen($strLabel) < 1)
+							{
+								$strLabel = $objResult->{$strValueField};
+							}
+							$this->addTranslation($objResult->{$strValueField},$strLabel,$lang);
+						}
+					}
+				}
+				
+				if($this->hasTranslation($strValue))
+				{
+					$strValue = $this->getTranslatedValue($strValue);
+				}
+				$arrReturn[ $objResult->{$strKeyField} ] = $strValue;
+			}
+		}
+		// no translations
+		else
+		{
+			$arrReturn[ $objResult->{$strKeyField} ] = $objResult->{$strValueField};
+		}
+		
+		if($blnCached)
+		{
+			$this->set('getAllTags',$arrReturn);
+			$this->markAsModified('getAllTags');
+		}
+
 		return $arrReturn;
 	}
 
