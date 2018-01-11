@@ -257,6 +257,7 @@ class Tags extends \PCT\CustomElements\Filter
 			if(strlen($objTags->{$strTranslationField}) > 0)
 			{
 				$arrTranslations = deserialize($objTags->{$strTranslationField});
+				
 				if(count($arrTranslations) > 0 && is_array($arrTranslations))
 				{
 					foreach($arrTranslations as $lang => $arrTranslation)
@@ -276,6 +277,12 @@ class Tags extends \PCT\CustomElements\Filter
 					}
 				}
 			}
+			// if the tag has not translations use the title as label
+			else
+			{
+				$this->addTranslation($varValue,$objTags->{$strValueField},$GLOBALS['TL_LANGUAGE']);
+			}
+			
 			$arrReturn[$objTags->{$strKeyField}] = $varValue;
 		}
 		
