@@ -1,3 +1,6 @@
+### 1.11.2
+Fixed: Missing be_filter, be_search, be_sorting fields under Contao 4.4.12 due to changed DCA loading routine from 4.4.12 
+
 ### 1.11.1
 Fixed: If no translation is set, use the tag title as label / translated value for the current active language
 
