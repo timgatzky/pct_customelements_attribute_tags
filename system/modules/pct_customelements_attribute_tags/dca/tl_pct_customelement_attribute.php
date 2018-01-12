@@ -34,6 +34,12 @@ $GLOBALS['TL_DCA']['tl_pct_customelement_attribute']['config']['onload_callback'
 $strType = 'tags';
 $arrPalettes = $objDcaHelper->getPalettesAsArray('default');
 $arrPalettes['settings_legend'] = array('tag_custom','tag_roots','eval_multiple','eval_mandatory','options');
+if(is_array($arrPalettes['be_setting_legend']) && version_compare(VERSION.'.'.BUILD, '4.4.12','>='))
+{
+	$arrPalettes['be_setting_legend'][] = 'be_filter';
+	$arrPalettes['be_setting_legend'][] = 'be_search';
+	$arrPalettes['be_setting_legend'][] = 'be_sorting';
+}
 $GLOBALS['TL_DCA']['tl_pct_customelement_attribute']['palettes'][$strType] = $objDcaHelper->generatePalettes($arrPalettes);
 
 /**
