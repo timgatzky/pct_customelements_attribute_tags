@@ -1,3 +1,6 @@
+### 1.11.3
+Update: Put constants in quotations for php 7.2
+
 ### 1.11.2
 Fixed: Missing be_filter, be_search, be_sorting fields under Contao 4.4.12 due to changed DCA loading routine from 4.4.12 
 
