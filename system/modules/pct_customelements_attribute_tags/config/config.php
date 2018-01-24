@@ -16,8 +16,8 @@
 /**
  * Constants
  */
-define(PCT_CUSTOMELEMENTS_TAGS_PATH, 'system/modules/pct_customelements_attribute_tags');
-define(PCT_CUSTOMELEMENTS_TAGS_VERSION, '1.11.2');
+define('PCT_CUSTOMELEMENTS_TAGS_PATH', 'system/modules/pct_customelements_attribute_tags');
+define('PCT_CUSTOMELEMENTS_TAGS_VERSION', '1.11.3');
 
 $blnInstallTool = false;
 if(strlen(strpos(\Environment::getInstance()->scriptName, '/contao/install.php')) > 0 )
