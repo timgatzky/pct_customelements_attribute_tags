@@ -1,3 +1,6 @@
+### 1.11.5
+Update: PHP 7.2 compatiblity
+
 ### 1.11.4
 Update: Set CustomCatalog as requirement in autoload.ini
 Removed: be_filter, be_search, be_sorting fields from DCA array because CC loads them before
