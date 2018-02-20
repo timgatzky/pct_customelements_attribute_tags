@@ -1,5 +1,5 @@
 ### 1.11.5
-Update: PHP 7.2 compatiblity
+Update: PHP 7.2 compatibility
 
 ### 1.11.4
 Update: Set CustomCatalog as requirement in autoload.ini
