@@ -1,3 +1,7 @@
+### 1.11.5
+Update: PHP 7.2 compatibility
+Update: Pass the current value to the orderSRC_ value when manual sorting is active (#79)
+
 ### 1.11.4
 Update: Set CustomCatalog as requirement in autoload.ini
 Removed: be_filter, be_search, be_sorting fields from DCA array because CC loads them before

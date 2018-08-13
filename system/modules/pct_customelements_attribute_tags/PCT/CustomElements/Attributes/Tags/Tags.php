@@ -134,7 +134,12 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		{
 			$objWidget->class = 'error';
 		}
-
+		
+		if($arrFieldDef['sortable'])
+		{
+			$objWidget->activeRecord->{'orderSRC_'.$strField} = $varValue;
+		}
+		
 		return $objWidget->parse();
 	}
 
@@ -228,7 +233,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 				if(strlen($objResult->{$strTranslationField}) > 0)
 				{
 					$arrTranslations = deserialize($objResult->{$strTranslationField});
-					if(count($arrTranslations) > 0 && is_array($arrTranslations))
+					if(!empty($arrTranslations) && is_array($arrTranslations))
 					{
 						foreach($arrTranslations as $lang => $arrTranslation)
 						{
@@ -264,6 +269,29 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		$objTemplate->result = $objResult;
 		$objTemplate->value = implode(',', $arrValues);
 		return $objTemplate->parse();
+	}
+	
+	
+	/**
+	 * Set the value
+	 * @param integer
+	 * @param array
+	 */
+	public function storeValueCallback($objAttribute,$arrSet)
+	{
+		if($objAttribute->get('type') != 'tags')
+		{
+			return $arrSet;
+		}
+		
+		$arrOptions = deserialize($this->get('options')) ?: array();
+		
+		if(in_array('sortable', $arrOptions) && \Input::post('orderSRC_'.$objAttribute->get('uuid')) != '')
+		{
+			$arrSet[$this->saveDataAs] = \Input::post('orderSRC_'.$objAttribute->get('uuid'));
+		}
+		
+		return $arrSet;
 	}
 	
 	
@@ -350,7 +378,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 				if(strlen($objResult->{$strTranslationField}) > 0)
 				{
 					$arrTranslations = deserialize($objResult->{$strTranslationField});
-					if(count($arrTranslations) > 0 && is_array($arrTranslations))
+					if(!empty($arrTranslations) && is_array($arrTranslations))
 					{
 						foreach($arrTranslations as $lang => $arrTranslation)
 						{
@@ -437,7 +465,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 				if(strlen($objResult->{$strTranslationField}) > 0)
 				{
 					$arrTranslations = deserialize($objResult->{$strTranslationField});
-					if(count($arrTranslations) > 0 && is_array($arrTranslations))
+					if(!empty($arrTranslations) && is_array($arrTranslations))
 					{
 						foreach($arrTranslations as $lang => $arrTranslation)
 						{
@@ -489,7 +517,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 	public function getBackendFilterOptions($arrData,$strField,$objAttribute,$objCC)
 	{
 		$arrOptions = $objAttribute->getSelectOptions();
-		if(count($arrOptions) < 1)
+		if(empty($arrOptions))
 		{
 			return array();
 		}
@@ -885,7 +913,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			if(strlen($objResult->{$strTranslationField}) > 0)
 			{
 				$arrTranslations = deserialize($objResult->{$strTranslationField});
-				if(count($arrTranslations) > 0 && is_array($arrTranslations) && array_key_exists($metaWizardKey, $arrTranslations))
+				if(!empty($arrTranslations) && is_array($arrTranslations) && array_key_exists($metaWizardKey, $arrTranslations))
 				{
 					foreach($arrTranslations as $lang => $arrTranslation)
 					{
