@@ -1,3 +1,6 @@
+### 1.11.6
+Update: Filter: Always store the tags title as translation for the current active front end language as fallback
+
 ### 1.11.5
 Update: PHP 7.2 compatibility
 Update: Pass the current value to the orderSRC_ value when manual sorting is active (#79)
