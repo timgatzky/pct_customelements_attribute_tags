@@ -253,6 +253,9 @@ class Tags extends \PCT\CustomElements\Filter
 				$varValue = $objTags->{$strKeyField};
 			}
 			
+			// always store the tags title as fallback to the current language
+			$this->addTranslation($varValue,$objTags->{$strValueField},$GLOBALS['TL_LANGUAGE']);
+			
 			// store the translations
 			if(strlen($objTags->{$strTranslationField}) > 0)
 			{
