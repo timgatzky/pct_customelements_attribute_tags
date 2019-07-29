@@ -212,7 +212,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			}
 		}
 				
-		$objResult = $objDatabase->prepare("SELECT ".$strKeyField.','.$strValueField.($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".($objAttribute->get('tag_where') ? $objAttribute->get('tag_where') . " AND " : "")." ".$objDatabase->findInSet($strKeyField,$varValue).($strSortingField ? " ORDER BY ".$strSortingField:"") )->execute();
+		$objResult = $objDatabase->prepare("SELECT ".$strKeyField.','.$strValueField.($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".($objAttribute->get('tag_where') ? \Controller::replaceInsertTags($objAttribute->get('tag_where')) . " AND " : "")." ".$objDatabase->findInSet($strKeyField,$varValue).($strSortingField ? " ORDER BY ".$strSortingField:"") )->execute();
 		if($objResult->numRows < 1)
 		{
 			return '';
@@ -356,7 +356,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			return array();
 		}
 		
-		$objResult = $objDatabase->prepare("SELECT ".$strKeyField.','.$strValueField.($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField, array_unique($arrValues)).($this->get('tag_where') ? " AND ".$this->get('tag_where') : " ").($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
+		$objResult = $objDatabase->prepare("SELECT ".$strKeyField.','.$strValueField.($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField, array_unique($arrValues)).($this->get('tag_where') ? " AND ".\Controller::replaceInsertTags($this->get('tag_where')) : " ").($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
 		if($objResult->numRows < 1)
 		{
 			return array();
@@ -446,7 +446,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		}
 		
 		
-		$objResult = \Database::getInstance()->prepare("SELECT ".$strKeyField.','.$strValueField.($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".(count($arrRoots) > 0 ? "pid IN(".implode(',', $arrRoots).")" : "").($this->get('tag_where') ? " AND ".$this->get('tag_where') : " ").($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
+		$objResult = \Database::getInstance()->prepare("SELECT ".$strKeyField.','.$strValueField.($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".(count($arrRoots) > 0 ? "pid IN(".implode(',', $arrRoots).")" : "").($this->get('tag_where') ? " AND ".\Controller::replaceInsertTags($this->get('tag_where')) : " ").($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
 		if($objResult->numRows < 1)
 		{
 			return array();
@@ -894,7 +894,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$strTranslationField = $this->get('tag_translations');
 		}
 		
-		$objResult = $objDatabase->prepare("SELECT ".$strKeyField.','.$strValueField.($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField, array_unique($arrValues)).($this->get('tag_where') ? " AND ".$this->get('tag_where') : " ").($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
+		$objResult = $objDatabase->prepare("SELECT ".$strKeyField.','.$strValueField.($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField, array_unique($arrValues)).($this->get('tag_where') ? " AND ".\Controller::replaceInsertTags($this->get('tag_where')) : " ").($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
 		if($objResult->numRows < 1)
 		{
 			return array();
