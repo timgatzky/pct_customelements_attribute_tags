@@ -31,10 +31,10 @@ $GLOBALS['TL_DCA']['tl_pct_customelement_filter']['palettes'][$strType] = $objDc
 
 if($objDcaHelper->getActiveRecord()->type == $strType)
 {
-	if(\Input::get('act') == 'edit' && \Input::get('table') == $objDcaHelper->getTable())
+	if(\Contao\Input::get('act') == 'edit' && \Contao\Input::get('table') == $objDcaHelper->getTable())
 	{
 		// Show template info
-		\Message::addInfo(sprintf($GLOBALS['TL_LANG']['PCT_CUSTOMCATALOG']['MSC']['templateInfo_filter'], 'customcatalog_filter_tags'));
+		\Contao\Message::addInfo(sprintf($GLOBALS['TL_LANG']['PCT_CUSTOMCATALOG']['MSC']['templateInfo_filter'], 'customcatalog_filter_tags'));
 	}
 	
 	$GLOBALS['TL_DCA']['tl_pct_customelement_filter']['fields']['attr_id']['options_values'] = array('tags');

@@ -18,7 +18,7 @@ $path = 'system/modules/pct_customelements_attribute_tags';
 /**
  * Register the namespaces
  */
-ClassLoader::addNamespaces(array
+\Contao\ClassLoader::addNamespaces(array
 (
 	'PCT\CustomElements',
 ));
@@ -27,7 +27,7 @@ ClassLoader::addNamespaces(array
 /**
  * Register the classes
  */
-ClassLoader::addClasses(array
+\Contao\ClassLoader::addClasses(array
 (
 	'PCT\CustomElements\Attributes\Tags'								=> $path.'/PCT/CustomElements/Attributes/Tags/Tags.php',	
 	'PCT\CustomElements\Attributes\Tags\TableHelper'					=> $path.'/PCT/CustomElements/Attributes/Tags/TableHelper.php',	
@@ -42,7 +42,7 @@ ClassLoader::addClasses(array
 /**
  * Register the templates
  */
-TemplateLoader::addFiles(array
+\Contao\TemplateLoader::addFiles(array
 (
 	'customcatalog_filter_tags'		=> $path.'/templates',
 ));

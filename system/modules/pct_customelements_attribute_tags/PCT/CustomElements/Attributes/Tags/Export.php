@@ -28,7 +28,7 @@ class Export extends \PCT\CustomElements\Plugins\Export\Export
 	 */
 	public function addToExport($arrStatements,$objExport)
 	{
-		$objDatabase = \Database::getInstance();
+		$objDatabase = \Contao\Database::getInstance();
 		
 		if(count($arrStatements) < 1)
 		{

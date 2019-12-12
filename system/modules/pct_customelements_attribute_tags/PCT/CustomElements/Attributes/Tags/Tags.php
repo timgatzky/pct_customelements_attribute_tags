@@ -118,7 +118,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		$arrFieldDef['id'] = $arrFieldDef['strField'] = $arrFieldDef['name'] = $strField;
 		$arrFieldDef['strTable'] = $objDC->table;
 		
-		if(!is_array($varValue) && !\Environment::get('isAjaxRequest') && !$objDC->submitted)
+		if(!is_array($varValue) && !\Contao\Environment::get('isAjaxRequest') && !$objDC->submitted)
 		{
 			$varValue = explode(',', $varValue);
 			$objWidget->__set('value',$varValue);
@@ -171,7 +171,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			return '';
 		}
 		
-		$objDatabase = \Database::getInstance();
+		$objDatabase = \Contao\Database::getInstance();
 		
 		// fetch the readable values
 		$strSource = 'tl_pct_customelement_tags';
@@ -212,7 +212,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			}
 		}
 				
-		$objResult = $objDatabase->prepare("SELECT ".$strKeyField.','.$strValueField.($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".($objAttribute->get('tag_where') ? \Controller::replaceInsertTags($objAttribute->get('tag_where')) . " AND " : "")." ".$objDatabase->findInSet($strKeyField,$varValue).($strSortingField ? " ORDER BY ".$strSortingField:"") )->execute();
+		$objResult = $objDatabase->prepare("SELECT ".$strKeyField.','.$strValueField.($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".($objAttribute->get('tag_where') ? \Contao\Controller::replaceInsertTags($objAttribute->get('tag_where')) . " AND " : "")." ".$objDatabase->findInSet($strKeyField,$varValue).($strSortingField ? " ORDER BY ".$strSortingField:"") )->execute();
 		if($objResult->numRows < 1)
 		{
 			return '';
@@ -286,9 +286,9 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		
 		$arrOptions = deserialize($this->get('options')) ?: array();
 		
-		if(in_array('sortable', $arrOptions) && \Input::post('orderSRC_'.$objAttribute->get('uuid')) != '')
+		if(in_array('sortable', $arrOptions) && \Contao\Input::post('orderSRC_'.$objAttribute->get('uuid')) != '')
 		{
-			$arrSet[$this->saveDataAs] = \Input::post('orderSRC_'.$objAttribute->get('uuid'));
+			$arrSet[$this->saveDataAs] = \Contao\Input::post('orderSRC_'.$objAttribute->get('uuid'));
 		}
 		
 		return $arrSet;
@@ -302,10 +302,10 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 	public function getSelectOptions()
 	{
 		$objOrigin = $this->getOrigin();
-		$objDatabase = \Database::getInstance();
+		$objDatabase = \Contao\Database::getInstance();
 		$strField = $this->get('alias');
 		
-		if(strlen($strField) < 1 || !\Database::getInstance()->fieldExists($strField,$objOrigin->getTable()))
+		if(strlen($strField) < 1 || !\Contao\Database::getInstance()->fieldExists($strField,$objOrigin->getTable()))
 		{
 			return array();
 		}
@@ -356,7 +356,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			return array();
 		}
 		
-		$objResult = $objDatabase->prepare("SELECT ".$strKeyField.','.$strValueField.($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField, array_unique($arrValues)).($this->get('tag_where') ? " AND ".\Controller::replaceInsertTags($this->get('tag_where')) : " ").($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
+		$objResult = $objDatabase->prepare("SELECT ".$strKeyField.','.$strValueField.($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField, array_unique($arrValues)).($this->get('tag_where') ? " AND ".\Contao\Controller::replaceInsertTags($this->get('tag_where')) : " ").($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
 		if($objResult->numRows < 1)
 		{
 			return array();
@@ -446,7 +446,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		}
 		
 		
-		$objResult = \Database::getInstance()->prepare("SELECT ".$strKeyField.','.$strValueField.($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".(count($arrRoots) > 0 ? "pid IN(".implode(',', $arrRoots).")" : "").($this->get('tag_where') ? " AND ".\Controller::replaceInsertTags($this->get('tag_where')) : " ").($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
+		$objResult = \Contao\Database::getInstance()->prepare("SELECT ".$strKeyField.','.$strValueField.($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".(count($arrRoots) > 0 ? "pid IN(".implode(',', $arrRoots).")" : "").($this->get('tag_where') ? " AND ".\Contao\Controller::replaceInsertTags($this->get('tag_where')) : " ").($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
 		if($objResult->numRows < 1)
 		{
 			return array();
@@ -522,7 +522,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			return array();
 		}
 		
-		$objDatabase = \Database::getInstance();
+		$objDatabase = \Contao\Database::getInstance();
 			
 		$strTable = $objCC->getTable();
 		
@@ -541,7 +541,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$objCache::addDatabaseResult('Tags::findAll',$strField,$objRows);
 		}
 		
-		$arrSession = \Session::getInstance()->getData();
+		$arrSession = \Contao\Session::getInstance()->getData();
 		$strSession = $GLOBALS['PCT_CUSTOMCATALOG']['backendFilterSession'];
 		
 		$varFilterValue = deserialize($arrSession[$strSession][$strTable][$strField] ?: $arrSession['filter'][$strTable][$strField]);
@@ -685,7 +685,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		$objRows = $objCache::getDatabaseResult('Tags::findAll',$strField);
 		if($objRows === null)
 		{
-			$objRows = \Database::getInstance()->prepare("SELECT * FROM ".$objCC->getTable()." WHERE ".$strField. " IS NOT NULL")->execute();
+			$objRows = \Contao\Database::getInstance()->prepare("SELECT * FROM ".$objCC->getTable()." WHERE ".$strField. " IS NOT NULL")->execute();
 			// add to cache
 			$objCache::addDatabaseResult('Tags::findAll',$strField,$objRows);
 		}
@@ -759,7 +759,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 	 */	
 	public function prepareField($arrData,$strField,$objAttribute,$objCC,$objCE,$objSystemIntegration)
 	{
-		$objDatabase = \Database::getInstance();
+		$objDatabase = \Contao\Database::getInstance();
 		
 		$strTable = $objCC->getTable();
 		if(!$objDatabase->tableExists($strTable))
@@ -808,7 +808,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		// show language records in a multilanguage custom catalog source
 		if($objAttribute->get('tag_custom'))
 		{
-			$objSession = \Session::getInstance();
+			$objSession = \Contao\Session::getInstance();
 			$strSource = $objAttribute->get('tag_table');
 			if(\PCT\CustomElements\Plugins\CustomCatalog\Core\CustomCatalogFactory::validateByTableName($strSource))
 			{
@@ -828,7 +828,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 						$arrData['fieldDef']['tabletree']['roots'] = $arrRoots;
 					}
 					
-					if(\Input::get('act') == 'show')
+					if(\Contao\Input::get('act') == 'show')
 					{
 						// set table tree roots session
 						$arrSession = $objSession->get('pct_tabletree_roots');
@@ -858,7 +858,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			return $varValue;
 		}
 		
-		$objTemplate = new \BackendTemplate('be_customelement_attr_default');
+		$objTemplate = new \Contao\BackendTemplate('be_customelement_attr_default');
 		$objTemplate->setData($objAttribute->getData());
 		
 		return $this->renderCallback($objAttribute->get('alias'),$varValue,$objTemplate,$objAttribute);
@@ -877,7 +877,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			return array();
 		}
 		
-		$objDatabase = \Database::getInstance();
+		$objDatabase = \Contao\Database::getInstance();
 		
 		// fetch the readable values
 		$strSource = 'tl_pct_customelement_tags';
@@ -894,7 +894,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$strTranslationField = $this->get('tag_translations');
 		}
 		
-		$objResult = $objDatabase->prepare("SELECT ".$strKeyField.','.$strValueField.($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField, array_unique($arrValues)).($this->get('tag_where') ? " AND ".\Controller::replaceInsertTags($this->get('tag_where')) : " ").($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
+		$objResult = $objDatabase->prepare("SELECT ".$strKeyField.','.$strValueField.($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField, array_unique($arrValues)).($this->get('tag_where') ? " AND ".\Contao\Controller::replaceInsertTags($this->get('tag_where')) : " ").($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
 		if($objResult->numRows < 1)
 		{
 			return array();

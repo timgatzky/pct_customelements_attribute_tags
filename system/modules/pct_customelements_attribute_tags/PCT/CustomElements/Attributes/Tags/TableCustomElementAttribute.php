@@ -26,7 +26,7 @@ use PCT\CustomElements\Helper\ControllerHelper as ControllerHelper;
  * Class file
  * TableCustomElementTags
  */
-class TableCustomElementAttribute extends \Backend
+class TableCustomElementAttribute extends \Contao\Backend
 {
 	/**
 	 * Import the back end user object
@@ -42,9 +42,9 @@ class TableCustomElementAttribute extends \Backend
 	 * Set the tabletree source
 	 * @param object
 	 */
-	public function setTabletreeOptions(\DataContainer $objDC)
+	public function setTabletreeOptions($objDC)
 	{
-		$objActiveRecord = \Database::getInstance()->prepare("SELECT * FROM ".$objDC->table." WHERE id=?")->limit(1)->execute($objDC->id);
+		$objActiveRecord = \Contao\Database::getInstance()->prepare("SELECT * FROM ".$objDC->table." WHERE id=?")->limit(1)->execute($objDC->id);
 		
 		if(!$objActiveRecord->tag_custom || strlen($objActiveRecord->tag_table) < 1)
 		{

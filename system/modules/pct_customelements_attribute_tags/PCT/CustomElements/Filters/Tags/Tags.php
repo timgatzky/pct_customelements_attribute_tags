@@ -98,7 +98,7 @@ class Tags extends \PCT\CustomElements\Filter
 	public function renderCallback($strName,$varActiveFilterValue,$objTemplate,$objFilter)
 	{
 		// reset the filter (will reload the page)
-		if(\Input::post($strName.'_reset') != '' || \Input::get($strName.'_reset') != '')
+		if(\Contao\Input::post($strName.'_reset') != '' || \Contao\Input::get($strName.'_reset') != '')
 		{
 			$this->reset();
 		}
@@ -198,7 +198,7 @@ class Tags extends \PCT\CustomElements\Filter
 			return array();
 		}
 		
-		$objDatabase = \Database::getInstance();
+		$objDatabase = \Contao\Database::getInstance();
 		
 		$return = array();
 		$strSource = 'tl_pct_customelement_tags';
@@ -307,7 +307,7 @@ class Tags extends \PCT\CustomElements\Filter
 			return array();
 		}
 		
-		$objDatabase = \Database::getInstance();
+		$objDatabase = \Contao\Database::getInstance();
 		$strField = $this->getFilterTarget();
 		$strPublished = ($GLOBALS['PCT_CUSTOMCATALOG']['FRONTEND']['FILTER']['publishedOnly'] ? $this->getCustomCatalog()->getPublishedField() : '');
 		
