@@ -548,6 +548,14 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		$varSearchValue = $arrSession[$strSession.'_search'][$strTable]['value'] ?: $arrSession['search'][$strTable]['value'];
 		$varSearchField = $arrSession[$strSession.'_search'][$strTable]['field'];
 		
+		// reset the filter
+		if( \Contao\Input::post('FORM_SUBMIT') == 'tl_filters' && (int)\Contao\Input::post('filter_reset') > 0)
+		{
+			unset($arrSession[$strSession][$strTable][$strField]);
+			\Contao\Session::getInstance()->set($strSession,$arrSession);
+			return array();
+		}
+
 		if(is_array($varFilterValue))
 		{
 			$varFilterValue = $varFilterValue[0];
