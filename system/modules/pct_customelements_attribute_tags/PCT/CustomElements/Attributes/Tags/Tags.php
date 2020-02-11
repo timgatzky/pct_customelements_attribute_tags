@@ -74,7 +74,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$arrReturn['tabletree']['orderField'] = $this->get('tag_sorting');
 			$arrReturn['tabletree']['translationField'] = $this->get('tag_translations');
 			$arrReturn['tabletree']['conditionsField'] = 'tag_where';
-			$arrReturn['tabletree']['conditions'] = $this->get('tag_where');
+			$arrReturn['tabletree']['conditions'] = \Controller::replaceInsertTags($this->get('tag_where'));
 		}
 		
 		// set root nodes
