@@ -26,7 +26,7 @@ use PCT\CustomElements\Helper\ControllerHelper as ControllerHelper;
  * Class file
  * TableCustomElementTags
  */
-class TableCustomElementTags extends \Backend
+class TableCustomElementTags extends \Contao\Backend
 {
 	/**
 	 * Import the back end user object
@@ -48,7 +48,7 @@ class TableCustomElementTags extends \Backend
 		if(strlen($arrRow['translations']) > 0)
 		{
 			$arrTranslations = deserialize($arrRow['translations']);
-			$lang = \Input::get('language') ?: \Input::get('lang') ?: $GLOBALS['TL_LANGUAGE'];
+			$lang = \Contao\Input::get('language') ?: \Contao\Input::get('lang') ?: $GLOBALS['TL_LANGUAGE'];
 			$strLabel = $arrTranslations[$lang]['label'] ?: $strLabel;
 		}
 		
@@ -62,17 +62,17 @@ class TableCustomElementTags extends \Backend
 	 * @param string
 	 * @param string
 	 */
-	public function addBreadcrumb(\DataContainer $objDC, $strKey='tabletree_node', $strTitleField='title')
+	public function addBreadcrumb($objDC, $strKey='tabletree_node', $strTitleField='title')
 	{
-		$objSession = \Session::getInstance();
-		$intNode = \Input::get('node');
+		$objSession = \Contao\Session::getInstance();
+		$intNode = \Contao\Input::get('node');
 		
 		if(isset($intNode))
 		{
 			// Store the node in the Session
-			$objSession->set($strKey,\Input::get('node'));
+			$objSession->set($strKey,\Contao\Input::get('node'));
 			// Remove node param from url and reload
-			\Controller::redirect(preg_replace('/&node=[^&]*/', '', \Environment::get('request')));
+			\Contao\Controller::redirect(preg_replace('/&node=[^&]*/', '', \Contao\Environment::get('request')));
 		}
 		
 		// retrieve active node from session
@@ -83,7 +83,7 @@ class TableCustomElementTags extends \Backend
 			return;
 		}
 		
-		$objDatabase = \Database::getInstance();
+		$objDatabase = \Contao\Database::getInstance();
 		
 		$arrLinks = array();
 		$arrIds = array();
@@ -109,7 +109,7 @@ class TableCustomElementTags extends \Backend
 			}
 			else
 			{
-				$arrLinks[] = ' <a href="' . \Controller::addToUrl('node='.$objRow->id) . '" title="'.specialchars($GLOBALS['TL_LANG']['MSC']['selectNode']).'">' . $objRow->$strTitleField . '</a>';
+				$arrLinks[] = ' <a href="' . \Contao\Controller::addToUrl('node='.$objRow->id) . '" title="'.specialchars($GLOBALS['TL_LANG']['MSC']['selectNode']).'">' . $objRow->$strTitleField . '</a>';
 			}
 			
 			$intId = $objRow->pid;
@@ -120,7 +120,7 @@ class TableCustomElementTags extends \Backend
 		$GLOBALS['TL_DCA'][$objDC->table]['list']['sorting']['root'] = array($intNode);
 		
 		// Add root link
-		$arrLinks[] = '<img src="' .PCT_CUSTOMELEMENTS_TAGS_PATH.'/assets/img/tags.png'. '" width="16" height="16" alt=""> <a href="' . \Controller::addToUrl('node=0') . '" title="'.specialchars($GLOBALS['TL_LANG']['MSC']['selectAllNodes']).'">' . $GLOBALS['TL_LANG']['MSC']['filterAll'] . '</a>';
+		$arrLinks[] = '<img src="' .PCT_CUSTOMELEMENTS_TAGS_PATH.'/assets/img/tags.png'. '" width="16" height="16" alt=""> <a href="' . \Contao\Controller::addToUrl('node=0') . '" title="'.specialchars($GLOBALS['TL_LANG']['MSC']['selectAllNodes']).'">' . $GLOBALS['TL_LANG']['MSC']['filterAll'] . '</a>';
 		$arrLinks = array_reverse($arrLinks);
 
 		// Render breadcrumb		
@@ -146,9 +146,9 @@ class TableCustomElementTags extends \Backend
 			return '';
 		}
 
-		$objChilds = \Database::getInstance()->prepare("SELECT * FROM ".$table." WHERE pid=?")->limit(1)->execute($row['id']);
+		$objChilds = \Contao\Database::getInstance()->prepare("SELECT * FROM ".$table." WHERE pid=?")->limit(1)->execute($row['id']);
 
-		return ($objChilds->numRows && ($this->User->isAdmin || ($this->User->isAllowed(2, $row)))) ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.\Image::getHtml($icon, $label).'</a> ' : \Image::getHtml(preg_replace('/\.gif$/i', '_.gif', $icon)).' ';
+		return ($objChilds->numRows && ($this->User->isAdmin || ($this->User->isAllowed(2, $row)))) ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.\Contao\Image::getHtml($icon, $label).'</a> ' : \Contao\Image::getHtml(preg_replace('/\.gif$/i', '_.gif', $icon)).' ';
 	}
 	
 	
@@ -175,7 +175,7 @@ class TableCustomElementTags extends \Backend
 	{
 		$strTable = 'tl_pct_customelement_tags';
 		
-		$objDatabase = \Database::getInstance();
+		$objDatabase = \Contao\Database::getInstance();
 		$objResult = $objDatabase->prepare("SELECT * FROM ".$strTable." WHERE pid > 0 AND tstamp > 0")->execute();
 		if($objResult->numRows < 1)
 		{
@@ -206,7 +206,7 @@ class TableCustomElementTags extends \Backend
 		{
 			$objDatabase->prepare("DELETE FROM ".$strTable." WHERE id IN (".implode(',', $arrPurge).")")->execute();
 			// Log
-			\System::log('Purged tags. Child records id: '.implode(',', $arrPurge).'',__METHOD__,TL_CRON);
+			\Contao\System::log('Purged tags. Child records id: '.implode(',', $arrPurge).'',__METHOD__,TL_CRON);
 		}
 	} 
 	

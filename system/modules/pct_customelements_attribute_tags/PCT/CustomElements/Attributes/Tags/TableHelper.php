@@ -21,7 +21,7 @@ namespace PCT\CustomElements\Attributes\Tags;
  * Class file
  * TableHelper
  */
-class TableHelper extends \Controller
+class TableHelper extends \Contao\Controller
 {
 	/**
 	 * Return all contao tables as array
@@ -29,7 +29,7 @@ class TableHelper extends \Controller
 	 */
 	public function getAllTables($objDC)
 	{
-		return \Database::getInstance()->listTables();
+		return \Contao\Database::getInstance()->listTables();
 	}
 	
 	
@@ -39,12 +39,12 @@ class TableHelper extends \Controller
 	 */
 	public function getFields($objDC)
 	{
-		if(strlen($objDC->activeRecord->tag_table) < 1 || !\Database::getInstance()->tableExists($objDC->activeRecord->tag_table))
+		if(strlen($objDC->activeRecord->tag_table) < 1 || !\Contao\Database::getInstance()->tableExists($objDC->activeRecord->tag_table))
 		{
 			return array();
 		}
 		
-		$fields = \Database::getInstance()->getFieldNames($objDC->activeRecord->tag_table);
+		$fields = \Contao\Database::getInstance()->getFieldNames($objDC->activeRecord->tag_table);
 		
 		$fields = array_combine($fields,array_values($fields));
 		unset($fields['PRIMARY']);
