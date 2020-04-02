@@ -429,7 +429,11 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		}
 		
 		$strSource = 'tl_pct_customelement_tags';
-		$arrRoots = deserialize($this->get('tag_roots'));
+		$arrRoots = deserialize($this->get('tag_roots')) ?: array();
+		if( !is_array($arrRoots) )
+		{
+			$arrRoots = explode(',', $arrRoots);
+		}
 		
 		$strSource = 'tl_pct_customelement_tags';
 		$strValueField = 'title';
@@ -445,8 +449,18 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$strTranslationField = $this->get('tag_translations');
 		}
 		
+		$arrWhere = array();
+		if( count($arrRoots) > 0 )
+		{
+			$arrWhere[] = "pid IN(".implode(',', $arrRoots).")";
+		}
 		
-		$objResult = \Contao\Database::getInstance()->prepare("SELECT ".$strKeyField.','.$strValueField.($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".(count($arrRoots) > 0 ? "pid IN(".implode(',', $arrRoots).")" : "").($this->get('tag_where') ? " AND ".\Contao\Controller::replaceInsertTags($this->get('tag_where')) : " ").($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
+		if( $this->get('tag_where') ) 
+		{
+			$arrWhere[] = \Contao\Controller::replaceInsertTags($this->get('tag_where'));
+		}
+		
+		$objResult = \Contao\Database::getInstance()->prepare("SELECT ".$strKeyField.','.$strValueField.($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource.(!empty($arrWhere) ? " WHERE ".implode(' AND ', $arrWhere) : "").($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
 		if($objResult->numRows < 1)
 		{
 			return array();
