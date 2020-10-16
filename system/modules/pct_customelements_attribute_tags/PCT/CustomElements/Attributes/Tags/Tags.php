@@ -835,27 +835,29 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			if(\PCT\CustomElements\Plugins\CustomCatalog\Core\CustomCatalogFactory::validateByTableName($strSource))
 			{
 				$objSourceCC = \PCT\CustomElements\Plugins\CustomCatalog\Core\CustomCatalogFactory::findByTableName($strSource);
-				
-				if($objSourceCC->hasLanguageRecords())
+				if( $objSourceCC !== null && $objSourceCC->multilanguage )
 				{
-					$strLanguage = \PCT\CustomElements\Plugins\CustomCatalog\Core\Multilanguage::getLanguage($objCC->getTable());
-					if(strlen($strLanguage) > 0)
+					if($objSourceCC->hasLanguageRecords())
 					{
-						$arrRoots = \PCT\CustomElements\Plugins\CustomCatalog\Core\Multilanguage::getInstance()->findLanguageRecords($strSource,$strLanguage);
-						$arrData['fieldDef']['tabletree']['roots'] = $arrRoots;
-					}
-					else
-					{
-						$arrRoots = \PCT\CustomElements\Plugins\CustomCatalog\Core\Multilanguage::getInstance()->findBaseRecords($strSource,$strLanguage);
-						$arrData['fieldDef']['tabletree']['roots'] = $arrRoots;
-					}
-					
-					if(\Contao\Input::get('act') == 'show')
-					{
-						// set table tree roots session
-						$arrSession = $objSession->get('pct_tabletree_roots');
-						$arrSession[$strField] = $arrRoots;
-						$objSession->set('pct_tabletree_roots',$arrSession);
+						$strLanguage = \PCT\CustomElements\Plugins\CustomCatalog\Core\Multilanguage::getLanguage($objCC->getTable());
+						if(strlen($strLanguage) > 0)
+						{
+							$arrRoots = \PCT\CustomElements\Plugins\CustomCatalog\Core\Multilanguage::getInstance()->findLanguageRecords($strSource,$strLanguage);
+							$arrData['fieldDef']['tabletree']['roots'] = $arrRoots;
+						}
+						else
+						{
+							$arrRoots = \PCT\CustomElements\Plugins\CustomCatalog\Core\Multilanguage::getInstance()->findBaseRecords($strSource,$strLanguage);
+							$arrData['fieldDef']['tabletree']['roots'] = $arrRoots;
+						}
+						
+						if(\Contao\Input::get('act') == 'show')
+						{
+							// set table tree roots session
+							$arrSession = $objSession->get('pct_tabletree_roots');
+							$arrSession[$strField] = $arrRoots;
+							$objSession->set('pct_tabletree_roots',$arrSession);
+						}
 					}
 				}
 			}
