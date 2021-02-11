@@ -77,10 +77,6 @@ class TableHelper extends \Contao\Controller
 		{
 			return array();
 		}
-		$objAttribute->getAllTags();
-		$objAttribute->getAllTags();
-		$objAttribute->getAllTags();
-		
 		return $objAttribute->getAllTags();
 	}
 	
