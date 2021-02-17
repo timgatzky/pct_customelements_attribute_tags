@@ -1,3 +1,6 @@
+### 1.14.0
+Added: Store selected values and merge them with new selection (#95)
+
 ### 1.13.2
 Update: Validate multilanguage CCs more consistent
 Update: Removed a couple forgotten debug entries
