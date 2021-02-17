@@ -17,6 +17,9 @@
  */
 namespace PCT\CustomElements\Attributes\Tags;
 
+use Contao\StringUtil;
+use Contao\System;
+
 /**
  * Class file
  * TableHelper
@@ -79,5 +82,49 @@ class TableHelper extends \Contao\Controller
 		}
 		return $objAttribute->getAllTags();
 	}
-	
+
+
+	/**
+	 * Store current values in session
+	 * @param mixed
+	 * @param object
+	 * @return array
+	 * called by save_callback
+	 */
+	public function storeTagsValues($varValues, $objDC)
+	{
+		$objSession = System::getContainer()->get('session');
+		$strSession = 'tags_' . $objDC->table . '_' . $objDC->field.'_'.$objDC->id;
+		$objSession->set($strSession, $varValues);
+		return $varValues;
+	}
+
+
+	/**
+	 * Merge with selected values
+	 * @param mixed
+	 * @param object
+	 * @return array
+	 * called by load_callback
+	 */
+	public function mergeTagsValues($varValues, $objDC)
+	{
+		$varValues = StringUtil::deserialize($varValues);
+		$strSession = 'tags_' . $objDC->table . '_' . $objDC->field.'_'.$objDC->id;
+		$objSession = System::getContainer()->get('session');
+		if( $objSession->get($strSession) === null )
+		{
+			$objSession->set($strSession, $varValues);
+		}
+		
+		$arrFromSession = StringUtil::deserialize($objSession->get($strSession)) ?: array();
+		
+		// merge with new values
+		if (empty($varValues) === false) 
+		{
+			$varValues = array_merge($varValues, $arrFromSession);
+		}
+		
+		return array_unique($varValues);
+	}
 }
