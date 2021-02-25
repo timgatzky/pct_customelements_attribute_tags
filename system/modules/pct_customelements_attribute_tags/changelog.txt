@@ -1,3 +1,6 @@
+### 1.14.1
+Fixed: Missing orderField information for sorting in default tags mode (#98) 
+
 ### 1.14.0
 Added: Store selected values and merge them with new selection (#95)
 
