@@ -60,11 +60,12 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 				'valueField'	=> 'title',
 				'keyField'		=> 'id',
 				'translationField' => 'translations',
+				'orderField' => 'sorting'
 			),
 			'eval'			=> $arrEval,
 			'sql'			=> "blob NULL",
 		);
-		
+
 		// use a custom source
 		if($this->get('tag_custom'))
 		{
