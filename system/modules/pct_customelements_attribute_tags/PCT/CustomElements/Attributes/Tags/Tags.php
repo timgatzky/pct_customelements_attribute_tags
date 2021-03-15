@@ -101,12 +101,6 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			}
 		}
 
-		if( $arrReturn['eval']['multiple'] )
-		{
-			$arrReturn['save_callback'][] = array('PCT\CustomElements\Attributes\Tags\TableHelper','storeTagsValues');
-			$arrReturn['load_callback'][] = array('PCT\CustomElements\Attributes\Tags\TableHelper','mergeTagsValues');
-		}
-		
 		return $arrReturn;
 	}
 	
