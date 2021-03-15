@@ -1,3 +1,6 @@
+### 1.14.2
+Removed: Feature "store selected values and merge... (#95)". It is now part of the table tree widget version >= 1.6.6
+
 ### 1.14.1
 Fixed: Missing orderField information for sorting in default tags mode (#98) 
 
