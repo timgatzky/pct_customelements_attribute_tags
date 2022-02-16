@@ -45,9 +45,9 @@ class TableCustomElementTags extends \Contao\Backend
 	 */
 	public function listRecord($arrRow, $strLabel)
 	{
-		if(strlen($arrRow['translations']) > 0)
+		if( strlen($arrRow['translations']) > 0)
 		{
-			$arrTranslations = deserialize($arrRow['translations']);
+			$arrTranslations = \Contao\StringUtil::deserialize($arrRow['translations']);
 			$lang = \Contao\Input::get('language') ?: \Contao\Input::get('lang') ?: $GLOBALS['TL_LANGUAGE'];
 			$strLabel = $arrTranslations[$lang]['label'] ?: $strLabel;
 		}
@@ -109,7 +109,7 @@ class TableCustomElementTags extends \Contao\Backend
 			}
 			else
 			{
-				$arrLinks[] = ' <a href="' . \Contao\Controller::addToUrl('node='.$objRow->id) . '" title="'.specialchars($GLOBALS['TL_LANG']['MSC']['selectNode']).'">' . $objRow->$strTitleField . '</a>';
+				$arrLinks[] = ' <a href="' . \Contao\Controller::addToUrl('node='.$objRow->id) . '" title="'.\Contao\StringUtil::specialchars($GLOBALS['TL_LANG']['MSC']['selectNode']).'">' . $objRow->$strTitleField . '</a>';
 			}
 			
 			$intId = $objRow->pid;
@@ -120,7 +120,7 @@ class TableCustomElementTags extends \Contao\Backend
 		$GLOBALS['TL_DCA'][$objDC->table]['list']['sorting']['root'] = array($intNode);
 		
 		// Add root link
-		$arrLinks[] = '<img src="' .PCT_CUSTOMELEMENTS_TAGS_PATH.'/assets/img/tags.png'. '" width="16" height="16" alt=""> <a href="' . \Contao\Controller::addToUrl('node=0') . '" title="'.specialchars($GLOBALS['TL_LANG']['MSC']['selectAllNodes']).'">' . $GLOBALS['TL_LANG']['MSC']['filterAll'] . '</a>';
+		$arrLinks[] = '<img src="' .PCT_CUSTOMELEMENTS_TAGS_PATH.'/assets/img/tags.png'. '" width="16" height="16" alt=""> <a href="' . \Contao\Controller::addToUrl('node=0') . '" title="'.\Contao\StringUtil::specialchars($GLOBALS['TL_LANG']['MSC']['selectAllNodes']).'">' . $GLOBALS['TL_LANG']['MSC']['filterAll'] . '</a>';
 		$arrLinks = array_reverse($arrLinks);
 
 		// Render breadcrumb		
@@ -148,7 +148,7 @@ class TableCustomElementTags extends \Contao\Backend
 
 		$objChilds = \Contao\Database::getInstance()->prepare("SELECT * FROM ".$table." WHERE pid=?")->limit(1)->execute($row['id']);
 
-		return ($objChilds->numRows && ($this->User->isAdmin || ($this->User->isAllowed(2, $row)))) ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.\Contao\Image::getHtml($icon, $label).'</a> ' : \Contao\Image::getHtml(preg_replace('/\.gif$/i', '_.gif', $icon)).' ';
+		return ($objChilds->numRows && ($this->User->isAdmin || ($this->User->isAllowed(2, $row)))) ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.\Contao\StringUtil::specialchars($title).'"'.$attributes.'>'.\Contao\Image::getHtml($icon, $label).'</a> ' : \Contao\Image::getHtml(preg_replace('/\.gif$/i', '_.gif', $icon)).' ';
 	}
 	
 	

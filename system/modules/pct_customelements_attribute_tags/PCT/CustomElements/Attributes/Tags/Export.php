@@ -76,7 +76,7 @@ class Export extends \PCT\CustomElements\Plugins\Export\Export
 		{
 			while($objVault->next())
 			{
-				$tags = deserialize($objVault->data_blob);
+				$tags = \Contao\StringUtil::deserialize($objVault->data_blob);
 				if(!is_array($tags))
 				{
 					$tags = explode(',', $tags);
@@ -114,7 +114,7 @@ class Export extends \PCT\CustomElements\Plugins\Export\Export
 						
 						while($objTagsInTable->next())
 						{
-							$tags = deserialize($objTagsInTable->{$field});
+							$tags = \Contao\StringUtil::deserialize($objTagsInTable->{$field});
 							if(!is_array($tags))
 							{
 								$tags = explode(',', $tags);

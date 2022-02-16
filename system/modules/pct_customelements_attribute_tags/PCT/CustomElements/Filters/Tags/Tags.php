@@ -259,7 +259,7 @@ class Tags extends \PCT\CustomElements\Filter
 			// store the translations
 			if(strlen($objTags->{$strTranslationField}) > 0)
 			{
-				$arrTranslations = deserialize($objTags->{$strTranslationField});
+				$arrTranslations = \Contao\StringUtil::deserialize($objTags->{$strTranslationField});
 				
 				if(count($arrTranslations) > 0 && is_array($arrTranslations))
 				{
@@ -344,7 +344,7 @@ class Tags extends \PCT\CustomElements\Filter
 				continue;
 			}
 			
-			$values = deserialize($objRows->{$strField});
+			$values = \Contao\StringUtil::deserialize($objRows->{$strField});
 			
 			if(!is_array($values))
 			{
