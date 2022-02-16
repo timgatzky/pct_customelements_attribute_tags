@@ -303,6 +303,11 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 	public function getSelectOptions()
 	{
 		$objOrigin = $this->getOrigin();
+		if( $objOrigin === null )
+		{
+			return array();
+		}
+
 		$objDatabase = \Contao\Database::getInstance();
 		$strField = $this->get('alias');
 		
