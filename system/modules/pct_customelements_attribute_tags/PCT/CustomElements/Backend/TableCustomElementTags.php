@@ -64,7 +64,7 @@ class TableCustomElementTags extends \Contao\Backend
 	 */
 	public function addBreadcrumb($objDC, $strKey='tabletree_node', $strTitleField='title')
 	{
-		$objSession = \Contao\Session::getInstance();
+		$objSession = \Contao\System::getContainer()->get('session');
 		$intNode = \Contao\Input::get('node');
 		
 		if(isset($intNode))

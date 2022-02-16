@@ -561,7 +561,8 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$objCache::addDatabaseResult('Tags::findAll',$strField,$objRows);
 		}
 		
-		$arrSession = \Contao\Session::getInstance()->getData();
+		$objSession = \Contao\System::getContainer()->get('session');
+		$arrSession = $objSession->all();
 		$strSession = $GLOBALS['PCT_CUSTOMCATALOG']['backendFilterSession'];
 		
 		$varFilterValue = \Contao\StringUtil::deserialize($arrSession[$strSession][$strTable][$strField] ?: $arrSession['filter'][$strTable][$strField]);
@@ -572,7 +573,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		if( \Contao\Input::post('FORM_SUBMIT') == 'tl_filters' && (int)\Contao\Input::post('filter_reset') > 0)
 		{
 			unset($arrSession[$strSession][$strTable][$strField]);
-			\Contao\Session::getInstance()->set($strSession,$arrSession);
+			$objSession->set($strSession,$arrSession);
 			return array();
 		}
 
@@ -836,7 +837,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		// show language records in a multilanguage custom catalog source
 		if($objAttribute->get('tag_custom'))
 		{
-			$objSession = \Contao\Session::getInstance();
+			$objSession = \Contao\System::getContainer()->get('session');
 			$strSource = $objAttribute->get('tag_table');
 			if(\PCT\CustomElements\Plugins\CustomCatalog\Core\CustomCatalogFactory::validateByTableName($strSource))
 			{
