@@ -79,11 +79,11 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		}
 		
 		// set root nodes
-		$arrReturn['tabletree']['roots'] = deserialize($this->get('tag_roots'));
+		$arrReturn['tabletree']['roots'] = \Contao\StringUtil::deserialize($this->get('tag_roots'));
 		$arrReturn['tabletree']['rootsField'] = 'tag_roots';
 		
 		// make field sortable
-		$arrOptions = deserialize($this->get('options')) ?: array();
+		$arrOptions = \Contao\StringUtil::deserialize($this->get('options')) ?: array();
 		if(in_array('sortable', $arrOptions))
 		{
 			$arrReturn['sortable'] = true;
@@ -160,7 +160,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 	{
 		$this->setData($objAttribute->getData());
 		
-		$varValue = deserialize($varValue);
+		$varValue = \Contao\StringUtil::deserialize($varValue);
 		
 		if(!is_array($varValue))
 		{
@@ -191,7 +191,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		
 			
 		// custom orderSRC
-		$arrOptions = deserialize( $objAttribute->get('options') );
+		$arrOptions = \Contao\StringUtil::deserialize( $objAttribute->get('options') );
 		if(!is_array($arrOptions))
 		{
 			$arrOptions = explode(',', $arrOptions);
@@ -199,7 +199,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		
 		if(in_array('sortable', $arrOptions) && isset($objAttribute->getActiveRecord()->{'orderSRC_'.$strField}))
 		{
-			$arrOrderSRC = deserialize( $objAttribute->getActiveRecord()->{'orderSRC_'.$strField} );
+			$arrOrderSRC = \Contao\StringUtil::deserialize( $objAttribute->getActiveRecord()->{'orderSRC_'.$strField} );
 			if(!is_array($arrOrderSRC) && !empty($arrOrderSRC))
 			{
 				$arrOrderSRC = explode(',', $arrOrderSRC);
@@ -233,7 +233,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 				// store the translations
 				if(strlen($objResult->{$strTranslationField}) > 0)
 				{
-					$arrTranslations = deserialize($objResult->{$strTranslationField});
+					$arrTranslations = \Contao\StringUtil::deserialize($objResult->{$strTranslationField});
 					if(!empty($arrTranslations) && is_array($arrTranslations))
 					{
 						foreach($arrTranslations as $lang => $arrTranslation)
@@ -285,7 +285,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			return $arrSet;
 		}
 		
-		$arrOptions = deserialize($this->get('options')) ?: array();
+		$arrOptions = \Contao\StringUtil::deserialize($this->get('options')) ?: array();
 		
 		if(in_array('sortable', $arrOptions) && \Contao\Input::post('orderSRC_'.$objAttribute->get('uuid')) != '')
 		{
@@ -303,6 +303,11 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 	public function getSelectOptions()
 	{
 		$objOrigin = $this->getOrigin();
+		if( $objOrigin === null )
+		{
+			return array();
+		}
+
 		$objDatabase = \Contao\Database::getInstance();
 		$strField = $this->get('alias');
 		
@@ -329,7 +334,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		$arrValues = array();
 		while($objRows->next())
 		{
-			$values = deserialize($objRows->{$strField});
+			$values = \Contao\StringUtil::deserialize($objRows->{$strField});
 			if(!is_array($values))
 			{
 				$values = explode(',', $values);
@@ -378,7 +383,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 				// store the translations
 				if(strlen($objResult->{$strTranslationField}) > 0)
 				{
-					$arrTranslations = deserialize($objResult->{$strTranslationField});
+					$arrTranslations = \Contao\StringUtil::deserialize($objResult->{$strTranslationField});
 					if(!empty($arrTranslations) && is_array($arrTranslations))
 					{
 						foreach($arrTranslations as $lang => $arrTranslation)
@@ -430,7 +435,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		}
 		
 		$strSource = 'tl_pct_customelement_tags';
-		$arrRoots = deserialize($this->get('tag_roots')) ?: array();
+		$arrRoots = \Contao\StringUtil::deserialize($this->get('tag_roots')) ?: array();
 		if( !is_array($arrRoots) )
 		{
 			$arrRoots = explode(',', $arrRoots);
@@ -479,7 +484,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 				// store the translations
 				if(strlen($objResult->{$strTranslationField}) > 0)
 				{
-					$arrTranslations = deserialize($objResult->{$strTranslationField});
+					$arrTranslations = \Contao\StringUtil::deserialize($objResult->{$strTranslationField});
 					if(!empty($arrTranslations) && is_array($arrTranslations))
 					{
 						foreach($arrTranslations as $lang => $arrTranslation)
@@ -556,10 +561,11 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$objCache::addDatabaseResult('Tags::findAll',$strField,$objRows);
 		}
 		
-		$arrSession = \Contao\Session::getInstance()->getData();
+		$objSession = \Contao\System::getContainer()->get('session');
+		$arrSession = $objSession->all();
 		$strSession = $GLOBALS['PCT_CUSTOMCATALOG']['backendFilterSession'];
 		
-		$varFilterValue = deserialize($arrSession[$strSession][$strTable][$strField] ?: $arrSession['filter'][$strTable][$strField]);
+		$varFilterValue = \Contao\StringUtil::deserialize($arrSession[$strSession][$strTable][$strField] ?: $arrSession['filter'][$strTable][$strField]);
 		$varSearchValue = $arrSession[$strSession.'_search'][$strTable]['value'] ?: $arrSession['search'][$strTable]['value'];
 		$varSearchField = $arrSession[$strSession.'_search'][$strTable]['field'];
 		
@@ -567,7 +573,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		if( \Contao\Input::post('FORM_SUBMIT') == 'tl_filters' && (int)\Contao\Input::post('filter_reset') > 0)
 		{
 			unset($arrSession[$strSession][$strTable][$strField]);
-			\Contao\Session::getInstance()->set($strSession,$arrSession);
+			$objSession->set($strSession,$arrSession);
 			return array();
 		}
 
@@ -600,7 +606,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		$arrIds = array();
 		while($objRows->next())
 		{
-			$values = deserialize($objRows->{$strField});
+			$values = \Contao\StringUtil::deserialize($objRows->{$strField});
 			if(!is_array($values))
 			{
 				$values = explode(',', $values);
@@ -732,7 +738,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		$pos = 0;
 		while($objRows->next())
 		{
-			$values = deserialize($objRows->{$strField});
+			$values = \Contao\StringUtil::deserialize($objRows->{$strField});
 			if(!is_array($values))
 			{
 				$values = explode(',', $values);
@@ -831,7 +837,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		// show language records in a multilanguage custom catalog source
 		if($objAttribute->get('tag_custom'))
 		{
-			$objSession = \Contao\Session::getInstance();
+			$objSession = \Contao\System::getContainer()->get('session');
 			$strSource = $objAttribute->get('tag_table');
 			if(\PCT\CustomElements\Plugins\CustomCatalog\Core\CustomCatalogFactory::validateByTableName($strSource))
 			{
@@ -937,7 +943,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			// run through translations
 			if(strlen($objResult->{$strTranslationField}) > 0)
 			{
-				$arrTranslations = deserialize($objResult->{$strTranslationField});
+				$arrTranslations = \Contao\StringUtil::deserialize($objResult->{$strTranslationField});
 				if(!empty($arrTranslations) && is_array($arrTranslations) && array_key_exists($metaWizardKey, $arrTranslations))
 				{
 					foreach($arrTranslations as $lang => $arrTranslation)

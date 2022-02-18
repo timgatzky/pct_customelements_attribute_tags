@@ -52,7 +52,7 @@ class TagsModel extends \Model
 			return '';
 		}
 		
-		$arrTranslations = deserialize($objModel->translations);
+		$arrTranslations = \Contao\StringUtil::deserialize($objModel->translations);
 		
 		if(strlen($strLanguage) < 1)
 		{
