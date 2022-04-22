@@ -14,14 +14,10 @@
  */
 
 /**
- * Imports
- */
-use PCT\CustomElements\Helper\DcaHelper as DcaHelper;
-
-/**
  * Table tl_pct_customelement_attribute
  */
-$objDcaHelper = DcaHelper::getInstance()->setTable('tl_pct_customelement_attribute');
+$objDcaHelper = \PCT\CustomElements\Helper\DcaHelper::getInstance()->setTable('tl_pct_customelement_attribute');
+$objActiveRecord = $objDcaHelper->getActiveRecord();
 
 /**
  * Config
@@ -44,7 +40,7 @@ $objDcaHelper->addSubpalette('tag_custom',array('tag_table','tag_key','tag_value
 /**
  * Fields
  */
-if($objDcaHelper->getActiveRecord()->type == $strType)
+if( isset($objActiveRecord) && $objActiveRecord->type == $strType)
 {
 	$GLOBALS['TL_DCA']['tl_pct_customelement_attribute']['fields']['options'][$strType]['options'] = array
 	(
