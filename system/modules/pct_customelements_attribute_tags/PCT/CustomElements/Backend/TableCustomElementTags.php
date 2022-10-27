@@ -141,7 +141,7 @@ class TableCustomElementTags extends \Contao\Backend
 	 */
 	public function copyWithChilds($row, $href, $label, $title, $icon, $attributes, $table)
 	{
-		if($GLOBALS['TL_DCA'][$table]['config']['closed'])
+		if( isset($GLOBALS['TL_DCA'][$table]['config']['closed']) && $GLOBALS['TL_DCA'][$table]['config']['closed'])
 		{
 			return '';
 		}

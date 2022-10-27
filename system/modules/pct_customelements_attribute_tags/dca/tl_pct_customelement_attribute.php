@@ -14,10 +14,14 @@
  */
 
 /**
+ * Imports
+ */
+use PCT\CustomElements\Helper\DcaHelper as DcaHelper;
+
+/**
  * Table tl_pct_customelement_attribute
  */
-$objDcaHelper = \PCT\CustomElements\Helper\DcaHelper::getInstance()->setTable('tl_pct_customelement_attribute');
-$objActiveRecord = $objDcaHelper->getActiveRecord();
+$objDcaHelper = DcaHelper::getInstance()->setTable('tl_pct_customelement_attribute');
 
 /**
  * Config
@@ -40,16 +44,19 @@ $objDcaHelper->addSubpalette('tag_custom',array('tag_table','tag_key','tag_value
 /**
  * Fields
  */
-if( isset($objActiveRecord) && $objActiveRecord->type == $strType)
+$objActiveRecord = $objDcaHelper->getActiveRecord();
+if( $objActiveRecord !== null )
 {
-	$GLOBALS['TL_DCA']['tl_pct_customelement_attribute']['fields']['options'][$strType]['options'] = array
-	(
-		'sortable',
-		'checkboxmenu'
-	);
-	$GLOBALS['TL_DCA']['tl_pct_customelement_attribute']['fields']['options'][$strType]['reference'] = &$GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['options'][$strType];
+	if($objActiveRecord->type == $strType)
+	{
+		$GLOBALS['TL_DCA']['tl_pct_customelement_attribute']['fields']['options'][$strType]['options'] = array
+		(
+			'sortable',
+			'checkboxmenu'
+		);
+		$GLOBALS['TL_DCA']['tl_pct_customelement_attribute']['fields']['options'][$strType]['reference'] = &$GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['options'][$strType];
+	}
 }
-
 
 
 $objDcaHelper->addFields(array

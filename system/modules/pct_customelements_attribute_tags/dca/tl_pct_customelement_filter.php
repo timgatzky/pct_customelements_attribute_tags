@@ -16,9 +16,7 @@
  * Table tl_pct_customelement_filter
  */
 $objDcaHelper = \PCT\CustomElements\Helper\DcaHelper::getInstance()->setTable('tl_pct_customelement_filter');
-$objActiveRecord = $objDcaHelper->getActiveRecord();
 $strType = 'tags';
-
 
 /**
  * Palettes
@@ -31,7 +29,8 @@ $arrPalettes['settings_legend'][] = 'includeReset';
 array_insert( $arrPalettes, 3, array('conditions_legend' => array('conditional')) );
 $GLOBALS['TL_DCA']['tl_pct_customelement_filter']['palettes'][$strType] = $objDcaHelper->generatePalettes($arrPalettes);
 
-if( isset($objActiveRecord) && $objActiveRecord->type == $strType)
+$objActiveRecord = $objDcaHelper->getActiveRecord();
+if( $objActiveRecord !== null && $objActiveRecord->type == $strType )
 {
 	if(\Contao\Input::get('act') == 'edit' && \Contao\Input::get('table') == $objDcaHelper->getTable())
 	{

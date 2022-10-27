@@ -20,7 +20,7 @@ $GLOBALS['TL_DCA']['tl_pct_customelement_tags'] = array
 	// Config
 	'config' => array
 	(
-		'label'                       => $GLOBALS['TL_LANG']['tl_pct_customelement_tags']['config']['label'] ? $GLOBALS['TL_LANG']['tl_pct_customelement_tags']['config']['label'] : 'Tags',
+		'label'                       => $GLOBALS['TL_LANG']['tl_pct_customelement_tags']['config']['label'] ?? 'Tags',
 		'dataContainer'				  => 'Table',
 		'enableVersioning'            => true,
 		'sql' => array
