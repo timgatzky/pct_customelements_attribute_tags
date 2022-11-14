@@ -132,6 +132,7 @@ class Tags extends \PCT\CustomElements\Filter
 					'value'  	=> $value,
 					'label'  	=> $label,
 					'name'  	=> $strName,
+					'selected'	=> false,
 				);
 				
 				// translate label

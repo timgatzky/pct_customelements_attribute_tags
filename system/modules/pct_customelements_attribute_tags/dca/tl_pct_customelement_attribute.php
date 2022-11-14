@@ -44,16 +44,19 @@ $objDcaHelper->addSubpalette('tag_custom',array('tag_table','tag_key','tag_value
 /**
  * Fields
  */
-if($objDcaHelper->getActiveRecord()->type == $strType)
+$objActiveRecord = $objDcaHelper->getActiveRecord();
+if( $objActiveRecord !== null )
 {
-	$GLOBALS['TL_DCA']['tl_pct_customelement_attribute']['fields']['options'][$strType]['options'] = array
-	(
-		'sortable',
-		'checkboxmenu'
-	);
-	$GLOBALS['TL_DCA']['tl_pct_customelement_attribute']['fields']['options'][$strType]['reference'] = &$GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['options'][$strType];
+	if($objActiveRecord->type == $strType)
+	{
+		$GLOBALS['TL_DCA']['tl_pct_customelement_attribute']['fields']['options'][$strType]['options'] = array
+		(
+			'sortable',
+			'checkboxmenu'
+		);
+		$GLOBALS['TL_DCA']['tl_pct_customelement_attribute']['fields']['options'][$strType]['reference'] = &$GLOBALS['TL_LANG']['tl_pct_customelement_attribute']['options'][$strType];
+	}
 }
-
 
 
 $objDcaHelper->addFields(array

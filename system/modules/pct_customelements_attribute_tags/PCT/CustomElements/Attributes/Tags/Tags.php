@@ -565,9 +565,9 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		$arrSession = $objSession->all();
 		$strSession = $GLOBALS['PCT_CUSTOMCATALOG']['backendFilterSession'];
 		
-		$varFilterValue = \Contao\StringUtil::deserialize($arrSession[$strSession][$strTable][$strField] ?: $arrSession['filter'][$strTable][$strField]);
-		$varSearchValue = $arrSession[$strSession.'_search'][$strTable]['value'] ?: $arrSession['search'][$strTable]['value'];
-		$varSearchField = $arrSession[$strSession.'_search'][$strTable]['field'];
+		$varFilterValue = \Contao\StringUtil::deserialize($arrSession[$strSession][$strTable][$strField] ?? $arrSession['filter'][$strTable][$strField] ?? '');
+		$varSearchValue = $arrSession[$strSession.'_search'][$strTable]['value'] ?? $arrSession['search'][$strTable]['value'] ?? '';
+		$varSearchField = $arrSession[$strSession.'_search'][$strTable]['field'] ?? '';
 		
 		// reset the filter
 		if( \Contao\Input::post('FORM_SUBMIT') == 'tl_filters' && (int)\Contao\Input::post('filter_reset') > 0)

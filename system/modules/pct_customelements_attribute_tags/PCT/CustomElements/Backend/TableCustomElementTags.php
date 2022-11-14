@@ -49,7 +49,10 @@ class TableCustomElementTags extends \Contao\Backend
 		{
 			$arrTranslations = \Contao\StringUtil::deserialize($arrRow['translations']);
 			$lang = \Contao\Input::get('language') ?: \Contao\Input::get('lang') ?: $GLOBALS['TL_LANGUAGE'];
-			$strLabel = $arrTranslations[$lang]['label'] ?: $strLabel;
+			if( isset($arrTranslations[$lang]['label']) && !empty($arrTranslations[$lang]['label']) )
+			{
+				$strLabel = $arrTranslations[$lang]['label'];
+			}
 		}
 		
 		return '<a href="'.$this->addToUrl('node='.$arrRow['id']).'" title="'.$GLOBALS['TL_LANG']['MSC']['selectNode'].'">'.$strLabel.'</a>';
@@ -141,7 +144,7 @@ class TableCustomElementTags extends \Contao\Backend
 	 */
 	public function copyWithChilds($row, $href, $label, $title, $icon, $attributes, $table)
 	{
-		if($GLOBALS['TL_DCA'][$table]['config']['closed'])
+		if( isset($GLOBALS['TL_DCA'][$table]['config']['closed']) && $GLOBALS['TL_DCA'][$table]['config']['closed'])
 		{
 			return '';
 		}
