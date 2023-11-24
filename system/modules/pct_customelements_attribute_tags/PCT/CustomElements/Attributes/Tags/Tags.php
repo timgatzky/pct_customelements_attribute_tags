@@ -100,7 +100,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 				$arrReturn['options_callback'] = array('PCT\CustomElements\Attributes\Tags\TableHelper','getTagsByDca');
 			}
 		}
-
+		
 		return $arrReturn;
 	}
 	
@@ -560,8 +560,10 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			// add to cache
 			$objCache::addDatabaseResult('Tags::findAll',$strField,$objRows);
 		}
+
+		$objContainer = \Contao\System::getContainer();
 		
-		$objSession = \Contao\System::getContainer()->get('session');
+		$objSession = $objContainer->get('session');
 		$arrSession = $objSession->all();
 		$strSession = $GLOBALS['PCT_CUSTOMCATALOG']['backendFilterSession'];
 		
@@ -569,6 +571,19 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		$varSearchValue = $arrSession[$strSession.'_search'][$strTable]['value'] ?? $arrSession['search'][$strTable]['value'] ?? '';
 		$varSearchField = $arrSession[$strSession.'_search'][$strTable]['field'] ?? '';
 		
+		// contao backend session bag
+		$objSessionBag = $objContainer->get('session')->getBag('contao_backend');
+		$arrSessionBag = $objSessionBag->all();
+
+		if( isset($arrSessionBag['filter'][$strTable][$strField]) && !empty($arrSessionBag['filter'][$strTable][$strField]) )
+		{
+			$varFilterValue = $arrSessionBag['filter'][$strTable][$strField];
+		}
+		if( isset($arrSessionBag['search'][$strTable]['value']) && !empty($arrSessionBag['search'][$strTable]['value']) )
+		{
+			$varSearchValue = $arrSessionBag['search'][$strTable]['value'];
+		}
+
 		// reset the filter
 		if( \Contao\Input::post('FORM_SUBMIT') == 'tl_filters' && (int)\Contao\Input::post('filter_reset') > 0)
 		{
@@ -646,7 +661,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		{
 			return array();
 		}
-				
+
 		return array('FIND_IN_SET(id,?)',implode(',',array_unique($arrIds)));
 	}
 	
@@ -822,7 +837,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			{
 				$arrData['fieldDef']['foreignKey'] = $strSource.'.title';
 				$arrData['fieldDef']['relation'] = array('type'=>'hasMany', 'load'=>'lazy');
-			
+				
 				if($objAttribute->get('tag_custom'))
 				{
 					$arrData['fieldDef']['foreignKey'] =  $strSource.'.'.$objAttribute->get('tag_value');

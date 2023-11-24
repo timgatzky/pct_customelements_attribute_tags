@@ -13,21 +13,12 @@
  */
 
 
-$path = 'system/modules/pct_customelements_attribute_tags';
-
-/**
- * Register the namespaces
- */
-\Contao\ClassLoader::addNamespaces(array
-(
-	'PCT\CustomElements',
-));
-
+$path = \Contao\System::getContainer()->getParameter('kernel.project_dir').'/vendor/composer/../../system/modules/pct_customelements_attribute_tags';
 
 /**
  * Register the classes
  */
-\Contao\ClassLoader::addClasses(array
+$classMap = array
 (
 	'PCT\CustomElements\Attributes\Tags'								=> $path.'/PCT/CustomElements/Attributes/Tags/Tags.php',	
 	'PCT\CustomElements\Attributes\Tags\TableHelper'					=> $path.'/PCT/CustomElements/Attributes/Tags/TableHelper.php',	
@@ -37,12 +28,16 @@ $path = 'system/modules/pct_customelements_attribute_tags';
 	'PCT\CustomElements\Attributes\Tags\Export'							=> $path.'/PCT/CustomElements/Attributes/Tags/Export.php',	
 	'Contao\PCT_TagsModel'												=> $path.'/Contao/PCT_TagsModel.php',
 	'PCT\CustomElements\Models\TagsModel'								=> $path.'/PCT/CustomElements/Models/TagsModel.php',	
-));
+);
+
+$loader = new \Composer\Autoload\ClassLoader();
+$loader->addClassMap($classMap);
+$loader->register();
 
 /**
  * Register the templates
  */
 \Contao\TemplateLoader::addFiles(array
 (
-	'customcatalog_filter_tags'		=> $path.'/templates',
+	'customcatalog_filter_tags'		=> 'system/modules/pct_customelements_attribute_tags/templates',
 ));

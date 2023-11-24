@@ -21,6 +21,8 @@ namespace PCT\CustomElements\Backend;
  * Imports
  */
 use PCT\CustomElements\Helper\ControllerHelper as ControllerHelper;
+use Contao\BackendUser;
+use Contao\System;
 
 /**
  * Class file
@@ -34,7 +36,7 @@ class TableCustomElementTags extends \Contao\Backend
 	public function __construct()
 	{
 		parent::__construct();
-		$this->import('BackendUser', 'User');
+		$this->import(BackendUser::class, 'User');	
 	}
 	
 	/**
@@ -67,7 +69,7 @@ class TableCustomElementTags extends \Contao\Backend
 	 */
 	public function addBreadcrumb($objDC, $strKey='tabletree_node', $strTitleField='title')
 	{
-		$objSession = \Contao\System::getContainer()->get('session');
+		$objSession = System::getContainer()->get('request_stack')->getSession();
 		$intNode = \Contao\Input::get('node');
 		
 		if(isset($intNode))
@@ -160,14 +162,12 @@ class TableCustomElementTags extends \Contao\Backend
 	 */
 	public function loadAssets()
 	{
-		if(version_compare(VERSION, '4','>='))
+		$request = System::getContainer()->get('request_stack')->getCurrentRequest();
+		if( $request && System::getContainer()->get('contao.routing.scope_matcher')->isFrontendRequest($request) )
 		{
-			$GLOBALS['TL_CSS'][] = PCT_CUSTOMELEMENTS_TAGS_PATH.'/assets/css/styles.css';
+			return;
 		}
-		else
-		{
-			$GLOBALS['TL_CSS'][] = PCT_CUSTOMELEMENTS_TAGS_PATH.'/assets/css/styles_c3.css';
-		}
+		$GLOBALS['TL_CSS'][] = PCT_CUSTOMELEMENTS_TAGS_PATH.'/assets/css/styles.css';
 	}
 	
 	

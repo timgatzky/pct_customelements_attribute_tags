@@ -12,6 +12,8 @@
  * @license     LGPL
  */
 
+use Contao\DC_Table;
+
 /**
  * Table tl_pct_customelement_tags
  */
@@ -21,8 +23,9 @@ $GLOBALS['TL_DCA']['tl_pct_customelement_tags'] = array
 	'config' => array
 	(
 		'label'                       => $GLOBALS['TL_LANG']['tl_pct_customelement_tags']['config']['label'] ?? 'Tags',
-		'dataContainer'				  => 'Table',
+		'dataContainer'				  => DC_Table::class,
 		'enableVersioning'            => true,
+		'markAsCopy'                  => 'title',
 		'sql' => array
 		(
 			'keys' => array
@@ -42,6 +45,8 @@ $GLOBALS['TL_DCA']['tl_pct_customelement_tags'] = array
 		'sorting' => array
 		(
 			'mode'                    => 5,
+			'rootPaste'               => true,
+			'showRootTrails'          => true,
 			'fields'                  => array('title'),
 			'icon'                    => PCT_CUSTOMELEMENTS_TAGS_PATH.'/assets/img/tags.png',
 			'panelLayout'             => 'filter;search',
@@ -74,13 +79,15 @@ $GLOBALS['TL_DCA']['tl_pct_customelement_tags'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_pct_customelement_tags']['edit'],
 				'href'                => 'act=edit',
-				'icon'                => 'edit.gif',
+				'icon'                => 'edit.svg',
+				'attributes'          => 'onclick="Backend.getScrollOffset()"',
 			),
 			'copy' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_pct_customelement_tags']['copy'],
 				'href'                => 'act=copy',
-				'icon'                => 'copy.gif',
+				'icon'                => 'copy.svg',
+				'attributes'          => 'onclick="Backend.getScrollOffset()"',
 			),
 			'copyChilds' => array
 			(
@@ -94,7 +101,8 @@ $GLOBALS['TL_DCA']['tl_pct_customelement_tags'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_pct_customelement_tags']['cut'],
 				'href'                => 'act=paste&amp;mode=cut',
-				'icon'                => 'cut.gif',
+				'icon'                => 'cut.svg',
+				'attributes'          => 'onclick="Backend.getScrollOffset()"',
 			),
 			'delete' => array
 			(
@@ -107,7 +115,7 @@ $GLOBALS['TL_DCA']['tl_pct_customelement_tags'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_pct_customelement_tags']['show'],
 				'href'                => 'act=show',
-				'icon'                => 'show.gif'
+				'icon'                => 'show.svg'
 			),
 		)
 	),

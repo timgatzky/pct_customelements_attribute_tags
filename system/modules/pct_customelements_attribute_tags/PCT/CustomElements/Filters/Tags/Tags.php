@@ -162,7 +162,7 @@ class Tags extends \PCT\CustomElements\Filter
 		{
 			$label = !$isSelected ? sprintf($GLOBALS['TL_LANG']['PCT_CUSTOMCATALOG']['MSC']['filter_firstOption'],$this->objAttribute->title) : $GLOBALS['TL_LANG']['PCT_CUSTOMCATALOG']['MSC']['filter_reset'];
 			$blank = array('value'=>'','label'=>$label,'id'=>'ctrl_'.$strName.'_reset','name'=> $strName.'_reset');
-			array_insert($arrOptions,0,array($blank));
+			\Contao\ArrayUtil::arrayInsert($arrOptions,0,array($blank));
 		}
 
 		$objTemplate->options = $arrOptions;

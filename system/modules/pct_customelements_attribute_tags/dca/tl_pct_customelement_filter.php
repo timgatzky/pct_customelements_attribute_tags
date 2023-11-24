@@ -26,7 +26,7 @@ $arrPalettes['settings_legend'][] = 'attr_id';
 $arrPalettes['settings_legend'][] = 'label';
 $arrPalettes['settings_legend'][] = 'mode';
 $arrPalettes['settings_legend'][] = 'includeReset';
-array_insert( $arrPalettes, 3, array('conditions_legend' => array('conditional')) );
+\Contao\ArrayUtil::arrayInsert( $arrPalettes, 3, array('conditions_legend' => array('conditional')) );
 $GLOBALS['TL_DCA']['tl_pct_customelement_filter']['palettes'][$strType] = $objDcaHelper->generatePalettes($arrPalettes);
 
 $objActiveRecord = $objDcaHelper->getActiveRecord();
