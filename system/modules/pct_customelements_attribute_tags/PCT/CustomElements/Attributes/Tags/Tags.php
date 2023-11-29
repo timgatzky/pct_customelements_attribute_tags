@@ -843,7 +843,8 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		}
 		
 		// show language records in a multilanguage custom catalog source
-		if($objAttribute->get('tag_custom'))
+		$request = \Contao\System::getContainer()->get('request_stack')->getCurrentRequest();
+		if(  $request && \Contao\System::getContainer()->get('contao.routing.scope_matcher')->isBackendRequest($request) &&$objAttribute->get('tag_custom') )
 		{
 			$objSession = \Contao\System::getContainer()->get('request_stack')->getSession();
 			$strSource = $objAttribute->get('tag_table');
