@@ -1,3 +1,7 @@
+### 1.16.0
+Update: General Contao 5 compatibility (#109)
+Removed: Contao 4.9 compatibility (#109)
+
 ### 1.15.1
 Update: General PHP8 updates (#107)
 
