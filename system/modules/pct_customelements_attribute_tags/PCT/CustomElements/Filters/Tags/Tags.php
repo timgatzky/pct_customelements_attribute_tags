@@ -235,8 +235,6 @@ class Tags extends \PCT\CustomElements\Filter
 		{
 			$objTags = $objDatabase->prepare("SELECT ".($blnHasIdField ? "id,":'').$strValueField.($strKeyField ? ','.$strKeyField:'').($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE id IN(".implode(',', $arrValues).")" . ($strSortingField ? " ORDER BY ".$strSortingField : "") )->execute();
 		}
-		
-		$metaWizardKey = (version_compare(VERSION,'3.2','<=') ? 'title': 'label');
 					
 		$arrReturn = array();
 		while($objTags->next())
@@ -266,12 +264,12 @@ class Tags extends \PCT\CustomElements\Filter
 				{
 					foreach($arrTranslations as $lang => $arrTranslation)
 					{
-						if(!array_key_exists($metaWizardKey, $arrTranslation))
+						if(!array_key_exists('label', $arrTranslation))
 						{
 							continue;
 						}
 						
-						$strLabel = $arrTranslation[$metaWizardKey];
+						$strLabel = $arrTranslation['label'];
 						if(strlen($strLabel) < 1)
 						{
 							$strLabel = $objTags->{$strValueField};

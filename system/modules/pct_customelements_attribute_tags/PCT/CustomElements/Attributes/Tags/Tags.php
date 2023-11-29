@@ -220,8 +220,6 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			return '';
 		}
 		
-		$metaWizardKey = (version_compare(VERSION,'3.2','<=') ? 'title': 'label');
-		
 		// translate values
 		$arrValues = array();
 		
@@ -239,12 +237,12 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 					{
 						foreach($arrTranslations as $lang => $arrTranslation)
 						{
-							if(!array_key_exists($metaWizardKey, $arrTranslation))
+							if(!array_key_exists('label', $arrTranslation))
 							{
 								continue;
 							}
 							
-							$strLabel = $arrTranslation[$metaWizardKey];
+							$strLabel = $arrTranslation['label'];
 							if(strlen($strLabel) < 1)
 							{
 								$strLabel = $objResult->{$strValueField};
@@ -369,10 +367,6 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			return array();
 		}
 		
-		$metaWizardKey = (version_compare(VERSION,'3.2','<=') ? 'title': 'label');
-		
-		
-		
 		$arrReturn = array();
 		
 		if(strlen($strTranslationField) > 0)
@@ -389,12 +383,12 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 					{
 						foreach($arrTranslations as $lang => $arrTranslation)
 						{
-							if(!array_key_exists($metaWizardKey, $arrTranslation))
+							if(!array_key_exists('label', $arrTranslation))
 							{
 								continue;
 							}
 							
-							$strLabel = $arrTranslation[$metaWizardKey];
+							$strLabel = $arrTranslation['label'];
 							if(strlen($strLabel) < 1)
 							{
 								$strLabel = $objResult->{$strValueField};
@@ -476,8 +470,6 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		$arrReturn = array();
 		if(strlen($strTranslationField) > 0)
 		{
-			$metaWizardKey = (version_compare(VERSION,'3.2','<=') ? 'title': 'label');
-
 			while($objResult->next())
 			{
 				$strValue = $objResult->{$strValueField};
@@ -490,12 +482,12 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 					{
 						foreach($arrTranslations as $lang => $arrTranslation)
 						{
-							if(!array_key_exists($metaWizardKey, $arrTranslation))
+							if(!array_key_exists('label', $arrTranslation))
 							{
 								continue;
 							}
 							
-							$strLabel = $arrTranslation[$metaWizardKey];
+							$strLabel = $arrTranslation['label'];
 							if(strlen($strLabel) < 1)
 							{
 								$strLabel = $objResult->{$strValueField};
@@ -947,8 +939,6 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			return array();
 		}
 		
-		$metaWizardKey = (version_compare(VERSION,'3.2','<=') ? 'title': 'label');		
-		
 		$arrReturn = array();
 		while($objResult->next())
 		{
@@ -960,11 +950,11 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			if(strlen($objResult->{$strTranslationField}) > 0)
 			{
 				$arrTranslations = \Contao\StringUtil::deserialize($objResult->{$strTranslationField});
-				if(!empty($arrTranslations) && is_array($arrTranslations) && array_key_exists($metaWizardKey, $arrTranslations))
+				if(!empty($arrTranslations) && is_array($arrTranslations) && array_key_exists('label', $arrTranslations))
 				{
 					foreach($arrTranslations as $lang => $arrTranslation)
 					{
-						$strLabel = $arrTranslation[$metaWizardKey];
+						$strLabel = $arrTranslation['label'];
 						if(strlen($strLabel) < 1)
 						{
 							$strLabel = $objResult->{$strValueField};
