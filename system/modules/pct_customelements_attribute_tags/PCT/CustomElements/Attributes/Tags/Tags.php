@@ -21,6 +21,7 @@ namespace PCT\CustomElements\Attributes;
  * Imports
  */
 use PCT\CustomElements\Helper\ControllerHelper as ControllerHelper;
+use PCT\CustomElements\Plugins\CustomCatalog\Core\Multilanguage;
 
 /**
  * Class file
@@ -861,15 +862,15 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 				{
 					if($objSourceCC->hasLanguageRecords())
 					{
-						$strLanguage = \PCT\CustomElements\Plugins\CustomCatalog\Core\Multilanguage::getLanguage($objCC->getTable());
+						$strLanguage = Multilanguage::getLanguage($objCC->getTable());
 						if(strlen($strLanguage) > 0)
 						{
-							$arrRoots = \PCT\CustomElements\Plugins\CustomCatalog\Core\Multilanguage::getInstance()->findLanguageRecords($strSource,$strLanguage);
+							$arrRoots = Multilanguage::findLanguageRecords($strSource,$strLanguage);
 							$arrData['fieldDef']['tabletree']['roots'] = $arrRoots;
 						}
 						else
 						{
-							$arrRoots = \PCT\CustomElements\Plugins\CustomCatalog\Core\Multilanguage::getInstance()->findBaseRecords($strSource,$strLanguage);
+							$arrRoots = Multilanguage::findBaseRecords($strSource,$strLanguage);
 							$arrData['fieldDef']['tabletree']['roots'] = $arrRoots;
 						}
 						
