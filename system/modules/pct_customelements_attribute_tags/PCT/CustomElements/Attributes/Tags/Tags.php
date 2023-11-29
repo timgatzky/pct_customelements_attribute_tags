@@ -556,7 +556,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 
 		$objContainer = \Contao\System::getContainer();
 		
-		$objSession = $objContainer->get('session');
+		$objSession = $objContainer->get('request_stack')->getSession();
 		$arrSession = $objSession->all();
 		$strSession = $GLOBALS['PCT_CUSTOMCATALOG']['backendFilterSession'];
 		
@@ -565,7 +565,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		$varSearchField = $arrSession[$strSession.'_search'][$strTable]['field'] ?? '';
 		
 		// contao backend session bag
-		$objSessionBag = $objContainer->get('session')->getBag('contao_backend');
+		$objSessionBag = $objSession->getBag('contao_backend');
 		$arrSessionBag = $objSessionBag->all();
 
 		if( isset($arrSessionBag['filter'][$strTable][$strField]) && !empty($arrSessionBag['filter'][$strTable][$strField]) )
@@ -845,7 +845,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		// show language records in a multilanguage custom catalog source
 		if($objAttribute->get('tag_custom'))
 		{
-			$objSession = \Contao\System::getContainer()->get('session');
+			$objSession = \Contao\System::getContainer()->get('request_stack')->getSession();
 			$strSource = $objAttribute->get('tag_table');
 			if(\PCT\CustomElements\Plugins\CustomCatalog\Core\CustomCatalogFactory::validateByTableName($strSource))
 			{
