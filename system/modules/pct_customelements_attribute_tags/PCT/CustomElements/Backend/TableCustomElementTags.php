@@ -209,7 +209,8 @@ class TableCustomElementTags extends \Contao\Backend
 		{
 			$objDatabase->prepare("DELETE FROM ".$strTable." WHERE id IN (".implode(',', $arrPurge).")")->execute();
 			// Log
-			\Contao\System::log('Purged tags. Child records id: '.implode(',', $arrPurge).'',__METHOD__,TL_CRON);
+			\Contao\System::getContainer()->get('monolog.logger.contao.cron')->info('Purged tags. Child records id: '.implode(',', $arrPurge));
+
 		}
 	} 
 	
