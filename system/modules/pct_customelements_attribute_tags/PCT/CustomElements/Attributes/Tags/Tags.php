@@ -85,6 +85,11 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		
 		// make field sortable
 		$arrOptions = \Contao\StringUtil::deserialize($this->get('options')) ?: array();
+		if( !is_array($arrOptions) )
+		{
+			$arrOptions = explode(',', $arrOptions);
+		}
+
 		if(in_array('sortable', $arrOptions))
 		{
 			$arrReturn['sortable'] = true;
