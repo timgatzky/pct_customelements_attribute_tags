@@ -814,6 +814,9 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			return $arrData;
 		}
 		
+		// add the table to the tags backend module
+		$GLOBALS['BE_MOD']['content']['pct_customelements_tags']['tables'][] = $strTable;
+		
 		// set the orgin to the customcatalog
 		$objAttribute->setOrigin($objCC);
 		
