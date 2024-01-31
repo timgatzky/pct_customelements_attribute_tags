@@ -44,5 +44,5 @@ if( $objActiveRecord !== null && $objActiveRecord->type == $strType )
 	$GLOBALS['TL_DCA']['tl_pct_customelement_filter']['fields']['mode']['inputType'] = 'select';
 	$GLOBALS['TL_DCA']['tl_pct_customelement_filter']['fields']['mode']['options'] = array('exact');
 	$GLOBALS['TL_DCA']['tl_pct_customelement_filter']['fields']['mode']['eval'] = array('tl_class'=>'clr','includeBlankOption' => true);
-	$GLOBALS['TL_DCA']['tl_pct_customelement_filter']['fields']['mode']['reference'] = $GLOBALS['TL_LANG']['tl_pct_customelement_filter']['mode']['tags'];
+	$GLOBALS['TL_DCA']['tl_pct_customelement_filter']['fields']['mode']['reference'] = $GLOBALS['TL_LANG']['tl_pct_customelement_filter']['mode']['tags'] ?? array();
 }
