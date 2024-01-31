@@ -313,12 +313,15 @@ class Tags extends \PCT\CustomElements\Filter
 		$objCache = new \PCT\CustomElements\Plugins\CustomCatalog\Core\Cache();
 		
 		// look up from cache
-		$objRows = $objCache::getDatabaseResult('Tags::findAll'.(strlen($strPublished) > 0 ? 'Published' : ''),$strField);
+		$cacheKey = 'Tags::findAll'.implode('-', $filterValues).(strlen($strPublished) > 0 ? 'Published' : '');
+		$objRows = $objCache::getDatabaseResult($cacheKey,$strField);
 		if($objRows === null)
 		{
-			$objRows = $objDatabase->prepare("SELECT id,".$strField." FROM ".$this->getTable()." WHERE ".$strField." IS NOT NULL ".(strlen($strPublished) > 0 ? " AND ".$strPublished."=1" : ""))->execute();
+			$objRows = $objDatabase->prepare("SELECT id,".$strField." FROM ".$this->getTable()." WHERE ".$strField." IS NOT NULL AND (SELECT LOCATE(?,".$strField.")) ".(strlen($strPublished) > 0 ? " AND ".$strPublished."=1" : ""))->execute($filterValues);
+		
 			// add to cache
-			$objCache::addDatabaseResult('Tags::findAll'.(strlen($strPublished) > 0 ? 'Published' : ''),$strField,$objRows);
+			$objCache::addDatabaseResult($cacheKey,$strField,$objRows);
+		
 		}
 		
 		if($objRows->numRows < 1)
