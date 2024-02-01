@@ -337,7 +337,15 @@ class Tags extends \PCT\CustomElements\Filter
 		{
 			$arrTags = array_keys($this->getTagsOptions($filterValues));
 		}
-	
+		
+		// result in cache?
+		$cacheKey = 'Tags::filterResult::'.$strField.(strlen($strPublished) > 0 ? '::Published' : '').'::'.implode(',',$filterValues);
+		$arrReturn = $objCache->getFilterResult($cacheKey);
+		if( $arrReturn !== null )
+		{
+			return $arrReturn;
+		}
+		
 		$arrReturn = array();
 		while($objRows->next())
 		{
@@ -369,6 +377,9 @@ class Tags extends \PCT\CustomElements\Filter
 				$arrReturn[] = $objRows->id;
 			}
 		}
+		
+		// cache the result
+		$objCache->addFilterResult($cacheKey,$arrReturn);
 		
 		return $arrReturn;
 	}
