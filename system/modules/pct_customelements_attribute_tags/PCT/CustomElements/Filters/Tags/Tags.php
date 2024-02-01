@@ -21,6 +21,7 @@ namespace PCT\CustomElements\Filters;
  * Imports
  */
 use \PCT\CustomElements\Helper\ControllerHelper;
+use PCT\CustomElements\Plugins\CustomCatalog\Core\Cache;
 
 /**
  * Class file
@@ -310,18 +311,15 @@ class Tags extends \PCT\CustomElements\Filter
 		$strField = $this->getFilterTarget();
 		$strPublished = ($GLOBALS['PCT_CUSTOMCATALOG']['FRONTEND']['FILTER']['publishedOnly'] ? $this->getCustomCatalog()->getPublishedField() : '');
 		
-		$objCache = new \PCT\CustomElements\Plugins\CustomCatalog\Core\Cache();
-		
 		// look up from cache
-		$cacheKey = 'Tags::findAll'.implode('-', $filterValues).(strlen($strPublished) > 0 ? 'Published' : '');
-		$objRows = $objCache::getDatabaseResult($cacheKey,$strField);
+		$cacheKey = 'Tags::findAll::'.implode('-', $filterValues).(strlen($strPublished) > 0 ? 'Published' : '');
+		$objRows = Cache::getDatabaseResult($cacheKey,$strField);
 		if($objRows === null)
 		{
 			$objRows = $objDatabase->prepare("SELECT id,".$strField." FROM ".$this->getTable()." WHERE ".$strField." IS NOT NULL AND (SELECT LOCATE(?,".$strField.")) ".(strlen($strPublished) > 0 ? " AND ".$strPublished."=1" : ""))->execute($filterValues);
 		
 			// add to cache
-			$objCache::addDatabaseResult($cacheKey,$strField,$objRows);
-		
+			Cache::addDatabaseResult($cacheKey,$strField,$objRows);
 		}
 		
 		if($objRows->numRows < 1)
@@ -341,7 +339,7 @@ class Tags extends \PCT\CustomElements\Filter
 		// result in cache?
 		$cacheKey = 'Tags::filterResult::'.$strField.(strlen($strPublished) > 0 ? '::Published' : '').'::'.implode(',',$filterValues);
 		$arrReturn = $objCache->getFilterResult($cacheKey);
-		if( $arrReturn !== null )
+		if( $arrReturn !== null && is_array($arrReturn) )
 		{
 			return $arrReturn;
 		}
@@ -379,7 +377,7 @@ class Tags extends \PCT\CustomElements\Filter
 		}
 		
 		// cache the result
-		$objCache->addFilterResult($cacheKey,$arrReturn);
+		Cache::addFilterResult($cacheKey,$arrReturn);
 		
 		return $arrReturn;
 	}
