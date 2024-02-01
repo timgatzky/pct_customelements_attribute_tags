@@ -338,7 +338,7 @@ class Tags extends \PCT\CustomElements\Filter
 		
 		// result in cache?
 		$cacheKey = 'Tags::filterResult::'.$strField.(strlen($strPublished) > 0 ? '::Published' : '').'::'.implode(',',$filterValues);
-		$arrReturn = $objCache->getFilterResult($cacheKey);
+		$arrReturn = Cache::getFilterResult($cacheKey);
 		if( $arrReturn !== null && is_array($arrReturn) )
 		{
 			return $arrReturn;
