@@ -29,11 +29,6 @@ if( version_compare(ContaoCoreBundle::getVersion(),'5.0','>=') )
 	include( $rootDir.'/system/modules/pct_customelements_attribute_tags/config/autoload.php' );
 }
 
-$blnInstallTool = false;
-if(strlen(strpos(Environment::get('scriptName'), '/contao/install.php')) > 0 || strlen(strpos(Environment::get('requestUri'), '/contao/install')) > 0)
-{
-	$blnInstallTool = true;
-}
 
 /**
  * Back end modules
