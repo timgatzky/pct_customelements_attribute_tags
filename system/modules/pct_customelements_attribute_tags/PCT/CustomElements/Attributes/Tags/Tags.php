@@ -142,7 +142,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$objWidget->class = 'error';
 		}
 		
-		if($arrFieldDef['sortable'])
+		if( isset($arrFieldDef['sortable']) && $arrFieldDef['sortable'])
 		{
 			$objWidget->activeRecord->{'orderSRC_'.$strField} = $varValue;
 		}
@@ -203,7 +203,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$arrOptions = explode(',', $arrOptions);
 		}
 		
-		if(in_array('sortable', $arrOptions) && isset($objAttribute->getActiveRecord()->{'orderSRC_'.$strField}))
+		if(in_array('sortable', $arrOptions) && isset($objAttribute->getActiveRecord()->{'orderSRC_'.$strField}) && !empty($objAttribute->getActiveRecord()->{'orderSRC_'.$strField}))
 		{
 			$arrOrderSRC = \Contao\StringUtil::deserialize( $objAttribute->getActiveRecord()->{'orderSRC_'.$strField} );
 			if(!is_array($arrOrderSRC) && !empty($arrOrderSRC))
