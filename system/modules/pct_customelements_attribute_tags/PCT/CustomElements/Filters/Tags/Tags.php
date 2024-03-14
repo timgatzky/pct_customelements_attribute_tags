@@ -236,7 +236,7 @@ class Tags extends \PCT\CustomElements\Filter
 		{
 			$objTags = $objDatabase->prepare("SELECT ".($blnHasIdField ? "id,":'').$strValueField.($strKeyField ? ','.$strKeyField:'').($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE id IN(".implode(',', $arrValues).")" . ($strSortingField ? " ORDER BY ".$strSortingField : "") )->execute();
 		}
-					
+		
 		$arrReturn = array();
 		while($objTags->next())
 		{
@@ -301,7 +301,6 @@ class Tags extends \PCT\CustomElements\Filter
 	{
 		// get the current filter values
 		$filterValues = $this->getValue();
-		
 		if(empty($filterValues))
 		{
 			return array();
@@ -316,7 +315,7 @@ class Tags extends \PCT\CustomElements\Filter
 		$objRows = Cache::getDatabaseResult($cacheKey,$strField);
 		if($objRows === null)
 		{
-			$objRows = $objDatabase->prepare("SELECT id,".$strField." FROM ".$this->getTable()." WHERE ".$strField." IS NOT NULL AND (SELECT LOCATE(?,".$strField.")) ".(strlen($strPublished) > 0 ? " AND ".$strPublished."=1" : ""))->execute($filterValues);
+			$objRows = $objDatabase->prepare("SELECT id,".$strField." FROM ".$this->getTable()." WHERE ".$strField." IS NOT NULL".(strlen($strPublished) > 0 ? " AND ".$strPublished."=1" : ""))->execute();
 		
 			// add to cache
 			Cache::addDatabaseResult($cacheKey,$strField,$objRows);

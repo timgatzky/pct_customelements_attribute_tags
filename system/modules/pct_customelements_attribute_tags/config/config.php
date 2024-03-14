@@ -14,14 +14,16 @@
 
 use Contao\CoreBundle\ContaoCoreBundle;
 use Contao\System;
-use Contao\Environment;
 use Contao\ArrayUtil;
 
 /**
  * Constants
  */
-define('PCT_CUSTOMELEMENTS_TAGS_PATH', 'system/modules/pct_customelements_attribute_tags');
-define('PCT_CUSTOMELEMENTS_TAGS_VERSION', '1.16.0');
+if( \defined('PCT_CUSTOMELEMENTS_TAGS_PATH') === false )
+{
+	define('PCT_CUSTOMELEMENTS_TAGS_PATH', 'system/modules/pct_customelements_attribute_tags');
+	define('PCT_CUSTOMELEMENTS_TAGS_VERSION', '1.16.0');
+}
 
 if( version_compare(ContaoCoreBundle::getVersion(),'5.0','>=') )
 {

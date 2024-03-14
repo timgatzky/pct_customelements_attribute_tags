@@ -7,7 +7,7 @@
 <fieldset class="checkbox_container">
 	<?php if($this->label): ?><legend><?php echo $this->label; ?></legend><?php endif; ?>
 	<?php foreach($this->options as $option): ?>
-	<div class="checkbox_container <?php echo standardize($option['value']); ?>">
+	<div class="checkbox_container <?php echo \Contao\StringUtil::standardize($option['value']); ?>">
 		<label class="label"><?php echo $option['label']; ?> <?php if($option['id']): ?>(<?php echo $this->countValue($option['value']); ?>)<?php endif; ?></label>
 		<input <?php if($option['id']): ?>id="<?php echo $option['id']; ?>"<?php endif; ?> type="checkbox" name="<?php echo $option['name']; ?>[]" value="<?php echo $option['value']; ?>" <?php if($option['selected']):?>checked<?php endif;?>>
 	</div>
