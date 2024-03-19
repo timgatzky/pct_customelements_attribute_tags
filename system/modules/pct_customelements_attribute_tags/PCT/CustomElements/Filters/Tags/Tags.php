@@ -315,10 +315,22 @@ class Tags extends \PCT\CustomElements\Filter
 		$objRows = Cache::getDatabaseResult($cacheKey,$strField);
 		if($objRows === null)
 		{
-			$objRows = $objDatabase->prepare("SELECT id,".$strField." FROM ".$this->getTable()." WHERE ".$strField." IS NOT NULL".(strlen($strPublished) > 0 ? " AND ".$strPublished."=1" : ""))->execute();
-		
+			$tmp = array();
+			foreach($filterValues as $value)
+			{
+				$tmp[] = $strField." LIKE '%$value%'";
+			}
+			$combiner = 'OR';
+			if( $this->get('mode') == 'exact' )
+			{
+				$combiner = 'AND';
+			}
+			
+			$objRows = $objDatabase->prepare("SELECT id,".$strField." FROM ".$this->getTable()." WHERE ".$strField." IS NOT NULL ".(!empty( $tmp ) ? " $combiner ".\implode(" $combiner ",$tmp) : '' ) .(strlen($strPublished) > 0 ? " AND ".$strPublished."=1" : ""))->execute();
 			// add to cache
 			Cache::addDatabaseResult($cacheKey,$strField,$objRows);
+
+			unset($tmp);
 		}
 		
 		if($objRows->numRows < 1)
