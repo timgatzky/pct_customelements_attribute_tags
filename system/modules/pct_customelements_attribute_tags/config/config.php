@@ -19,10 +19,10 @@ use Contao\ArrayUtil;
 /**
  * Constants
  */
-if( \defined('PCT_CUSTOMELEMENTS_TAGS_PATH') === false )
+if( \defined('PCT_CUSTOMELEMENTS_TAGS_VERSION') === false )
 {
-	define('PCT_CUSTOMELEMENTS_TAGS_PATH', 'system/modules/pct_customelements_attribute_tags');
 	define('PCT_CUSTOMELEMENTS_TAGS_VERSION', '1.16.0');
+	define('PCT_CUSTOMELEMENTS_TAGS_PATH', 'system/modules/pct_customelements_attribute_tags');
 }
 
 if( version_compare(ContaoCoreBundle::getVersion(),'5.0','>=') )
