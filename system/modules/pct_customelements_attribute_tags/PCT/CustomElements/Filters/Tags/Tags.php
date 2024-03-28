@@ -134,6 +134,7 @@ class Tags extends \PCT\CustomElements\Filter
 					'label'  	=> $label,
 					'name'  	=> $strName,
 					'selected'	=> false,
+					'isBlankOption' => false,
 				);
 				
 				// translate label
@@ -162,7 +163,7 @@ class Tags extends \PCT\CustomElements\Filter
 		if($this->get('includeReset'))
 		{
 			$label = !$isSelected ? sprintf($GLOBALS['TL_LANG']['PCT_CUSTOMCATALOG']['MSC']['filter_firstOption'],$this->objAttribute->title) : $GLOBALS['TL_LANG']['PCT_CUSTOMCATALOG']['MSC']['filter_reset'];
-			$blank = array('value'=>'','label'=>$label,'id'=>'ctrl_'.$strName.'_reset','name'=> $strName.'_reset');
+			$blank = array('value'=>'','label'=>$label,'id'=>'ctrl_'.$strName.'_reset','name'=> $strName.'_reset','isBlankOption'=>true);
 			\Contao\ArrayUtil::arrayInsert($arrOptions,0,array($blank));
 		}
 
