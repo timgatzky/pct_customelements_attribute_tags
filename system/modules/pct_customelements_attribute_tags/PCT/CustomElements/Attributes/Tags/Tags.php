@@ -21,6 +21,7 @@ namespace PCT\CustomElements\Attributes;
  * Imports
  */
 use PCT\CustomElements\Helper\ControllerHelper as ControllerHelper;
+use PCT\CustomElements\Plugins\CustomCatalog\Core\Multilanguage;
 
 /**
  * Class file
@@ -84,6 +85,11 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		
 		// make field sortable
 		$arrOptions = \Contao\StringUtil::deserialize($this->get('options')) ?: array();
+		if( !is_array($arrOptions) )
+		{
+			$arrOptions = explode(',', $arrOptions);
+		}
+
 		if(in_array('sortable', $arrOptions))
 		{
 			$arrReturn['sortable'] = true;
@@ -100,7 +106,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 				$arrReturn['options_callback'] = array('PCT\CustomElements\Attributes\Tags\TableHelper','getTagsByDca');
 			}
 		}
-
+		
 		return $arrReturn;
 	}
 	
@@ -136,7 +142,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$objWidget->class = 'error';
 		}
 		
-		if($arrFieldDef['sortable'])
+		if( isset($arrFieldDef['sortable']) && $arrFieldDef['sortable'])
 		{
 			$objWidget->activeRecord->{'orderSRC_'.$strField} = $varValue;
 		}
@@ -197,7 +203,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$arrOptions = explode(',', $arrOptions);
 		}
 		
-		if(in_array('sortable', $arrOptions) && isset($objAttribute->getActiveRecord()->{'orderSRC_'.$strField}))
+		if(in_array('sortable', $arrOptions) && isset($objAttribute->getActiveRecord()->{'orderSRC_'.$strField}) && !empty($objAttribute->getActiveRecord()->{'orderSRC_'.$strField}))
 		{
 			$arrOrderSRC = \Contao\StringUtil::deserialize( $objAttribute->getActiveRecord()->{'orderSRC_'.$strField} );
 			if(!is_array($arrOrderSRC) && !empty($arrOrderSRC))
@@ -213,13 +219,11 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			}
 		}
 				
-		$objResult = $objDatabase->prepare("SELECT ".$strKeyField.','.$strValueField.($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".($objAttribute->get('tag_where') ? \Contao\Controller::replaceInsertTags($objAttribute->get('tag_where')) . " AND " : "")." ".$objDatabase->findInSet($strKeyField,$varValue).($strSortingField ? " ORDER BY ".$strSortingField:"") )->execute();
+		$objResult = $objDatabase->prepare("SELECT ".$strKeyField.','.$strValueField.($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".($objAttribute->get('tag_where') ? \Contao\System::getContainer()->get('contao.insert_tag.parser')->replace($objAttribute->get('tag_where')) . " AND " : "")." ".$objDatabase->findInSet($strKeyField,$varValue).($strSortingField ? " ORDER BY ".$strSortingField:"") )->execute();
 		if($objResult->numRows < 1)
 		{
 			return '';
 		}
-		
-		$metaWizardKey = (version_compare(VERSION,'3.2','<=') ? 'title': 'label');
 		
 		// translate values
 		$arrValues = array();
@@ -238,12 +242,12 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 					{
 						foreach($arrTranslations as $lang => $arrTranslation)
 						{
-							if(!array_key_exists($metaWizardKey, $arrTranslation))
+							if(!array_key_exists('label', $arrTranslation))
 							{
 								continue;
 							}
 							
-							$strLabel = $arrTranslation[$metaWizardKey];
+							$strLabel = $arrTranslation['label'];
 							if(strlen($strLabel) < 1)
 							{
 								$strLabel = $objResult->{$strValueField};
@@ -362,15 +366,11 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			return array();
 		}
 		
-		$objResult = $objDatabase->prepare("SELECT ".$strKeyField.','.$strValueField.($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField, array_unique($arrValues)).($this->get('tag_where') ? " AND ".\Contao\Controller::replaceInsertTags($this->get('tag_where')) : " ").($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
+		$objResult = $objDatabase->prepare("SELECT ".$strKeyField.','.$strValueField.($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField, array_unique($arrValues)).($this->get('tag_where') ? " AND ".\Contao\System::getContainer()->get('contao.insert_tag.parser')->replace($this->get('tag_where')) : " ").($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
 		if($objResult->numRows < 1)
 		{
 			return array();
 		}
-		
-		$metaWizardKey = (version_compare(VERSION,'3.2','<=') ? 'title': 'label');
-		
-		
 		
 		$arrReturn = array();
 		
@@ -388,12 +388,12 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 					{
 						foreach($arrTranslations as $lang => $arrTranslation)
 						{
-							if(!array_key_exists($metaWizardKey, $arrTranslation))
+							if(!array_key_exists('label', $arrTranslation))
 							{
 								continue;
 							}
 							
-							$strLabel = $arrTranslation[$metaWizardKey];
+							$strLabel = $arrTranslation['label'];
 							if(strlen($strLabel) < 1)
 							{
 								$strLabel = $objResult->{$strValueField};
@@ -463,7 +463,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		
 		if( $this->get('tag_where') ) 
 		{
-			$arrWhere[] = \Contao\Controller::replaceInsertTags($this->get('tag_where'));
+			$arrWhere[] = \Contao\System::getContainer()->get('contao.insert_tag.parser')->replace($this->get('tag_where'));
 		}
 		
 		$objResult = \Contao\Database::getInstance()->prepare("SELECT ".$strKeyField.','.$strValueField.($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource.(!empty($arrWhere) ? " WHERE ".implode(' AND ', $arrWhere) : "").($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
@@ -475,8 +475,6 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		$arrReturn = array();
 		if(strlen($strTranslationField) > 0)
 		{
-			$metaWizardKey = (version_compare(VERSION,'3.2','<=') ? 'title': 'label');
-
 			while($objResult->next())
 			{
 				$strValue = $objResult->{$strValueField};
@@ -489,12 +487,12 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 					{
 						foreach($arrTranslations as $lang => $arrTranslation)
 						{
-							if(!array_key_exists($metaWizardKey, $arrTranslation))
+							if(!array_key_exists('label', $arrTranslation))
 							{
 								continue;
 							}
 							
-							$strLabel = $arrTranslation[$metaWizardKey];
+							$strLabel = $arrTranslation['label'];
 							if(strlen($strLabel) < 1)
 							{
 								$strLabel = $objResult->{$strValueField};
@@ -560,8 +558,10 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			// add to cache
 			$objCache::addDatabaseResult('Tags::findAll',$strField,$objRows);
 		}
+
+		$objContainer = \Contao\System::getContainer();
 		
-		$objSession = \Contao\System::getContainer()->get('session');
+		$objSession = $objContainer->get('request_stack')->getSession();
 		$arrSession = $objSession->all();
 		$strSession = $GLOBALS['PCT_CUSTOMCATALOG']['backendFilterSession'];
 		
@@ -569,6 +569,19 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		$varSearchValue = $arrSession[$strSession.'_search'][$strTable]['value'] ?? $arrSession['search'][$strTable]['value'] ?? '';
 		$varSearchField = $arrSession[$strSession.'_search'][$strTable]['field'] ?? '';
 		
+		// contao backend session bag
+		$objSessionBag = $objSession->getBag('contao_backend');
+		$arrSessionBag = $objSessionBag->all();
+
+		if( isset($arrSessionBag['filter'][$strTable][$strField]) && !empty($arrSessionBag['filter'][$strTable][$strField]) )
+		{
+			$varFilterValue = $arrSessionBag['filter'][$strTable][$strField];
+		}
+		if( isset($arrSessionBag['search'][$strTable]['value']) && !empty($arrSessionBag['search'][$strTable]['value']) )
+		{
+			$varSearchValue = $arrSessionBag['search'][$strTable]['value'];
+		}
+
 		// reset the filter
 		if( \Contao\Input::post('FORM_SUBMIT') == 'tl_filters' && (int)\Contao\Input::post('filter_reset') > 0)
 		{
@@ -646,7 +659,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		{
 			return array();
 		}
-				
+
 		return array('FIND_IN_SET(id,?)',implode(',',array_unique($arrIds)));
 	}
 	
@@ -801,6 +814,9 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			return $arrData;
 		}
 		
+		// add the table to the tags backend module
+		$GLOBALS['BE_MOD']['content']['pct_customelements_tags']['tables'][] = $strTable;
+		
 		// set the orgin to the customcatalog
 		$objAttribute->setOrigin($objCC);
 		
@@ -822,7 +838,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			{
 				$arrData['fieldDef']['foreignKey'] = $strSource.'.title';
 				$arrData['fieldDef']['relation'] = array('type'=>'hasMany', 'load'=>'lazy');
-			
+				
 				if($objAttribute->get('tag_custom'))
 				{
 					$arrData['fieldDef']['foreignKey'] =  $strSource.'.'.$objAttribute->get('tag_value');
@@ -835,9 +851,10 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		}
 		
 		// show language records in a multilanguage custom catalog source
-		if($objAttribute->get('tag_custom'))
+		$request = \Contao\System::getContainer()->get('request_stack')->getCurrentRequest();
+		if(  $request && \Contao\System::getContainer()->get('contao.routing.scope_matcher')->isBackendRequest($request) &&$objAttribute->get('tag_custom') )
 		{
-			$objSession = \Contao\System::getContainer()->get('session');
+			$objSession = \Contao\System::getContainer()->get('request_stack')->getSession();
 			$strSource = $objAttribute->get('tag_table');
 			if(\PCT\CustomElements\Plugins\CustomCatalog\Core\CustomCatalogFactory::validateByTableName($strSource))
 			{
@@ -846,15 +863,15 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 				{
 					if($objSourceCC->hasLanguageRecords())
 					{
-						$strLanguage = \PCT\CustomElements\Plugins\CustomCatalog\Core\Multilanguage::getLanguage($objCC->getTable());
+						$strLanguage = Multilanguage::getLanguage($objCC->getTable());
 						if(strlen($strLanguage) > 0)
 						{
-							$arrRoots = \PCT\CustomElements\Plugins\CustomCatalog\Core\Multilanguage::getInstance()->findLanguageRecords($strSource,$strLanguage);
+							$arrRoots = Multilanguage::findLanguageRecords($strSource,$strLanguage);
 							$arrData['fieldDef']['tabletree']['roots'] = $arrRoots;
 						}
 						else
 						{
-							$arrRoots = \PCT\CustomElements\Plugins\CustomCatalog\Core\Multilanguage::getInstance()->findBaseRecords($strSource,$strLanguage);
+							$arrRoots = Multilanguage::findBaseRecords($strSource,$strLanguage);
 							$arrData['fieldDef']['tabletree']['roots'] = $arrRoots;
 						}
 						
@@ -925,13 +942,11 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$strTranslationField = $this->get('tag_translations');
 		}
 		
-		$objResult = $objDatabase->prepare("SELECT ".$strKeyField.','.$strValueField.($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField, array_unique($arrValues)).($this->get('tag_where') ? " AND ".\Contao\Controller::replaceInsertTags($this->get('tag_where')) : " ").($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
+		$objResult = $objDatabase->prepare("SELECT ".$strKeyField.','.$strValueField.($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE ".$objDatabase->findInSet($strKeyField, array_unique($arrValues)).($this->get('tag_where') ? " AND ".\Contao\System::getContainer()->get('contao.insert_tag.parser')->replace($this->get('tag_where')) : " ").($strSorting ? " ORDER BY ".$strSorting:"") )->execute();
 		if($objResult->numRows < 1)
 		{
 			return array();
 		}
-		
-		$metaWizardKey = (version_compare(VERSION,'3.2','<=') ? 'title': 'label');		
 		
 		$arrReturn = array();
 		while($objResult->next())
@@ -944,11 +959,11 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			if(strlen($objResult->{$strTranslationField}) > 0)
 			{
 				$arrTranslations = \Contao\StringUtil::deserialize($objResult->{$strTranslationField});
-				if(!empty($arrTranslations) && is_array($arrTranslations) && array_key_exists($metaWizardKey, $arrTranslations))
+				if(!empty($arrTranslations) && is_array($arrTranslations) && array_key_exists('label', $arrTranslations))
 				{
 					foreach($arrTranslations as $lang => $arrTranslation)
 					{
-						$strLabel = $arrTranslation[$metaWizardKey];
+						$strLabel = $arrTranslation['label'];
 						if(strlen($strLabel) < 1)
 						{
 							$strLabel = $objResult->{$strValueField};

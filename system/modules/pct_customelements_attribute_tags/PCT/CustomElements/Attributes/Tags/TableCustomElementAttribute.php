@@ -29,16 +29,6 @@ use PCT\CustomElements\Helper\ControllerHelper as ControllerHelper;
 class TableCustomElementAttribute extends \Contao\Backend
 {
 	/**
-	 * Import the back end user object
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-		$this->import('BackendUser', 'User');
-	}
-	
-	
-	/**
 	 * Set the tabletree source
 	 * @param object
 	 */

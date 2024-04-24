@@ -12,27 +12,34 @@
  * @license     LGPL
  */
 
+use Contao\CoreBundle\ContaoCoreBundle;
+use Contao\System;
+use Contao\ArrayUtil;
 
 /**
  * Constants
  */
-define('PCT_CUSTOMELEMENTS_TAGS_PATH', 'system/modules/pct_customelements_attribute_tags');
-define('PCT_CUSTOMELEMENTS_TAGS_VERSION', '1.15.1');
-
-$blnInstallTool = false;
-if(strlen(strpos(\Contao\Environment::getInstance()->scriptName, '/contao/install.php')) > 0 )
+if( \defined('PCT_CUSTOMELEMENTS_TAGS_VERSION') === false )
 {
-	$blnInstallTool = true;
+	define('PCT_CUSTOMELEMENTS_TAGS_VERSION', '2.0.0');
+	define('PCT_CUSTOMELEMENTS_TAGS_PATH', 'system/modules/pct_customelements_attribute_tags');
 }
+
+if( version_compare(ContaoCoreBundle::getVersion(),'5.0','>=') )
+{
+	$rootDir = System::getContainer()->getParameter('kernel.project_dir');
+	include( $rootDir.'/system/modules/pct_customelements_attribute_tags/config/autoload.php' );
+}
+
 
 /**
  * Back end modules
  */
-array_insert($GLOBALS['BE_MOD']['content'], count($GLOBALS['BE_MOD']['content']), array
+ArrayUtil::arrayInsert($GLOBALS['BE_MOD']['content'], count($GLOBALS['BE_MOD']['content']), array
 (
 	'pct_customelements_tags' => array
 	(
-		'tables' 		=> array('tl_pct_customelement_tags'),
+		'tables' 		=> array('tl_pct_customelement_tags','tl_pct_customelement_attribute'),
 		'icon' 			=> PCT_CUSTOMELEMENTS_TAGS_PATH.'/assets/img/tags_mod.png',
 	)
 ));
@@ -68,15 +75,8 @@ $GLOBALS['TL_MODELS']['tl_pct_customelement_tags'] = 'Contao\PCT_TagsModel';
 /**
  * Hooks
  */
-if(TL_MODE == 'BE')
-{
-	$GLOBALS['TL_HOOKS']['loadDataContainer'][] 				= array('PCT\CustomElements\Backend\TableCustomElementTags','loadAssets');
-}
-
-if($blnInstallTool === false)
-{
-	$GLOBALS['CUSTOMCATALOG_HOOKS']['prepareField'][] 			= array('PCT\CustomElements\Attributes\Tags','prepareField');
-}
+$GLOBALS['TL_HOOKS']['loadDataContainer'][] 				= array('PCT\CustomElements\Backend\TableCustomElementTags','loadAssets');
+$GLOBALS['CUSTOMCATALOG_HOOKS']['prepareField'][] 			= array('PCT\CustomElements\Attributes\Tags','prepareField');
 $GLOBALS['CUSTOMELEMENTS_HOOKS']['processWildcardValue'][] 	= array('PCT\CustomElements\Attributes\Tags','processWildcardValue');
 $GLOBALS['CUSTOMELEMENTS_HOOKS']['getExportChain'][] 		= array('PCT\CustomElements\Attributes\Tags\Export','addToExport');
 $GLOBALS['TL_CRON']['daily'][] 								= array('PCT\CustomElements\Backend\TableCustomElementTags','purgeRevisedRecords');

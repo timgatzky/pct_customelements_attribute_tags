@@ -1,3 +1,9 @@
+### 2.0.0
+Update: General Contao 5 compatibility (#109)
+Update: Cache filter results (#110)
+Update: Support "isBlankOption" key (#111)
+Removed: Contao 4.9 compatibility (#109)
+
 ### 1.15.1
 Update: General PHP8 updates (#107)
 

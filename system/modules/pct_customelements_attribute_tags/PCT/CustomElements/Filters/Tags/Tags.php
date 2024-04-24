@@ -21,6 +21,7 @@ namespace PCT\CustomElements\Filters;
  * Imports
  */
 use \PCT\CustomElements\Helper\ControllerHelper;
+use PCT\CustomElements\Plugins\CustomCatalog\Core\Cache;
 
 /**
  * Class file
@@ -133,6 +134,7 @@ class Tags extends \PCT\CustomElements\Filter
 					'label'  	=> $label,
 					'name'  	=> $strName,
 					'selected'	=> false,
+					'isBlankOption' => false,
 				);
 				
 				// translate label
@@ -161,8 +163,8 @@ class Tags extends \PCT\CustomElements\Filter
 		if($this->get('includeReset'))
 		{
 			$label = !$isSelected ? sprintf($GLOBALS['TL_LANG']['PCT_CUSTOMCATALOG']['MSC']['filter_firstOption'],$this->objAttribute->title) : $GLOBALS['TL_LANG']['PCT_CUSTOMCATALOG']['MSC']['filter_reset'];
-			$blank = array('value'=>'','label'=>$label,'id'=>'ctrl_'.$strName.'_reset','name'=> $strName.'_reset');
-			array_insert($arrOptions,0,array($blank));
+			$blank = array('value'=>'','label'=>$label,'id'=>'ctrl_'.$strName.'_reset','name'=> $strName.'_reset','isBlankOption'=>true);
+			\Contao\ArrayUtil::arrayInsert($arrOptions,0,array($blank));
 		}
 
 		$objTemplate->options = $arrOptions;
@@ -236,8 +238,6 @@ class Tags extends \PCT\CustomElements\Filter
 			$objTags = $objDatabase->prepare("SELECT ".($blnHasIdField ? "id,":'').$strValueField.($strKeyField ? ','.$strKeyField:'').($strTranslationField ? ','.$strTranslationField:'')." FROM ".$strSource." WHERE id IN(".implode(',', $arrValues).")" . ($strSortingField ? " ORDER BY ".$strSortingField : "") )->execute();
 		}
 		
-		$metaWizardKey = (version_compare(VERSION,'3.2','<=') ? 'title': 'label');
-					
 		$arrReturn = array();
 		while($objTags->next())
 		{
@@ -266,12 +266,12 @@ class Tags extends \PCT\CustomElements\Filter
 				{
 					foreach($arrTranslations as $lang => $arrTranslation)
 					{
-						if(!array_key_exists($metaWizardKey, $arrTranslation))
+						if(!array_key_exists('label', $arrTranslation))
 						{
 							continue;
 						}
 						
-						$strLabel = $arrTranslation[$metaWizardKey];
+						$strLabel = $arrTranslation['label'];
 						if(strlen($strLabel) < 1)
 						{
 							$strLabel = $objTags->{$strValueField};
@@ -302,7 +302,6 @@ class Tags extends \PCT\CustomElements\Filter
 	{
 		// get the current filter values
 		$filterValues = $this->getValue();
-		
 		if(empty($filterValues))
 		{
 			return array();
@@ -312,15 +311,27 @@ class Tags extends \PCT\CustomElements\Filter
 		$strField = $this->getFilterTarget();
 		$strPublished = ($GLOBALS['PCT_CUSTOMCATALOG']['FRONTEND']['FILTER']['publishedOnly'] ? $this->getCustomCatalog()->getPublishedField() : '');
 		
-		$objCache = new \PCT\CustomElements\Plugins\CustomCatalog\Core\Cache();
-		
 		// look up from cache
-		$objRows = $objCache::getDatabaseResult('Tags::findAll'.(strlen($strPublished) > 0 ? 'Published' : ''),$strField);
+		$cacheKey = 'Tags::findAll::'.implode('-', $filterValues).(strlen($strPublished) > 0 ? 'Published' : '');
+		$objRows = Cache::getDatabaseResult($cacheKey,$strField);
 		if($objRows === null)
 		{
-			$objRows = $objDatabase->prepare("SELECT id,".$strField." FROM ".$this->getTable()." WHERE ".$strField." IS NOT NULL ".(strlen($strPublished) > 0 ? " AND ".$strPublished."=1" : ""))->execute();
+			$tmp = array();
+			foreach($filterValues as $value)
+			{
+				$tmp[] = $strField." LIKE '%$value%'";
+			}
+			$combiner = 'OR';
+			if( $this->get('mode') == 'exact' )
+			{
+				$combiner = 'AND';
+			}
+			
+			$objRows = $objDatabase->prepare("SELECT id,".$strField." FROM ".$this->getTable()." WHERE ".$strField." IS NOT NULL ".(!empty( $tmp ) ? " $combiner ".\implode(" $combiner ",$tmp) : '' ) .(strlen($strPublished) > 0 ? " AND ".$strPublished."=1" : ""))->execute();
 			// add to cache
-			$objCache::addDatabaseResult('Tags::findAll'.(strlen($strPublished) > 0 ? 'Published' : ''),$strField,$objRows);
+			Cache::addDatabaseResult($cacheKey,$strField,$objRows);
+
+			unset($tmp);
 		}
 		
 		if($objRows->numRows < 1)
@@ -336,7 +347,15 @@ class Tags extends \PCT\CustomElements\Filter
 		{
 			$arrTags = array_keys($this->getTagsOptions($filterValues));
 		}
-	
+		
+		// result in cache?
+		$cacheKey = 'Tags::filterResult::'.$strField.(strlen($strPublished) > 0 ? '::Published' : '').'::'.implode(',',$filterValues);
+		$arrReturn = Cache::getFilterResult($cacheKey);
+		if( $arrReturn !== null && is_array($arrReturn) )
+		{
+			return $arrReturn;
+		}
+		
 		$arrReturn = array();
 		while($objRows->next())
 		{
@@ -368,6 +387,9 @@ class Tags extends \PCT\CustomElements\Filter
 				$arrReturn[] = $objRows->id;
 			}
 		}
+		
+		// cache the result
+		Cache::addFilterResult($cacheKey,$arrReturn);
 		
 		return $arrReturn;
 	}
