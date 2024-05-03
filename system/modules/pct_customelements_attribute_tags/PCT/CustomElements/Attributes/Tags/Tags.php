@@ -21,6 +21,7 @@ namespace PCT\CustomElements\Attributes;
  * Imports
  */
 use PCT\CustomElements\Helper\ControllerHelper as ControllerHelper;
+use PCT\CustomElements\Plugins\CustomCatalog\Core\Cache;
 use PCT\CustomElements\Plugins\CustomCatalog\Core\Multilanguage;
 
 /**
@@ -539,6 +540,15 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		{
 			return array();
 		}
+
+		// add filter result to cache
+		$objCache = new \PCT\CustomElements\Plugins\CustomCatalog\Core\Cache();
+		$cacheKey = 'Tags::filterResult::'.$strField;
+		$arrReturn = $objCache::getFilterResult($cacheKey);
+		if( $arrReturn !== null && is_array($arrReturn) )
+		{
+			return $arrReturn;
+		}
 		
 		$objDatabase = \Contao\Database::getInstance();
 			
@@ -660,7 +670,11 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			return array();
 		}
 
-		return array('FIND_IN_SET(id,?)',implode(',',array_unique($arrIds)));
+
+		$arrReturn = array('FIND_IN_SET(id,?)',implode(',',array_unique($arrIds)));
+		$objCache::addFilterResult($cacheKey,$arrReturn);
+
+		return $arrReturn;
 	}
 	
 	
