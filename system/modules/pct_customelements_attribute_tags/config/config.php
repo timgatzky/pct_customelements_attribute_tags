@@ -21,7 +21,7 @@ use Contao\ArrayUtil;
  */
 if( \defined('PCT_CUSTOMELEMENTS_TAGS_VERSION') === false )
 {
-	define('PCT_CUSTOMELEMENTS_TAGS_VERSION', '2.0.1');
+	define('PCT_CUSTOMELEMENTS_TAGS_VERSION', '2.0.2');
 	define('PCT_CUSTOMELEMENTS_TAGS_PATH', 'system/modules/pct_customelements_attribute_tags');
 }
 

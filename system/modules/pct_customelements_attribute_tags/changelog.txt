@@ -1,3 +1,6 @@
+### 2.0.2
+Fixed: Backend filtering, search (#106)
+
 ### 2.0.1
 Update: Added filter caching for custom backend filter methods (#114)
 
