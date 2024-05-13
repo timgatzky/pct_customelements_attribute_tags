@@ -20,6 +20,8 @@ namespace PCT\CustomElements\Attributes;
 /**
  * Imports
  */
+
+use Contao\Input;
 use PCT\CustomElements\Helper\ControllerHelper as ControllerHelper;
 use PCT\CustomElements\Plugins\CustomCatalog\Core\Cache;
 use PCT\CustomElements\Plugins\CustomCatalog\Core\Multilanguage;
@@ -572,13 +574,39 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		$objContainer = \Contao\System::getContainer();
 		
 		$objSession = $objContainer->get('request_stack')->getSession();
-		$arrSession = $objSession->all();
 		$strSession = $GLOBALS['PCT_CUSTOMCATALOG']['backendFilterSession'];
+		$arrSession = $objSession->get($strSession);
+
+		if( !isset($arrSession[$strSession][$strTable]) )
+		{
+			$arrSession[$strSession][$strTable] = array();
+		}
+
+		$varFilterValue = $arrSession[$strSession][$strTable][$strField] ?? null;
+		$varSearchValue = $arrSession[$strSession.'_search'][$strTable]['value'] ?? '';
+		$strSearchField = $arrSession[$strSession.'_search'][$strTable]['field'] ?? '';
 		
-		$varFilterValue = \Contao\StringUtil::deserialize($arrSession[$strSession][$strTable][$strField] ?? $arrSession['filter'][$strTable][$strField] ?? '');
-		$varSearchValue = $arrSession[$strSession.'_search'][$strTable]['value'] ?? $arrSession['search'][$strTable]['value'] ?? '';
-		$varSearchField = $arrSession[$strSession.'_search'][$strTable]['field'] ?? '';
-		
+		// filter
+		if( Input::post('FORM_SUBMIT') == 'tl_filters' && Input::post($strField) !== null && Input::post($strField) != 'tl_'.$strField )
+		{
+			// update helper session
+			$arrSession[$strSession][$strTable][$strField] = Input::post($strField);
+			$objSession->set($strSession, $arrSession);
+			// clear the value from the post data to avoid contaos internal filter routine to process the value
+			Input::setPost($strField,null);
+		}
+
+		// search
+		if( Input::post('FORM_SUBMIT') == 'tl_filters' &&  Input::post('tl_field') == $strField && Input::post('tl_value') !== null )
+		{
+			// update helper session
+			$arrSession[$strSession.'_search'][$strTable]['field'] = $strField;
+			$arrSession[$strSession.'_search'][$strTable]['value'] = Input::post('tl_value');
+			$objSession->set($strSession, $arrSession);
+			// clear the value from the post data to avoid contaos internal filter routine to process the value
+			Input::setPost('tl_value',null);
+		}
+
 		// contao backend session bag
 		$objSessionBag = $objSession->getBag('contao_backend');
 		$arrSessionBag = $objSessionBag->all();
@@ -586,16 +614,40 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		if( isset($arrSessionBag['filter'][$strTable][$strField]) && !empty($arrSessionBag['filter'][$strTable][$strField]) )
 		{
 			$varFilterValue = $arrSessionBag['filter'][$strTable][$strField];
+			// remove from contaos filter session to apply custom filtering
+			unset($arrSessionBag['filter'][$strTable][$strField]);
+			$objSessionBag->replace($arrSessionBag);
 		}
+		
 		if( isset($arrSessionBag['search'][$strTable]['value']) && !empty($arrSessionBag['search'][$strTable]['value']) )
 		{
 			$varSearchValue = $arrSessionBag['search'][$strTable]['value'];
+			// remove from contaos filter session to apply custom filtering
+			unset($arrSessionBag['search'][$strTable]['value']);
+			$objSessionBag->replace($arrSessionBag);
 		}
 
-		// reset the filter
-		if( \Contao\Input::post('FORM_SUBMIT') == 'tl_filters' && (int)\Contao\Input::post('filter_reset') > 0)
+		// reset filter
+		if( Input::post('FORM_SUBMIT') == 'tl_filters' && Input::post($strField) == 'tl_'.$strField)
 		{
 			unset($arrSession[$strSession][$strTable][$strField]);
+			$objSession->set($strSession,$arrSession);
+		}
+
+		// reset search
+ 		#if( Input::post('FORM_SUBMIT') == 'tl_filters' && Input::post('tl_field') == $strField && Input::post('tl_value') == '')
+		#{
+		#	unset($arrSession[$strSession.'_search'][$strTable]['field']);
+		#	unset($arrSession[$strSession.'_search'][$strTable]['value']);
+		#	$objSession->set($strSession,$arrSession);
+		#}
+		
+		// full reset
+		if( Input::post('FORM_SUBMIT') == 'tl_filters' && (int)Input::post('filter_reset') > 0 )
+		{
+			unset($arrSession[$strSession][$strTable][$strField]);
+			unset($arrSession[$strSession.'_search'][$strTable]['field']);
+			unset($arrSession[$strSession.'_search'][$strTable]['value']);
 			$objSession->set($strSession,$arrSession);
 			return array();
 		}
@@ -606,7 +658,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 		}
 		
 		$arrSearch = array();
-		if(strlen($varSearchValue) > 0 && $varSearchField == $strField)
+		if(strlen($varSearchValue) > 0 && $strSearchField == $strField)
 		{
 			$strSource = 'tl_pct_customelement_tags';
 			$strKeyField = 'id';
@@ -652,14 +704,8 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			$arrIds[] = $objRows->id;
 		}
 		
-		// null result on filters
-		if(count($arrIds) < 1 && !empty($varFilterValue))
-		{
-			$arrIds = array(-1);
-		}
-		
-		// null result on empty search
-		else if(count($arrIds) < 1 && $varSearchField == $strField && !empty($varSearchValue))
+		// no search hits, set impossible query
+		if( empty($arrIds) && $strSearchField == $strField && !empty($varSearchValue) )
 		{
 			$arrIds = array(-1);
 		}
