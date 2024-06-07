@@ -58,6 +58,7 @@ class Tags extends \PCT\CustomElements\Core\Attribute
 			'label'			=> array( $this->get('title'),$this->get('description') ),
 			'exclude'		=> true,
 			'inputType'		=> 'pct_tabletree',
+			'sortable'		=> false,
 			'tabletree'		=> array
 			(
 				'source'		=> 'tl_pct_customelement_tags',
