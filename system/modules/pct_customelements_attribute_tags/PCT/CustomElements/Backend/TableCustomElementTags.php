@@ -152,8 +152,8 @@ class TableCustomElementTags extends \Contao\Backend
 		}
 
 		$objChilds = \Contao\Database::getInstance()->prepare("SELECT * FROM ".$table." WHERE pid=?")->limit(1)->execute($row['id']);
-
-		return ($objChilds->numRows && ($this->User->isAdmin || ($this->User->isAllowed(2, $row)))) ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.\Contao\StringUtil::specialchars($title).'"'.$attributes.'>'.\Contao\Image::getHtml($icon, $label).'</a> ' : \Contao\Image::getHtml(preg_replace('/\.gif$/i', '_.gif', $icon)).' ';
+		
+		return ($objChilds->numRows >= 1) ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.\Contao\StringUtil::specialchars($title).'"'.$attributes.'>'.\Contao\Image::getHtml($icon, $label).'</a> ' : \Contao\Image::getHtml(preg_replace('/\.gif$/i', '_.', $icon)).' ';
 	}
 	
 	
