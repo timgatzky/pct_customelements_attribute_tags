@@ -1,3 +1,6 @@
+### 2.0.4
+Fixed: The method BackendUser isAllowed does not exist under Contao 5.3 anymore (#119)
+
 ### 2.0.3
 Update: General PHP updates (#117)
 
