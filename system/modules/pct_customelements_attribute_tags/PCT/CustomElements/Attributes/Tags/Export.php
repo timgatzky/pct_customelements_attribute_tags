@@ -60,7 +60,7 @@ class Export extends \PCT\CustomElements\Plugins\Export\Export
 		// fetch tags attributes
 		$objTagsAttributes = \PCT\CustomElements\Core\AttributeFactory::fetchMultipleByCustomElement($intCE,$options);
 		
-		if($objTagsAttributes->numRows < 1)
+		if( $objTagsAttributes === null || $objTagsAttributes->numRows < 1)
 		{
 			return $arrStatements;
 		}
