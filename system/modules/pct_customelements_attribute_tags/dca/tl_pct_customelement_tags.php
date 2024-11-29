@@ -12,6 +12,7 @@
  * @license     LGPL
  */
 
+use Contao\CoreBundle\ContaoCoreBundle;
 use Contao\DC_Table;
 
 /**
@@ -93,7 +94,7 @@ $GLOBALS['TL_DCA']['tl_pct_customelement_tags'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_pct_customelement_tags']['copyChilds'],
 				'href'                => 'act=paste&amp;mode=copy&amp;childs=1',
-				'icon'                => 'copychilds.gif',
+				'icon'                => 'copychildren.svg',
 				'attributes'          => 'onclick="Backend.getScrollOffset()"',
 				'button_callback'     => array('PCT\CustomElements\Backend\TableCustomElementTags', 'copyWithChilds')
 			),
@@ -108,7 +109,7 @@ $GLOBALS['TL_DCA']['tl_pct_customelement_tags'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_pct_customelement_tags']['delete'],
 				'href'                => 'act=delete',
-				'icon'                => 'delete.gif',
+				'icon'                => 'delete.svg',
 				'attributes'          => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\'))return false;Backend.getScrollOffset()"',
 			),
 			'show' => array
@@ -164,3 +165,8 @@ $GLOBALS['TL_DCA']['tl_pct_customelement_tags'] = array
 		),
 	)
 );
+
+if( \version_compare(ContaoCoreBundle::getVersion(),'5.0','<') )
+{
+	$GLOBALS['TL_DCA']['tl_pct_customelement_tags']['list']['operations']['copyChilds']['icon'] = 'copychilds.svg';
+}
