@@ -1,5 +1,6 @@
 ### 2.0.6
 Fixed: TagsModel: Missing Contao namespace in \Contao\Model class extension (#123)
+Update: Operation icons (#124)
 
 ### 2.0.5
 Update: Minor code updates (#121)
