@@ -24,7 +24,7 @@ namespace PCT\CustomElements\Models;
  * @method static \PCT_TagsModel|null findByPid($val, $opt=array())
  * @method static \PCT_TagsModel|null findMultipleByIds($val, $opt=array())
  */
-class TagsModel extends \Model
+class TagsModel extends \Contao\Model
 {
 	/**
 	 * Table name
